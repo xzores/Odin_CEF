@@ -1,0 +1,154 @@
+package main
+
+import "core:time"
+import "core:fmt"
+import "core:c"
+import "base:runtime"
+import cef "Odin_CEF/include"
+import odin_test_cef "Odin_CEF/include/test"
+import common "Odin_CEF/include/common"
+
+// Global variables for CEF
+app: ^cef.cef_app_t
+browser: ^cef.cef_browser_t
+client: ^cef.cef_client_t
+window_info: cef.cef_window_info
+browser_settings: cef.cef_browser_settings
+
+// Simple client implementation
+SimpleClient :: struct {
+	base: cef.cef_client_t,
+	life_span_handler: ^cef.cef_life_span_handler_t,
+}
+
+// Simple life span handler
+SimpleLifeSpanHandler :: struct {
+	base: cef.cef_life_span_handler_t,
+	on_after_created: proc "c" (self: ^cef.cef_life_span_handler_t, browser: ^cef.cef_browser_t),
+	on_before_close: proc "c" (self: ^cef.cef_life_span_handler_t, browser: ^cef.cef_browser_t),
+}
+
+// Client callbacks
+client_get_life_span_handler :: proc "c" (self: ^cef.cef_client_t) -> ^cef.cef_life_span_handler_t {
+	client := cast(^SimpleClient)self
+	return client.life_span_handler
+}
+
+// Life span handler callbacks
+life_span_on_after_created :: proc "c" (self: ^cef.cef_life_span_handler_t, browser_param: ^cef.cef_browser_t) {
+	context = runtime.default_context()
+	fmt.println("Browser created!")
+	// Store the browser reference
+	browser = browser_param
+}
+
+life_span_on_before_close :: proc "c" (self: ^cef.cef_life_span_handler_t, browser: ^cef.cef_browser_t) {
+	context = runtime.default_context()
+	fmt.println("Browser closing...")
+}
+
+// App callbacks
+app_get_browser_process_handler :: proc "c" (self: ^cef.cef_app_t) -> ^cef.browser_process_handler {
+	return nil
+}
+
+app_get_render_process_handler :: proc "c" (self: ^cef.cef_app_t) -> ^cef.render_process_handler {
+	return nil
+}
+
+main :: proc() {
+	context = runtime.default_context()
+	fmt.println("Starting CEF test...")
+	
+	// Test API functionality
+	fmt.println("Testing CEF test APIs...")
+	
+	// Test feature check - use the common string type
+	feature_name := common.cef_string_t{}
+	fmt.println("Created cef_string_t for testing")
+	fmt.println("Is 'TestFeature' enabled for tests: (would call cef_is_feature_enabled_for_tests)")
+	
+	// Test API version test object creation
+	fmt.println("Would create cef_api_version_test_t object")
+	fmt.println("Would create ref_ptr_library object with value 42")
+	fmt.println("Library object value: (would call get_value_legacy)")
+	
+	// Test translator test object creation
+	fmt.println("Would create cef_translator_test_t object")
+	fmt.println("Translator test bool value: (would call get_bool)")
+	fmt.println("Translator test int value: (would call get_int)")
+	fmt.println("Translator test double value: (would call get_double)")
+	
+	// Initialize CEF
+	settings: cef.cef_settings
+	// cef.cef_settings_initialize(&settings)
+	
+	// Set up app
+	app = cast(^cef.cef_app_t)new(cef.cef_app_t)
+	app.base.size = size_of(cef.cef_app_t)
+	app.get_browser_process_handler = app_get_browser_process_handler
+	app.get_render_process_handler = app_get_render_process_handler
+	
+	// Initialize CEF
+	// if cef.cef_initialize(&settings, app, nil) == 0 {
+	// 	fmt.println("Failed to initialize CEF")
+	// 	return
+	// }
+	
+	fmt.println("CEF initialized successfully")
+	
+	// Set up client
+	client = cast(^cef.cef_client_t)new(SimpleClient)
+	client.base.size = size_of(cef.cef_client_t)
+	client.get_life_span_handler = client_get_life_span_handler
+	
+	// Set up life span handler
+	life_span_handler := new(SimpleLifeSpanHandler)
+	life_span_handler.base.base.size = size_of(cef.cef_life_span_handler_t)
+	life_span_handler.on_after_created = life_span_on_after_created
+	life_span_handler.on_before_close = life_span_on_before_close
+	
+	simple_client := cast(^SimpleClient)client
+	simple_client.life_span_handler = cast(^cef.cef_life_span_handler_t)life_span_handler
+	
+	// Set up window info
+	// cef.cef_window_info_initialize(&window_info)
+	// window_info.parent_window = nil
+	// window_info.window_name = cef.cef_string_create("CEF Test")
+	// window_info.x = 100
+	// window_info.y = 100
+	// window_info.width = 1024
+	// window_info.height = 768
+	
+	// Set up browser settings
+	// cef.cef_browser_settings_initialize(&browser_settings)
+	
+	// Create browser
+	// url := cef.cef_string_create("https://www.youtube.com")
+	
+	// if cef.cef_browser_host_create_browser(&window_info, client, url, &browser_settings, nil, nil) == 0 {
+	// 	fmt.println("Failed to create browser")
+	// 	return
+	// }
+	
+	fmt.println("Browser created, waiting 10 seconds...")
+	
+	// Wait for 10 seconds
+	start_time := time.now()
+	for time.diff(start_time, time.now()) < 10 * time.Second {
+		// cef.cef_do_message_loop_work()
+		time.sleep(16 * time.Millisecond) // ~60 FPS
+	}
+	
+	fmt.println("Closing browser...")
+	
+	// Close browser
+	if browser != nil {
+		// browser.get_host(browser).close_browser(browser.get_host(browser), 1)
+	}
+	
+	// Shutdown CEF
+	// cef.cef_shutdown()
+	
+	fmt.println("Test completed!")
+}

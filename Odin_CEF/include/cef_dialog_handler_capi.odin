@@ -1,0 +1,70 @@
+package odin_cef
+
+import "core:c"
+
+// Forward declarations for dependencies
+// base_ref_counted is defined in cef_base_capi.odin
+// browser is defined in cef_browser_capi.odin
+// cef_string is defined in cef_string_capi.odin
+// cef_string_list is defined in cef_string_capi.odin
+// cef_file_dialog_mode is defined in cef_types_capi.odin
+
+///
+/// Callback structure for asynchronous continuation of file dialog requests.
+///
+/// NOTE: This struct is allocated DLL-side.
+///
+file_dialog_callback :: struct {
+    ///
+    /// Base structure.
+    ///
+    base: base_ref_counted,
+
+    ///
+    /// Continue the file selection. |file_paths| should be a single value or a
+    /// list of values depending on the dialog mode. An NULL |file_paths| value is
+    /// treated the same as calling cancel().
+    ///
+    cont: proc "c" (self: ^file_dialog_callback, file_paths: cef_string_list),
+
+    ///
+    /// Cancel the file selection.
+    ///
+    cancel: proc "c" (self: ^file_dialog_callback),
+}
+
+///
+/// Implement this structure to handle dialog events. The functions of this
+/// structure will be called on the browser process UI thread.
+///
+/// NOTE: This struct is allocated client-side.
+///
+dialog_handler :: struct {
+    ///
+    /// Base structure.
+    ///
+    base: base_ref_counted,
+
+    ///
+    /// Called to run a file chooser dialog. |mode| represents the type of dialog
+    /// to display. |title| to the title to be used for the dialog and may be NULL
+    /// to show the default title ("Open" or "Save" depending on the mode).
+    /// |default_file_path| is the path with optional directory and/or file name
+    /// component that should be initially selected in the dialog.
+    /// |accept_filters| are used to restrict the selectable file types and may be
+    /// any combination of valid lower-cased MIME types (e.g. "text/*" or
+    /// "image/*") and individual file extensions (e.g. ".txt" or ".png").
+    /// |accept_extensions| provides the semicolon-delimited expansion of MIME
+    /// types to file extensions (if known, or NULL string otherwise).
+    /// |accept_descriptions| provides the descriptions for MIME types (if known,
+    /// or NULL string otherwise). For example, the "image/*" mime type might have
+    /// extensions ".png;.jpg;.bmp;..." and description "Image Files".
+    /// |accept_filters|, |accept_extensions| and |accept_descriptions| will all
+    /// be the same size. To display a custom dialog return true (1) and execute
+    /// |callback| either inline or at a later time. To display the default dialog
+    /// return false (0). If this function returns false (0) it may be called an
+    /// additional time for the same dialog (both before and after MIME type
+    /// expansion).
+    ///
+    on_file_dialog: proc "c" (self: ^dialog_handler, browser: ^cef_browser_t, mode: cef_file_dialog_mode, title: ^cef_string, default_file_path: ^cef_string, accept_filters: cef_string_list, accept_extensions: cef_string_list, accept_descriptions: cef_string_list, callback: ^file_dialog_callback) -> b32,
+} 
