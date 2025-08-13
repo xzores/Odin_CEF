@@ -1,0 +1,26 @@
+package odin_cef
+
+import "core:c"
+
+when ODIN_OS == .Windows {
+    foreign import lib "CEF/Release/libcef.lib"
+} else when ODIN_OS == .Linux {
+    foreign import lib "CEF/Release/libcef.so"
+} else when ODIN_OS == .Darwin {
+    foreign import lib "CEF/Release/libcef.dylib"
+}
+
+cef_scroll_view_t :: struct {
+    base: cef_view_t,
+    
+    as_scroll_view: proc "c" (self: ^cef_scroll_view_t) -> ^cef_scroll_view_t,
+    set_content_view: proc "c" (self: ^cef_scroll_view_t, view: ^cef_view_t),
+    get_content_view: proc "c" (self: ^cef_scroll_view_t) -> ^cef_view_t,
+    get_visible_content_rect: proc "c" (self: ^cef_scroll_view_t) -> cef_rect,
+    get_chrome_scrollbar_mode: proc "c" (self: ^cef_scroll_view_t) -> cef_scrollbar_mode_t,
+    set_chrome_scrollbar_mode: proc "c" (self: ^cef_scroll_view_t, mode: cef_scrollbar_mode_t),
+    get_minimum_preferred_size: proc "c" (self: ^cef_scroll_view_t) -> cef_size_t,
+    get_maximum_preferred_size: proc "c" (self: ^cef_scroll_view_t) -> cef_size_t,
+    calculate_preferred_size: proc "c" (self: ^cef_scroll_view_t) -> cef_size_t,
+    layout: proc "c" (self: ^cef_scroll_view_t),
+} 

@@ -3,152 +3,201 @@ package main
 import "core:time"
 import "core:fmt"
 import "core:c"
+import "core:log"
+import "core:mem"
+
+import "base:intrinsics"
 import "base:runtime"
-import cef "Odin_CEF/include"
-import odin_test_cef "Odin_CEF/include/test"
-import common "Odin_CEF/include/common"
 
-// Global variables for CEF
-app: ^cef.cef_app_t
-browser: ^cef.cef_browser_t
-client: ^cef.cef_client_t
-window_info: cef.cef_window_info
-browser_settings: cef.cef_browser_settings
+import cef "CEF_bindings"
 
-// Simple client implementation
-SimpleClient :: struct {
-	base: cef.cef_client_t,
-	life_span_handler: ^cef.cef_life_span_handler_t,
+import "furbs/utils"
+
+get_view_rect :: proc "c" (self: ^cef.render_handler, browser: ^cef.cef_browser_t, rect: ^cef.cef_rect) {
+
+	
 }
 
-// Simple life span handler
-SimpleLifeSpanHandler :: struct {
-	base: cef.cef_life_span_handler_t,
-	on_after_created: proc "c" (self: ^cef.cef_life_span_handler_t, browser: ^cef.cef_browser_t),
-	on_before_close: proc "c" (self: ^cef.cef_life_span_handler_t, browser: ^cef.cef_browser_t),
+on_paint :: proc "c" (self: ^cef.render_handler, browser: ^cef.cef_browser_t, type: cef.cef_paint_element_type, dirtyRectsCount: c.size_t, dirtyRects: ^cef.cef_rect, buffer: rawptr, width: c.int, height: c.int) {
+
+
 }
 
-// Client callbacks
-client_get_life_span_handler :: proc "c" (self: ^cef.cef_client_t) -> ^cef.cef_life_span_handler_t {
-	client := cast(^SimpleClient)self
-	return client.life_span_handler
+on_loading_state_change :: proc "c" (self: ^cef.load_handler, browser: ^cef.cef_browser_t, isLoading: b32, canGoBack: b32, canGoForward: b32) {
+
 }
 
-// Life span handler callbacks
-life_span_on_after_created :: proc "c" (self: ^cef.cef_life_span_handler_t, browser_param: ^cef.cef_browser_t) {
-	context = runtime.default_context()
-	fmt.println("Browser created!")
-	// Store the browser reference
-	browser = browser_param
+@(private)
+cef_allocator : mem.Allocator;
+set_cef_allocator :: proc (alloc := context.allocator) {
+	cef_allocator = alloc;
 }
 
-life_span_on_before_close :: proc "c" (self: ^cef.cef_life_span_handler_t, browser: ^cef.cef_browser_t) {
-	context = runtime.default_context()
-	fmt.println("Browser closing...")
-}
+//Must be called when creating a cef object.
+@(require_results)
+alloc_cef_object :: proc ($T : typeid, loc := #caller_location) -> ^T where intrinsics.type_has_field(T, "base") {
+	assert(cef_allocator != {}, "You must call set_cef_allocator first", loc);
 
-// App callbacks
-app_get_browser_process_handler :: proc "c" (self: ^cef.cef_app_t) -> ^cef.browser_process_handler {
-	return nil
-}
-
-app_get_render_process_handler :: proc "c" (self: ^cef.cef_app_t) -> ^cef.render_process_handler {
-	return nil
-}
-
-main :: proc() {
-	context = runtime.default_context()
-	fmt.println("Starting CEF test...")
-	
-	// Test API functionality
-	fmt.println("Testing CEF test APIs...")
-	
-	// Test feature check - use the common string type
-	feature_name := common.cef_string_t{}
-	fmt.println("Created cef_string_t for testing")
-	fmt.println("Is 'TestFeature' enabled for tests: (would call cef_is_feature_enabled_for_tests)")
-	
-	// Test API version test object creation
-	fmt.println("Would create cef_api_version_test_t object")
-	fmt.println("Would create ref_ptr_library object with value 42")
-	fmt.println("Library object value: (would call get_value_legacy)")
-	
-	// Test translator test object creation
-	fmt.println("Would create cef_translator_test_t object")
-	fmt.println("Translator test bool value: (would call get_bool)")
-	fmt.println("Translator test int value: (would call get_int)")
-	fmt.println("Translator test double value: (would call get_double)")
-	
-	// Initialize CEF
-	settings: cef.cef_settings
-	// cef.cef_settings_initialize(&settings)
-	
-	// Set up app
-	app = cast(^cef.cef_app_t)new(cef.cef_app_t)
-	app.base.size = size_of(cef.cef_app_t)
-	app.get_browser_process_handler = app_get_browser_process_handler
-	app.get_render_process_handler = app_get_render_process_handler
-	
-	// Initialize CEF
-	// if cef.cef_initialize(&settings, app, nil) == 0 {
-	// 	fmt.println("Failed to initialize CEF")
-	// 	return
-	// }
-	
-	fmt.println("CEF initialized successfully")
-	
-	// Set up client
-	client = cast(^cef.cef_client_t)new(SimpleClient)
-	client.base.size = size_of(cef.cef_client_t)
-	client.get_life_span_handler = client_get_life_span_handler
-	
-	// Set up life span handler
-	life_span_handler := new(SimpleLifeSpanHandler)
-	life_span_handler.base.base.size = size_of(cef.cef_life_span_handler_t)
-	life_span_handler.on_after_created = life_span_on_after_created
-	life_span_handler.on_before_close = life_span_on_before_close
-	
-	simple_client := cast(^SimpleClient)client
-	simple_client.life_span_handler = cast(^cef.cef_life_span_handler_t)life_span_handler
-	
-	// Set up window info
-	// cef.cef_window_info_initialize(&window_info)
-	// window_info.parent_window = nil
-	// window_info.window_name = cef.cef_string_create("CEF Test")
-	// window_info.x = 100
-	// window_info.y = 100
-	// window_info.width = 1024
-	// window_info.height = 768
-	
-	// Set up browser settings
-	// cef.cef_browser_settings_initialize(&browser_settings)
-	
-	// Create browser
-	// url := cef.cef_string_create("https://www.youtube.com")
-	
-	// if cef.cef_browser_host_create_browser(&window_info, client, url, &browser_settings, nil, nil) == 0 {
-	// 	fmt.println("Failed to create browser")
-	// 	return
-	// }
-	
-	fmt.println("Browser created, waiting 10 seconds...")
-	
-	// Wait for 10 seconds
-	start_time := time.now()
-	for time.diff(start_time, time.now()) < 10 * time.Second {
-		// cef.cef_do_message_loop_work()
-		time.sleep(16 * time.Millisecond) // ~60 FPS
+	Super :: struct {
+		obj : T,
+		ref_cnt : i32,
 	}
-	
-	fmt.println("Closing browser...")
-	
-	// Close browser
-	if browser != nil {
-		// browser.get_host(browser).close_browser(browser.get_host(browser), 1)
+
+	base : cef.base_ref_counted = {
+		size_of(T), //size
+		proc "c" (self: ^cef.base_ref_counted) { //add_ref 
+			super := cast(^Super)self;
+			super.ref_cnt += 1; //whatever object must have ref_count defined.
+		},
+		proc "c" (self: ^cef.base_ref_counted) -> b32 { //release
+			context = {};
+			super := cast(^Super)self;
+			super.ref_cnt += 1; //whatever object must have ref_count defined
+			res := super.ref_cnt == 0;
+
+			//free the object
+			mem.free(super, cef_allocator);
+
+			return auto_cast res;
+		},
+		proc "c" (self: ^cef.base_ref_counted) -> b32 { //has_one_ref
+			super := cast(^Super)self;
+			return super.ref_cnt == 1;
+		},
+		proc "c" (self: ^cef.base_ref_counted) -> b32 { //has_at_least_one_ref
+			super := cast(^Super)self;
+			return super.ref_cnt >= 1;
+		}
 	}
+
+	ptr, err := mem.alloc(size = size_of(Super), allocator = cef_allocator, loc = loc);
+	super := cast(^Super)ptr;
+	assert(err == nil, "Failed to allocate memory for CEF object");
+	super.obj.base = base; 
+
+	return &super.obj;
+}
+
+make_render_handler :: proc () -> ^cef.render_handler {
+	handler := alloc_cef_object(cef.render_handler);
 	
-	// Shutdown CEF
-	// cef.cef_shutdown()
+	handler.get_view_rect = get_view_rect;
+	handler.on_paint = on_paint;
+
+	return handler;
+}
+
+make_load_handler :: proc () -> ^cef.load_handler {
+	handler := alloc_cef_object(cef.load_handler);
+
+	handler.on_loading_state_change = on_loading_state_change;
 	
-	fmt.println("Test completed!")
+	return handler;
+}
+
+On_before_command_line_processing :: #type proc "c" (self: ^cef.App, process_type: ^cef.cef_string, command_line: ^cef.command_line);
+On_register_custom_schemes :: #type proc "c" (self: ^cef.App, registrar: ^cef.scheme_registrar);
+
+make_application :: proc (on_cmd_process : On_before_command_line_processing, on_reg_schemes : On_register_custom_schemes) -> ^cef.App {
+	app := alloc_cef_object(cef.App);
+
+	app.on_before_command_line_processing = on_cmd_process;
+	app.on_register_custom_schemes = on_reg_schemes;
+
+	app.get_resource_bundle_handler =  proc "c" (self: ^cef.App) -> ^cef.resource_bundle_handler {
+		return nil;
+	}
+	app.get_browser_process_handler = proc "c" (self: ^cef.App) -> ^cef.browser_process_handler {
+		return nil;
+	}
+	app.get_render_process_handler = proc "c" (self: ^cef.App) -> ^cef.render_process_handler {
+		return nil;
+	}
+
+	return app;
+}
+
+g_render_handler : ^cef.render_handler;
+g_load_handler : ^cef.load_handler;
+
+entry :: proc () { 
+	
+	log.infof("Starting....");
+	set_cef_allocator();
+	
+	app := make_application(
+		proc "c" (self: ^cef.App, process_type: ^cef.cef_string, command_line: ^cef.command_line) {
+			context = runtime.default_context();
+			fmt.printf("proccessing command line arguments, %v and %v\n", process_type, command_line);
+		},
+		proc "c" (self: ^cef.App, registrar: ^cef.scheme_registrar) {
+			context = runtime.default_context();
+			fmt.printf("registering scheme %v\n", registrar);
+		}
+	);
+	
+	code := cef.initialize(nil, nil, app, nil);
+	if (code == 0) {
+		fmt.panicf("CEF initialize failed, code was %v", code);
+	}
+
+	/*
+	exit_code : i32 = cef.execute_process(nil, nil, nil);
+  	if (exit_code >= 0) {
+		panic("CEF failed to start");
+	}
+
+	// Global handlers
+	g_render_handler = make_render_handler();
+	g_load_handler = make_load_handler();
+	*/
+
+	log.infof("Shutting down gracefully");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+main :: proc () {
+	
+	context.logger = utils.create_console_logger(.Debug);
+	defer utils.destroy_console_logger(context.logger);
+	
+	when ODIN_DEBUG {
+		context.assertion_failure_proc = utils.init_stack_trace();
+		defer utils.destroy_stack_trace();
+		
+		utils.init_tracking_allocators();
+		
+		{
+			tracker : ^mem.Tracking_Allocator;
+			context.allocator = utils.make_tracking_allocator(tracker_res = &tracker); //This will use the backing allocator,
+			
+			entry();
+		}
+		
+		utils.print_tracking_memory_results();
+		utils.destroy_tracking_allocators();
+	}
+	else {
+		entry();
+	}
 }
