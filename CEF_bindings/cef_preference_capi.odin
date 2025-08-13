@@ -13,19 +13,19 @@ when ODIN_OS == .Windows {
 // cef_preference_registrar_t :: struct {}
 
 cef_preference_observer_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     on_preference_changed: proc "c" (self: ^cef_preference_observer_t, name: ^cef_string),
 }
 
 cef_preference_manager_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     has_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string) -> b32,
-    get_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string) -> ^cef_value_t,
-    get_all_preferences: proc "c" (self: ^cef_preference_manager_t, include_defaults: b32) -> ^cef_dictionary_value_t,
+    get_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string) -> ^cef_value,
+    get_all_preferences: proc "c" (self: ^cef_preference_manager_t, include_defaults: b32) -> ^cef_dictionary_value,
     can_set_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string) -> b32,
-    set_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string, value: ^cef_value_t, error: ^cef_string) -> b32,
+    set_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string, value: ^cef_value, error: ^cef_string) -> b32,
     clear_preferences: proc "c" (self: ^cef_preference_manager_t, error: ^cef_string) -> b32,
 }
 

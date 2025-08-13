@@ -21,33 +21,33 @@ accelerated_paint_info_common :: struct {
 	///
 	/// The full dimensions of the video frame.
 	///
-	coded_size: size,
+	coded_size: cef_size,
 
 	///
 	/// The visible area of the video frame.
 	///
-	visible_rect: rect,
+	visible_rect: cef_rect,
 
 	///
 	/// The region of the video frame that capturer would like to populate.
 	///
-	content_rect: rect,
+	content_rect: cef_rect,
 
 	///
 	/// Full size of the source frame.
 	///
-	source_size: size,
+	source_size: cef_size,
 
 	///
 	/// Updated area of frame, can be considered as the `dirty` area.
 	///
-	capture_update_rect: rect,
+	capture_update_rect: cef_rect,
 
 	///
 	/// May reflects where the frame's contents originate from if region
 	/// capture is used internally.
 	///
-	region_capture_rect: rect,
+	region_capture_rect: cef_rect,
 
 	///
 	/// The increamental counter of the frame.

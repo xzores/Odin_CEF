@@ -11,7 +11,7 @@ when ODIN_OS == .Windows {
 }
 
 cef_shared_process_message_builder_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     is_valid: proc "c" (self: ^cef_shared_process_message_builder_t) -> b32,
     size: proc "c" (self: ^cef_shared_process_message_builder_t) -> c.size_t,

@@ -41,46 +41,46 @@ extern "C" {
 ///
 /// CEF string maps are a set of key/value string pairs.
 ///
-typedef struct _cef_string_list_t* cef_string_list_t;
+typedef struct _string_list* string_list;
 
 ///
 /// Allocate a new string map.
 ///
-CEF_EXPORT cef_string_list_t cef_string_list_alloc(void);
+CEF_EXPORT string_list cef_string_list_alloc(void);
 
 ///
 /// Return the number of elements in the string list.
 ///
-CEF_EXPORT size_t cef_string_list_size(cef_string_list_t list);
+CEF_EXPORT size_t cef_string_list_size(string_list list);
 
 ///
 /// Retrieve the value at the specified zero-based string list index. Returns
 /// true (1) if the value was successfully retrieved.
 ///
-CEF_EXPORT int cef_string_list_value(cef_string_list_t list,
+CEF_EXPORT int cef_string_list_value(string_list list,
                                      size_t index,
                                      cef_string* value);
 
 ///
 /// Append a new value at the end of the string list.
 ///
-CEF_EXPORT void cef_string_list_append(cef_string_list_t list,
+CEF_EXPORT void cef_string_list_append(string_list list,
                                        const cef_string* value);
 
 ///
 /// Clear the string list.
 ///
-CEF_EXPORT void cef_string_list_clear(cef_string_list_t list);
+CEF_EXPORT void cef_string_list_clear(string_list list);
 
 ///
 /// Free the string list.
 ///
-CEF_EXPORT void cef_string_list_free(cef_string_list_t list);
+CEF_EXPORT void cef_string_list_free(string_list list);
 
 ///
 /// Creates a copy of an existing string list.
 ///
-CEF_EXPORT cef_string_list_t cef_string_list_copy(cef_string_list_t list);
+CEF_EXPORT string_list cef_string_list_copy(string_list list);
 
 #ifdef __cplusplus
 }

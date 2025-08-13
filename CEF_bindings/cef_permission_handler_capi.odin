@@ -4,10 +4,10 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
-// frame is defined in cef_frame_capi.odin
+// browser is defined in Browser_capi.odin
+// frame is defined in Frame_capi.odin
 // cef_string is defined in cef_string_capi.odin
-// cef_permission_request_result is defined in cef_types_capi.odin
+// Permission_request_result is defined in cef_types_capi.odin
 
 ///
 /// Callback structure used for asynchronous continuation of media access
@@ -51,7 +51,7 @@ permission_prompt_callback :: struct {
     ///
     /// Complete the permissions request with the specified |result|.
     ///
-    cont: proc "c" (self: ^permission_prompt_callback, result: cef_permission_request_result),
+    cont: proc "c" (self: ^permission_prompt_callback, result: Permission_request_result),
 }
 
 ///
@@ -61,7 +61,7 @@ permission_prompt_callback :: struct {
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-permission_handler :: struct {
+Permission_handler :: struct {
     ///
     /// Base structure.
     ///
@@ -80,7 +80,7 @@ permission_handler :: struct {
     /// will not be called if the "--enable-media-stream" command-line switch is
     /// used to grant all permissions.
     ///
-    	on_request_media_access_permission: proc "c" (self: ^permission_handler, browser: ^Browser, frame: ^Frame, requesting_origin: ^cef_string, requested_permissions: u32, callback: ^media_access_callback) -> b32,
+    	on_request_media_access_permission: proc "c" (self: ^Permission_handler, browser: ^Browser, frame: ^Frame, requesting_origin: ^cef_string, requested_permissions: u32, callback: ^media_access_callback) -> b32,
 
     ///
     /// Called when a page should show a permission prompt. |prompt_id| uniquely
@@ -93,7 +93,7 @@ permission_handler :: struct {
     /// default handling will display the permission prompt UI. With Alloy style,
     /// default handling is CEF_PERMISSION_RESULT_IGNORE.
     ///
-    on_show_permission_prompt: proc "c" (self: ^permission_handler, browser: ^Browser, prompt_id: u64, requesting_origin: ^cef_string, requested_permissions: u32, callback: ^permission_prompt_callback) -> b32,
+    on_show_permission_prompt: proc "c" (self: ^Permission_handler, browser: ^Browser, prompt_id: u64, requesting_origin: ^cef_string, requested_permissions: u32, callback: ^permission_prompt_callback) -> b32,
 
     ///
     /// Called when a permission prompt handled via on_show_permission_prompt is
@@ -104,5 +104,5 @@ permission_handler :: struct {
     /// closure, etc. This function will not be called if on_show_permission_prompt
     /// returned false (0) for |prompt_id|.
     ///
-    on_dismiss_permission_prompt: proc "c" (self: ^permission_handler, browser: ^Browser, prompt_id: u64, result: cef_permission_request_result),
+    on_dismiss_permission_prompt: proc "c" (self: ^Permission_handler, browser: ^Browser, prompt_id: u64, result: Permission_request_result),
 } 

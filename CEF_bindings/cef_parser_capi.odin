@@ -25,7 +25,7 @@ foreign lib {
     cef_get_mime_type :: proc(extension: ^cef_string) -> cef_string_userfree ---
     cef_get_extensions_for_mime_type :: proc(mime_type: ^cef_string, extensions: string_list) ---
     cef_base64_encode :: proc(data: rawptr, data_size: c.size_t) -> cef_string_userfree ---
-    cef_base64_decode :: proc(data: ^cef_string) -> ^cef_binary_value_t ---
+    cef_base64_decode :: proc(data: ^cef_string) -> ^cef_binary_value ---
     cef_uriencode :: proc(text: ^cef_string, use_plus: b32) -> cef_string_userfree ---
     cef_uridecode :: proc(text: ^cef_string, convert_to_utf8: b32, unescape_rule: cef_uri_unescape_rule_t) -> cef_string_userfree ---
     cef_parse_json :: proc(json_string: ^cef_string, options: cef_json_parser_options_t) -> ^cef_value_t ---

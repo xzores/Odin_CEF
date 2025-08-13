@@ -7,14 +7,14 @@ This document tracks CEF types that need attention or are missing from the Odin 
 - `Context_menu_handler` - Properly capitalized struct name
 - `Request` - Properly capitalized struct name  
 - `Download_item` - Properly capitalized struct name
-- `cursor_handle` - Added platform-specific type definition (using rawptr)
+- `Cursor_handle` - Added platform-specific type definition (using rawptr)
 - `Image` - Already correctly defined and capitalized
-- Geometry types - Added compatibility aliases (`cef_rect`, `cef_size`, `cef_point_t`)
+- Geometry types - Added compatibility aliases (`cef_rect`, `cef_size`, `cef_point`)
 - `process_id` - Added alias to internal enum
 - `cef_basetime` - Added alias to internal.base_time
-- `url_request` / `url_request_client` - Added aliases to urlrequest types
-- `dom_visitor` - Added alias to cef_domvisitor_t
-- `process_message` - Added alias to cef_process_message_t
+- `Url_request` / `Url_request_client` - Added aliases to Url_request types
+- `Dom_visitor` - Added alias to cef_domvisitor_t
+- `Process_message` - Added alias to cef_process_message_t
 
 ## Types Needing Investigation 🔍
 
@@ -25,25 +25,25 @@ The following types are referenced in the code but may need proper definitions o
 As we fix errors, new ones are revealed because Odin can now parse further into files. Here's the current complete list:
 
 #### Enum Types Still Missing
-- `cef_drag_operations_mask` - Drag and drop operations enumeration
-- `cef_focus_source` - Focus source enumeration  
-- `cef_permission_request_result` - Permission request result enumeration
+- `Drag_operations_mask` - Drag and drop operations enumeration
+- `Focus_source` - Focus source enumeration  
+- `Permission_request_result` - Permission request result enumeration
 - `cef_file_dialog_mode` - File dialog mode enumeration
-- `cef_cursor_type` - Cursor type enumeration
-- `cef_v8_propertyattribute` - V8 property attribute enumeration
-- `cef_urlrequest_status` - URL request status enumeration
-- `cef_event_handle` - Event handle type
+- `Cursor_type` - Cursor type enumeration
+- `V8_property_attribute` - V8 property attribute enumeration
+- `Url_request_status` - URL request status enumeration
+- `Event_handle` - Event handle type
 - `cef_jsdialog_type` - JavaScript dialog type enumeration
-- `cef_window_open_disposition` - Window open disposition enumeration
+- `Window_open_disposition` - Window open disposition enumeration
 - `cef_errorcode` - Error code enumeration
 
 #### Struct Types Still Missing
-- `cef_cursor_info` - Cursor information structure
-- `cef_draggable_region` - Draggable region structure  
-- `cef_key_event` - Key event structure
-- `cef_popup_features` - Popup features structure
-- `cef_window_info` - Window information structure
-- `cef_browser_settings` - Browser settings structure
+- `Cursor_info` - Cursor information structure
+- `Draggable_region` - Draggable region structure  
+- `Key_event` - Key event structure
+- `Popup_features` - Popup features structure
+- `Window_info` - Window information structure
+- `Browser_settings` - Browser settings structure
 - `cef_dictionary_value` - Dictionary value structure
 
 **Note**: These types are likely defined in CEF headers but may need:
@@ -64,8 +64,8 @@ As we fix errors, new ones are revealed because Odin can now parse further into 
 - All structs have been converted from C `typedef struct` syntax to Odin `:: struct` syntax
 - Member types updated to use Odin equivalents:
   - `cef_rect` -> `rect_t`
-  - `cef_point_t` -> `point_t`
-  - `cef_size_t` -> `size_t`
+  - `cef_point` -> `point_t`
+  - `cef_size` -> `size_t`
   - `cef_string` -> `cef_string`
   - `uint32_t` -> `u32`
   - `int64_t` -> `i64`

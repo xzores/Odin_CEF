@@ -4,16 +4,16 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
-// frame is defined in cef_frame_capi.odin
+// browser is defined in Browser_capi.odin
+// frame is defined in Frame_capi.odin
 // cef_string is defined in cef_string_capi.odin
 // string_list is defined in cef_string_capi.odin
 // cef_size is defined in cef_types_capi.odin
 // cef_rect is defined in cef_types_capi.odin
-// cursor_handle is defined in internal/cef_types.odin
-// cef_cursor_type is defined in cef_types_capi.odin
-// cef_cursor_info is defined in cef_types_capi.odin
-// log_severity is defined in cef_types_capi.odin
+// Cursor_handle is defined in internal/cef_types.odin
+// Cursor_type is defined in cef_types_capi.odin
+// Cursor_info is defined in cef_types_capi.odin
+// Log_severity is defined in cef_types_capi.odin
 
 ///
 /// Implement this structure to handle events related to browser display state.
@@ -21,7 +21,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-display_handler :: struct {
+Display_handler :: struct {
 	///
 	/// Base structure.
 	///
@@ -30,17 +30,17 @@ display_handler :: struct {
 	///
 	/// Called when a frame's address has changed.
 	///
-	on_address_change: proc "c" (self: ^display_handler, browser: ^Browser, frame: ^Frame, url: ^cef_string),
+	on_address_change: proc "c" (self: ^Display_handler, browser: ^Browser, frame: ^Frame, url: ^cef_string),
 
 	///
 	/// Called when the page title changes.
 	///
-	on_title_change: proc "c" (self: ^display_handler, browser: ^Browser, title: ^cef_string),
+	on_title_change: proc "c" (self: ^Display_handler, browser: ^Browser, title: ^cef_string),
 
 	///
 	/// Called when the page icon changes.
 	///
-	on_favicon_urlchange: proc "c" (self: ^display_handler, browser: ^Browser, icon_urls: string_list),
+	on_favicon_urlchange: proc "c" (self: ^Display_handler, browser: ^Browser, icon_urls: string_list),
 
 	///
 	/// Called when web content in the page has toggled fullscreen mode. If
@@ -53,7 +53,7 @@ display_handler :: struct {
 	/// The window_delegate::on_window_fullscreen_transition function will be
 	/// called during the fullscreen transition for notification purposes.
 	///
-	on_fullscreen_mode_change: proc "c" (self: ^display_handler, browser: ^Browser, fullscreen: b32),
+	on_fullscreen_mode_change: proc "c" (self: ^Display_handler, browser: ^Browser, fullscreen: b32),
 
 	///
 	/// Called when the browser is about to display a tooltip. |text| contains the
@@ -63,19 +63,19 @@ display_handler :: struct {
 	/// tooltip. When window rendering is disabled the application is responsible
 	/// for drawing tooltips and the return value is ignored.
 	///
-	on_tooltip: proc "c" (self: ^display_handler, browser: ^Browser, text: ^cef_string) -> b32,
+	on_tooltip: proc "c" (self: ^Display_handler, browser: ^Browser, text: ^cef_string) -> b32,
 
 	///
 	/// Called when the browser receives a status message. |value| contains the
 	/// text that will be displayed in the status message.
 	///
-	on_status_message: proc "c" (self: ^display_handler, browser: ^Browser, value: ^cef_string),
+	on_status_message: proc "c" (self: ^Display_handler, browser: ^Browser, value: ^cef_string),
 
 	///
 	/// Called to display a console message. Return true (1) to stop the message
 	/// from being output to the console.
 	///
-	on_console_message: proc "c" (self: ^display_handler, browser: ^Browser, level: log_severity, message: ^cef_string, source: ^cef_string, line: c.int) -> b32,
+	on_console_message: proc "c" (self: ^Display_handler, browser: ^Browser, level: Log_severity, message: ^cef_string, source: ^cef_string, line: c.int) -> b32,
 
 	///
 	/// Called when auto-resize is enabled via
@@ -83,13 +83,13 @@ display_handler :: struct {
 	/// resized. |new_size| will be the desired size in DIP coordinates. Return
 	/// true (1) if the resize was handled or false (0) for default handling.
 	///
-	on_auto_resize: proc "c" (self: ^display_handler, browser: ^Browser, new_size: ^cef_size) -> b32,
+	on_auto_resize: proc "c" (self: ^Display_handler, browser: ^Browser, new_size: ^cef_size) -> b32,
 
 	///
 	/// Called when the overall page loading progress has changed. |progress|
 	/// ranges from 0.0 to 1.0.
 	///
-	on_loading_progress_change: proc "c" (self: ^display_handler, browser: ^Browser, progress: f64),
+	on_loading_progress_change: proc "c" (self: ^Display_handler, browser: ^Browser, progress: f64),
 
 	///
 	/// Called when the browser's cursor has changed. If |type| is CT_CUSTOM then
@@ -97,13 +97,13 @@ display_handler :: struct {
 	/// Return true (1) if the cursor change was handled or false (0) for default
 	/// handling.
 	///
-	on_cursor_change: proc "c" (self: ^display_handler, browser: ^Browser, cursor: cursor_handle, type: cef_cursor_type, custom_cursor_info: ^cef_cursor_info) -> b32,
+	on_cursor_change: proc "c" (self: ^Display_handler, browser: ^Browser, cursor: Cursor_handle, type: Cursor_type, custom_cursor_info: ^Cursor_info) -> b32,
 
 	///
 	/// Called when the browser's access to an audio and/or video source has
 	/// changed.
 	///
-	on_media_access_change: proc "c" (self: ^display_handler, browser: ^Browser, has_video_access: b32, has_audio_access: b32),
+	on_media_access_change: proc "c" (self: ^Display_handler, browser: ^Browser, has_video_access: b32, has_audio_access: b32),
 
 	///
 	/// Called when JavaScript is requesting new bounds via window.moveTo/By() or
@@ -115,8 +115,8 @@ display_handler :: struct {
 	/// and Windows |new_bounds| are the desired frame bounds for the containing
 	/// root window. With other non-Views browsers |new_bounds| are the desired
 	/// bounds for the browser content only unless the client implements either
-	/// display_handler::get_root_window_screen_rect for windowed browsers or
-	/// render_handler::get_window_screen_rect for windowless browsers. Clients
+	/// Display_handler::get_root_window_screen_rect for windowed browsers or
+	/// Render_handler::get_window_screen_rect for windowless browsers. Clients
 	/// may expand browser content bounds to window bounds using OS-specific or
 	/// display functions.
 	///
@@ -124,7 +124,7 @@ display_handler :: struct {
 	/// handling. Default move/resize behavior is only provided with Views-hosted
 	/// Chrome style browsers.
 	///
-	on_contents_bounds_change: proc "c" (self: ^display_handler, browser: ^Browser, new_bounds: ^cef_rect) -> b32,
+	on_contents_bounds_change: proc "c" (self: ^Display_handler, browser: ^Browser, new_bounds: ^cef_rect) -> b32,
 
 	///
 	/// Called to retrieve the external (client-provided) root window rectangle in
@@ -134,5 +134,5 @@ display_handler :: struct {
 	/// Linux. For additional usage details see
 	/// browser_host::notify_screen_info_changed.
 	///
-	get_root_window_screen_rect: proc "c" (self: ^display_handler, browser: ^Browser, rect: ^cef_rect) -> b32,
+	get_root_window_screen_rect: proc "c" (self: ^Display_handler, browser: ^Browser, rect: ^cef_rect) -> b32,
 } 

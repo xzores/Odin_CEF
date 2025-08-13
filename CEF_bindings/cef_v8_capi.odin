@@ -5,23 +5,23 @@ import "core:c"
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
 // task_runner is defined in cef_task_capi.odin
-// browser is defined in cef_browser_capi.odin
-// frame is defined in cef_frame_capi.odin
+// browser is defined in Browser_capi.odin
+// frame is defined in Frame_capi.odin
 // cef_string is defined in cef_string_capi.odin
 // cef_string_userfree is defined in cef_string_capi.odin
 // cef_basetime is defined in cef_types_capi.odin
-// cef_v8_propertyattribute is defined in cef_types_capi.odin
+// V8_property_attribute is defined in cef_types_capi.odin
 
 ///
 /// Structure representing a V8 context handle. V8 handles can only be accessed
 /// from the thread on which they are created. Valid threads for creating a V8
 /// handle include the render process main thread (TID_RENDERER) and WebWorker
 /// threads. A task runner for posting tasks on the associated thread can be
-/// retrieved via the v8_context::get_task_runner() function.
+/// retrieved via the V8_context::get_task_runner() function.
 ///
 /// NOTE: This struct is allocated DLL-side.
 ///
-v8_context :: struct {
+V8_context :: struct {
 	///
 	/// Base structure.
 	///
@@ -32,32 +32,32 @@ v8_context :: struct {
 	/// be accessed from the thread on which they are created. This function can
 	/// be called on any render process thread.
 	///
-	get_task_runner: proc "c" (self: ^v8_context) -> ^task_runner,
+	get_task_runner: proc "c" (self: ^V8_context) -> ^task_runner,
 
 	///
 	/// Returns true (1) if the underlying handle is valid and it can be accessed
 	/// on the current thread. Do not call any other functions if this function
 	/// returns false (0).
 	///
-	is_valid: proc "c" (self: ^v8_context) -> b32,
+	is_valid: proc "c" (self: ^V8_context) -> b32,
 
 	///
 	/// Returns the browser for this context. This function will return an NULL
 	/// reference for WebWorker contexts.
 	///
-	    get_browser: proc "c" (self: ^v8_context) -> ^Browser,
+	    get_browser: proc "c" (self: ^V8_context) -> ^Browser,
 
 	///
 	/// Returns the frame for this context. This function will return an NULL
 	/// reference for WebWorker contexts.
 	///
-	get_frame: proc "c" (self: ^v8_context) -> ^Frame,
+	get_frame: proc "c" (self: ^V8_context) -> ^Frame,
 
 	///
 	/// Returns the global object for this context. The context must be entered
 	/// before calling this function.
 	///
-	get_global: proc "c" (self: ^v8_context) -> ^v8_value,
+	get_global: proc "c" (self: ^V8_context) -> ^v8_value,
 
 	///
 	/// Enter this context. A context must be explicitly entered before creating a
@@ -66,19 +66,19 @@ v8_context :: struct {
 	/// objects belong to the context in which they are created. Returns true (1)
 	/// if the scope was entered successfully.
 	///
-	enter: proc "c" (self: ^v8_context) -> b32,
+	enter: proc "c" (self: ^V8_context) -> b32,
 
 	///
 	/// Exit this context. Call this function only after calling enter(). Returns
 	/// true (1) if the scope was exited successfully.
 	///
-	exit: proc "c" (self: ^v8_context) -> b32,
+	exit: proc "c" (self: ^V8_context) -> b32,
 
 	///
 	/// Returns true (1) if this object is pointing to the same handle as |that|
 	/// object.
 	///
-	is_same: proc "c" (self: ^v8_context, that: ^v8_context) -> b32,
+	is_same: proc "c" (self: ^V8_context, that: ^V8_context) -> b32,
 
 	///
 	/// Execute a string of JavaScript code in this V8 context. The |script_url|
@@ -88,23 +88,23 @@ v8_context :: struct {
 	/// and the function will return true (1). On failure |exception| will be set
 	/// to the exception, if any, and the function will return false (0).
 	///
-	eval: proc "c" (self: ^v8_context, code: ^cef_string, script_url: ^cef_string, start_line: c.int, retval: ^^v8_value, exception: ^^v8_exception) -> b32,
+	eval: proc "c" (self: ^V8_context, code: ^cef_string, script_url: ^cef_string, start_line: c.int, retval: ^^v8_value, exception: ^^V8_exception) -> b32,
 }
 
 ///
 /// Returns the current (top) context object in the V8 context stack.
 ///
-v8_context_get_current_context :: proc "c" () -> ^v8_context
+V8_context_get_current_context :: proc "c" () -> ^V8_context
 
 ///
 /// Returns the entered (bottom) context object in the V8 context stack.
 ///
-v8_context_get_entered_context :: proc "c" () -> ^v8_context
+V8_context_get_entered_context :: proc "c" () -> ^V8_context
 
 ///
 /// Returns true (1) if V8 is currently inside a context.
 ///
-v8_context_in_context :: proc "c" () -> b32
+V8_context_in_context :: proc "c" () -> b32
 
 ///
 /// Structure that should be implemented to handle V8 function calls. The
@@ -222,7 +222,7 @@ v8_interceptor :: struct {
 ///
 /// NOTE: This struct is allocated DLL-side.
 ///
-v8_exception :: struct {
+V8_exception :: struct {
 	///
 	/// Base structure.
 	///
@@ -231,48 +231,48 @@ v8_exception :: struct {
 	///
 	/// Returns the exception message.
 	///
-	get_message: proc "c" (self: ^v8_exception) -> cef_string_userfree,
+	get_message: proc "c" (self: ^V8_exception) -> cef_string_userfree,
 
 	///
 	/// Returns the line of source code that the exception occurred within.
 	///
-	get_source_line: proc "c" (self: ^v8_exception) -> cef_string_userfree,
+	get_source_line: proc "c" (self: ^V8_exception) -> cef_string_userfree,
 
 	///
 	/// Returns the resource name for the script from where the function causing
 	/// the error originates.
 	///
-	get_script_resource_name: proc "c" (self: ^v8_exception) -> cef_string_userfree,
+	get_script_resource_name: proc "c" (self: ^V8_exception) -> cef_string_userfree,
 
 	///
 	/// Returns the 1-based number of the line where the error occurred or 0 if
 	/// the line number is unknown.
 	///
-	get_line_number: proc "c" (self: ^v8_exception) -> c.int,
+	get_line_number: proc "c" (self: ^V8_exception) -> c.int,
 
 	///
 	/// Returns the index within the script of the first character where the error
 	/// occurred.
 	///
-	get_start_position: proc "c" (self: ^v8_exception) -> c.int,
+	get_start_position: proc "c" (self: ^V8_exception) -> c.int,
 
 	///
 	/// Returns the index within the script of the last character where the error
 	/// occurred.
 	///
-	get_end_position: proc "c" (self: ^v8_exception) -> c.int,
+	get_end_position: proc "c" (self: ^V8_exception) -> c.int,
 
 	///
 	/// Returns the index within the line of the first character where the error
 	/// occurred.
 	///
-	get_start_column: proc "c" (self: ^v8_exception) -> c.int,
+	get_start_column: proc "c" (self: ^V8_exception) -> c.int,
 
 	///
 	/// Returns the index within the line of the last character where the error
 	/// occurred.
 	///
-	get_end_column: proc "c" (self: ^v8_exception) -> c.int,
+	get_end_column: proc "c" (self: ^V8_exception) -> c.int,
 }
 
 ///
@@ -301,7 +301,7 @@ v8_array_buffer_release_callback :: struct {
 /// from the thread on which they are created. Valid threads for creating a V8
 /// handle include the render process main thread (TID_RENDERER) and WebWorker
 /// threads. A task runner for posting tasks on the associated thread can be
-/// retrieved via the cef_v8_context_t::get_task_runner() function.
+/// retrieved via the cef_V8_context_t::get_task_runner() function.
 ///
 /// NOTE: This struct is allocated DLL-side.
 ///
@@ -412,7 +412,7 @@ v8_value :: struct {
 	///
 	/// Return a Date value.
 	///
-	get_date_value: proc "c" (self: ^v8_value) -> cef_basetime,
+	get_date_value: proc "c" (self: ^v8_value) -> Basetime,
 
 	///
 	/// Return a string value.
@@ -434,7 +434,7 @@ v8_value :: struct {
 	/// Returns the exception resulting from the last function call. This
 	/// attribute exists only in the scope of the current CEF value object.
 	///
-	get_exception: proc "c" (self: ^v8_value) -> ^v8_exception,
+	get_exception: proc "c" (self: ^v8_value) -> ^V8_exception,
 
 	///
 	/// Clears the last exception and returns true (1) on success.
@@ -500,7 +500,7 @@ v8_value :: struct {
 	/// exception is thrown. For read-only values this function will return true
 	/// (1) even though assignment failed.
 	///
-	set_value_bykey: proc "c" (self: ^v8_value, key: ^cef_string, value: ^v8_value, attribute: cef_v8_propertyattribute) -> b32,
+	set_value_bykey: proc "c" (self: ^v8_value, key: ^cef_string, value: ^v8_value, attribute: V8_property_attribute) -> b32,
 	
 	///
 	/// Associates a value with the specified identifier and returns true (1) on
@@ -517,7 +517,7 @@ v8_value :: struct {
 	/// function is called incorrectly or an exception is thrown. For read-only
 	/// values this function will return true (1) even though assignment failed.
 	///
-	set_value_byaccessor: proc "c" (self: ^v8_value, key: ^cef_string, attribute: cef_v8_propertyattribute) -> b32,
+	set_value_byaccessor: proc "c" (self: ^v8_value, key: ^cef_string, attribute: V8_property_attribute) -> b32,
 
 	///
 	/// Read the keys for the object's values into the specified vector. Integer-
@@ -602,7 +602,7 @@ v8_value :: struct {
 	/// Execute the function using the current V8 context. This function should
 	/// only be called from within the scope of a v8_handler or
 	/// v8_accessor callback, or in combination with calling enter() and
-	/// exit() on a stored v8_context reference. |object| is the receiver
+	/// exit() on a stored V8_context reference. |object| is the receiver
 	/// ('this' object) of the function. If |object| is NULL the current context's
 	/// global object will be used. |arguments| is the list of arguments that will
 	/// be passed to the function. Returns the function return value on success.
@@ -619,13 +619,13 @@ v8_value :: struct {
 	/// value on success. Returns NULL if this function is called incorrectly or
 	/// an exception is thrown.
 	///
-	execute_function_with_context: proc "c" (self: ^v8_value, ctx: ^v8_context, object: ^v8_value, argumentsCount: c.size_t, arguments: ^^v8_value) -> ^v8_value,
+	execute_function_with_context: proc "c" (self: ^v8_value, ctx: ^V8_context, object: ^v8_value, argumentsCount: c.size_t, arguments: ^^v8_value) -> ^v8_value,
 
 	///
 	/// Resolve the Promise using the current V8 context. This function should
 	/// only be called from within the scope of a v8_handler or
 	/// v8_accessor callback, or in combination with calling enter() and
-	/// exit() on a stored v8_context reference. |arg| is the argument
+	/// exit() on a stored V8_context reference. |arg| is the argument
 	/// passed to the resolved promise. Returns true (1) on success. Returns false
 	/// (0) if this function is called incorrectly or an exception is thrown.
 	///
@@ -635,7 +635,7 @@ v8_value :: struct {
 	/// Reject the Promise using the current V8 context. This function should only
 	/// be called from within the scope of a v8_handler or v8_accessor
 	/// callback, or in combination with calling enter() and exit() on a stored
-	/// v8_context reference. Returns true (1) on success. Returns false (0)
+	/// V8_context reference. Returns true (1) on success. Returns false (0)
 	/// if this function is called incorrectly or an exception is thrown.
 	///
 	reject_promise: proc "c" (self: ^v8_value, errorMsg: ^cef_string) -> b32,
@@ -673,11 +673,11 @@ v8_value_create_double :: proc "c" (value: f64) -> ^v8_value
 
 ///
 /// Create a new v8_value object of type Date. This function should only be
-/// called from within the scope of a v8_context, v8_handler or
+/// called from within the scope of a V8_context, v8_handler or
 /// v8_accessor callback, or in combination with calling enter() and exit()
-/// on a stored v8_context reference.
+/// on a stored V8_context reference.
 ///
-v8_value_create_date :: proc "c" (date: cef_basetime) -> ^v8_value
+v8_value_create_date :: proc "c" (date: Basetime) -> ^v8_value
 
 ///
 /// Create a new v8_value object of type string.
@@ -686,42 +686,42 @@ v8_value_create_string :: proc "c" (value: ^cef_string) -> ^v8_value
 
 ///
 /// Create a new v8_value object of type object with optional accessor. This
-/// function should only be called from within the scope of a v8_context,
+/// function should only be called from within the scope of a V8_context,
 /// v8_handler or v8_accessor callback, or in combination with calling
-/// enter() and exit() on a stored v8_context reference.
+/// enter() and exit() on a stored V8_context reference.
 ///
 v8_value_create_object :: proc "c" (accessor: ^v8_accessor, interceptor: ^v8_interceptor) -> ^v8_value
 
 ///
 /// Create a new v8_value object of type array with the specified |length|. If
 /// |length| is negative the returned array will have length 0. This function
-/// should only be called from within the scope of a v8_context, v8_handler or
+/// should only be called from within the scope of a V8_context, v8_handler or
 /// v8_accessor callback, or in combination with calling enter() and exit()
-/// on a stored v8_context reference.
+/// on a stored V8_context reference.
 ///
 v8_value_create_array :: proc "c" (length: c.int) -> ^v8_value
 
 ///
 /// Create a new v8_value object of type ArrayBuffer. This function should only
-/// be called from within the scope of a v8_context, v8_handler or
+/// be called from within the scope of a V8_context, v8_handler or
 /// v8_accessor callback, or in combination with calling enter() and exit()
-/// on a stored v8_context reference.
+/// on a stored V8_context reference.
 ///
 v8_value_create_array_buffer :: proc "c" (buffer: rawptr, length: c.size_t, release_callback: ^v8_array_buffer_release_callback) -> ^v8_value
 
 ///
 /// Create a new v8_value object of type function. This function should only be
-/// called from within the scope of a v8_context, v8_handler or
+/// called from within the scope of a V8_context, v8_handler or
 /// v8_accessor callback, or in combination with calling enter() and exit()
-/// on a stored v8_context reference.
+/// on a stored V8_context reference.
 ///
 v8_value_create_function :: proc "c" (name: ^cef_string, handler: ^v8_handler) -> ^v8_value
 
 ///
 /// Create a new v8_value object of type Promise. This function should only be
-/// called from within the scope of a v8_context, v8_handler or
+/// called from within the scope of a V8_context, v8_handler or
 /// v8_accessor callback, or in combination with calling enter() and exit()
-/// on a stored v8_context reference.
+/// on a stored V8_context reference.
 ///
 v8_value_create_promise :: proc "c" () -> ^v8_value
 
@@ -729,7 +729,7 @@ v8_value_create_promise :: proc "c" () -> ^v8_value
 /// Returns the stack trace for the currently active context. |frame_limit| is
 /// the maximum number of frames that will be captured.
 ///
-v8_get_current_stack_trace :: proc "c" (frame_limit: c.int) -> ^v8_stack_trace
+v8_get_current_stack_trace :: proc "c" (frame_limit: c.int) -> ^V8_stack_trace
 
 ///
 /// Structure representing a V8 stack trace handle. The functions of this
@@ -737,7 +737,7 @@ v8_get_current_stack_trace :: proc "c" (frame_limit: c.int) -> ^v8_stack_trace
 ///
 /// NOTE: This struct is allocated DLL-side.
 ///
-v8_stack_trace :: struct {
+V8_stack_trace :: struct {
 	///
 	/// Base structure.
 	///
@@ -748,17 +748,17 @@ v8_stack_trace :: struct {
 	/// on the current thread. Do not call any other functions if this function
 	/// returns false (0).
 	///
-	is_valid: proc "c" (self: ^v8_stack_trace) -> b32,
+	is_valid: proc "c" (self: ^V8_stack_trace) -> b32,
 
 	///
 	/// Returns the number of stack frames.
 	///
-	get_frame_count: proc "c" (self: ^v8_stack_trace) -> c.int,
+	get_frame_count: proc "c" (self: ^V8_stack_trace) -> c.int,
 
 	///
 	/// Returns the stack frame at the specified 0-based index.
 	///
-	get_frame: proc "c" (self: ^v8_stack_trace, index: c.int) -> ^v8_stack_frame,
+	get_frame: proc "c" (self: ^V8_stack_trace, index: c.int) -> ^v8_stack_frame,
 }
 
 ///

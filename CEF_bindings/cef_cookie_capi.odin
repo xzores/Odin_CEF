@@ -4,7 +4,7 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// completion_callback is defined in cef_callback_capi.odin
+// Completion_callback is defined in cef_callback_capi.odin
 // cef_string is defined in cef_string_capi.odin
 // cef_cookie is defined in cef_types_capi.odin
 
@@ -14,7 +14,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated DLL-side.
 ///
-cookie_manager :: struct {
+Cookie_manager :: struct {
     ///
     /// Base structure.
     ///
@@ -25,7 +25,7 @@ cookie_manager :: struct {
     /// longest path, then by earliest creation date. Returns false (0) if cookies
     /// cannot be accessed.
     ///
-    visit_all_cookies: proc "c" (self: ^cookie_manager, visitor: ^cookie_visitor) -> b32,
+    visit_all_cookies: proc "c" (self: ^Cookie_manager, visitor: ^cookie_visitor) -> b32,
 
     ///
     /// Visit a subset of cookies on the UI thread. The results are filtered by
@@ -34,7 +34,7 @@ cookie_manager :: struct {
     /// cookies are ordered by longest path, then by earliest creation date.
     /// Returns false (0) if cookies cannot be accessed.
     ///
-    visit_url_cookies: proc "c" (self: ^cookie_manager, url: ^cef_string, includeHttpOnly: b32, visitor: ^cookie_visitor) -> b32,
+    visit_url_cookies: proc "c" (self: ^Cookie_manager, url: ^cef_string, includeHttpOnly: b32, visitor: ^cookie_visitor) -> b32,
 
     ///
     /// Sets a cookie given a valid URL and explicit user-provided cookie
@@ -45,7 +45,7 @@ cookie_manager :: struct {
     /// asnychronously on the UI thread after the cookie has been set. Returns
     /// false (0) if an invalid URL is specified or if cookies cannot be accessed.
     ///
-    set_cookie: proc "c" (self: ^cookie_manager, url: ^cef_string, cookie: ^cef_cookie, callback: ^set_cookie_callback) -> b32,
+    set_cookie: proc "c" (self: ^Cookie_manager, url: ^cef_string, cookie: ^cef_cookie, callback: ^set_cookie_callback) -> b32,
 
     ///
     /// Delete all cookies that match the specified parameters. If both |url| and
@@ -58,14 +58,14 @@ cookie_manager :: struct {
     /// specified or if cookies cannot be accessed. Cookies can alternately be
     /// deleted using the Visit*Cookies() functions.
     ///
-    delete_cookies: proc "c" (self: ^cookie_manager, url: ^cef_string, cookie_name: ^cef_string, callback: ^delete_cookies_callback) -> b32,
+    delete_cookies: proc "c" (self: ^Cookie_manager, url: ^cef_string, cookie_name: ^cef_string, callback: ^delete_cookies_callback) -> b32,
 
     ///
     /// Flush the backing store (if any) to disk. If |callback| is non-NULL it
     /// will be executed asnychronously on the UI thread after the flush is
     /// complete. Returns false (0) if cookies cannot be accessed.
     ///
-    flush_store: proc "c" (self: ^cookie_manager, callback: ^completion_callback) -> b32,
+    flush_store: proc "c" (self: ^Cookie_manager, callback: ^Completion_callback) -> b32,
 }
 
 ///
@@ -73,9 +73,9 @@ cookie_manager :: struct {
 /// cef_settings.cache_path if specified or in memory otherwise. If |callback|
 /// is non-NULL it will be executed asnychronously on the UI thread after the
 /// manager's storage has been initialized. Using this function is equivalent to
-/// calling request_context::get_global_context()->get_default_cookie_manager().
+/// calling Request_context::get_global_context()->get_default_cookie_manager().
 ///
-get_global_manager :: proc "c" (callback: ^completion_callback) -> ^cookie_manager
+get_global_manager :: proc "c" (callback: ^Completion_callback) -> ^Cookie_manager
 
 ///
 /// Structure to implement for visiting cookie values. The functions of this
@@ -101,7 +101,7 @@ cookie_visitor :: struct {
 
 ///
 /// Structure to implement to be notified of asynchronous completion via
-/// cookie_manager::set_cookie().
+/// Cookie_manager::set_cookie().
 ///
 /// NOTE: This struct is allocated client-side.
 ///
@@ -120,7 +120,7 @@ set_cookie_callback :: struct {
 
 ///
 /// Structure to implement to be notified of asynchronous completion via
-/// cookie_manager::delete_cookies().
+/// Cookie_manager::delete_cookies().
 ///
 /// NOTE: This struct is allocated client-side.
 ///

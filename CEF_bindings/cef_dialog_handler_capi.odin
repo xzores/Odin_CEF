@@ -4,7 +4,7 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
+// browser is defined in Browser_capi.odin
 // cef_string is defined in cef_string_capi.odin
 // string_list is defined in cef_string_capi.odin
 // cef_file_dialog_mode is defined in cef_types_capi.odin
@@ -14,7 +14,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated DLL-side.
 ///
-file_dialog_callback :: struct {
+File_dialog_callback :: struct {
 	///
 	/// Base structure.
 	///
@@ -25,12 +25,12 @@ file_dialog_callback :: struct {
 	/// list of values depending on the dialog mode. An NULL |file_paths| value is
 	/// treated the same as calling cancel().
 	///
-	cont: proc "c" (self: ^file_dialog_callback, file_paths: string_list),
+	cont: proc "c" (self: ^File_dialog_callback, file_paths: string_list),
 
 	///
 	/// Cancel the file selection.
 	///
-	cancel: proc "c" (self: ^file_dialog_callback),
+	cancel: proc "c" (self: ^File_dialog_callback),
 }
 
 ///
@@ -39,7 +39,7 @@ file_dialog_callback :: struct {
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-dialog_handler :: struct {
+Dialog_handler :: struct {
 	///
 	/// Base structure.
 	///
@@ -66,5 +66,6 @@ dialog_handler :: struct {
 	/// additional time for the same dialog (both before and after MIME type
 	/// expansion).
 	///
-	on_file_dialog: proc "c" (self: ^dialog_handler, browser: ^Browser, mode: cef_file_dialog_mode, title: ^cef_string, default_file_path: ^cef_string, accept_filters: string_list, accept_extensions: string_list, accept_descriptions: string_list, callback: ^file_dialog_callback) -> b32,
+	on_file_dialog: proc "c" (self: ^Dialog_handler, browser: ^Browser, mode: File_dialog_mode, title: ^cef_string, default_file_path: ^cef_string,
+		 accept_filters: string_list, accept_extensions: string_list, accept_descriptions: string_list, callback: ^File_dialog_callback) -> b32,
 } 

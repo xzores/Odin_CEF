@@ -10,41 +10,74 @@ when ODIN_OS == .Windows {
     foreign import lib "CEF/Release/libcef.dylib"
 }
 
-// Forward declarations for types
-// cef_size_t :: struct {}
-// cef_rect :: struct {}
-cef_range_t :: struct {}
-cef_color_model_t :: enum c.int {}
-cef_duplex_mode_t :: enum c.int {}
+// Structure representing print settings.
+// NOTE: This struct is allocated DLL-side.
+Print_settings :: struct {
+	// Base structure.
+	base: base_ref_counted,
 
-cef_print_settings_t :: struct {
-    base: cef_base_ref_counted_t,
-    
-    is_valid: proc "c" (self: ^cef_print_settings_t) -> b32,
-    is_read_only: proc "c" (self: ^cef_print_settings_t) -> b32,
-    set_orientation: proc "c" (self: ^cef_print_settings_t, landscape: b32),
-    is_landscape: proc "c" (self: ^cef_print_settings_t) -> b32,
-    set_printer_printable_area: proc "c" (self: ^cef_print_settings_t, physical_size_device_units: ^cef_size_t, printable_area_device_units: ^cef_rect, landscape_needs_flip: b32),
-    set_device_name: proc "c" (self: ^cef_print_settings_t, name: ^cef_string),
-    get_device_name: proc "c" (self: ^cef_print_settings_t) -> cef_string_userfree,
-    set_dpi: proc "c" (self: ^cef_print_settings_t, dpi: c.int),
-    get_dpi: proc "c" (self: ^cef_print_settings_t) -> c.int,
-    set_page_ranges: proc "c" (self: ^cef_print_settings_t, ranges_count: c.size_t, ranges: ^cef_range_t),
-    get_page_ranges_count: proc "c" (self: ^cef_print_settings_t) -> c.size_t,
-    get_page_ranges: proc "c" (self: ^cef_print_settings_t, ranges_count: ^c.size_t, ranges: ^cef_range_t),
-    set_selection_only: proc "c" (self: ^cef_print_settings_t, selection_only: b32),
-    is_selection_only: proc "c" (self: ^cef_print_settings_t) -> b32,
-    set_collate: proc "c" (self: ^cef_print_settings_t, collate: b32),
-    will_collate: proc "c" (self: ^cef_print_settings_t) -> b32,
-    set_color_model: proc "c" (self: ^cef_print_settings_t, model: cef_color_model_t),
-    get_color_model: proc "c" (self: ^cef_print_settings_t) -> cef_color_model_t,
-    set_copies: proc "c" (self: ^cef_print_settings_t, copies: c.int),
-    get_copies: proc "c" (self: ^cef_print_settings_t) -> c.int,
-    set_duplex_mode: proc "c" (self: ^cef_print_settings_t, mode: cef_duplex_mode_t),
-    get_duplex_mode: proc "c" (self: ^cef_print_settings_t) -> cef_duplex_mode_t,
+	// Returns 1 if this object is valid. Do not call other functions if 0.
+	is_valid: proc "c" (self: ^Print_settings) -> c.int,
+
+	// Returns 1 if values are read-only (some APIs expose read-only objects).
+	is_read_only: proc "c" (self: ^Print_settings) -> c.int,
+
+	// Set the page orientation.
+	set_orientation: proc "c" (self: ^Print_settings, landscape: c.int),
+
+	// Returns 1 if orientation is landscape.
+	is_landscape: proc "c" (self: ^Print_settings) -> c.int,
+
+	// Set printer printable area in device units. Some platforms already provide flipped area; set landscape_needs_flip=0 there to avoid double flipping.
+	set_printer_printable_area: proc "c" (
+		self: ^Print_settings,
+		physical_size_device_units: ^cef_size,
+		printable_area_device_units: ^cef_rect,
+		landscape_needs_flip: c.int,
+	),
+
+	// Set the device name.
+	set_device_name: proc "c" (self: ^Print_settings, name: ^cef_string),
+
+	// Get the device name. Result must be freed with cef_string_userfree_free().
+	get_device_name: proc "c" (self: ^Print_settings) -> cef_string_userfree,
+
+	// Set/Get DPI (dots per inch).
+	set_dpi: proc "c" (self: ^Print_settings, dpi: c.int),
+	get_dpi: proc "c" (self: ^Print_settings) -> c.int,
+
+	// Set the page ranges.
+	set_page_ranges: proc "c" (self: ^Print_settings, rangesCount: c.size_t, ranges: [^]cef_range),
+
+	// Number of page ranges that currently exist.
+	get_page_ranges_count: proc "c" (self: ^Print_settings) -> c.size_t,
+
+	// Retrieve the page ranges.
+	get_page_ranges: proc "c" (self: ^Print_settings, rangesCount: ^c.size_t, ranges: ^cef_range),
+
+	// Set whether only the selection will be printed / query it.
+	set_selection_only: proc "c" (self: ^Print_settings, selection_only: c.int),
+	is_selection_only:  proc "c" (self: ^Print_settings) -> c.int,
+
+	// Set whether pages will be collated / query it.
+	set_collate:  proc "c" (self: ^Print_settings, collate: c.int),
+	will_collate: proc "c" (self: ^Print_settings) -> c.int,
+
+	// Set/Get color model.
+	set_color_model: proc "c" (self: ^Print_settings, model: Color_model),
+	get_color_model: proc "c" (self: ^Print_settings) -> Color_model,
+
+	// Set/Get number of copies.
+	set_copies: proc "c" (self: ^Print_settings, copies: c.int),
+	get_copies: proc "c" (self: ^Print_settings) -> c.int,
+
+	// Set/Get duplex mode.
+	set_duplex_mode: proc "c" (self: ^Print_settings, mode: Duplex_mode),
+	get_duplex_mode: proc "c" (self: ^Print_settings) -> Duplex_mode,
 }
 
-@(default_calling_convention="c")
+@(default_calling_convention="c", link_prefix="cef_", require_results)
 foreign lib {
-    cef_print_settings_create :: proc() -> ^cef_print_settings_t ---
-} 
+	// Create a new Print_settings_t object.
+	print_settings_create :: proc "c" () -> ^Print_settings ---
+}

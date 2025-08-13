@@ -11,7 +11,7 @@ when ODIN_OS == .Windows {
 }
 
 cef_overlay_controller_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     is_same: proc "c" (self: ^cef_overlay_controller_t, that: ^cef_overlay_controller_t) -> b32,
     get_view: proc "c" (self: ^cef_overlay_controller_t) -> ^cef_view_t,
@@ -19,10 +19,10 @@ cef_overlay_controller_t :: struct {
     destroy: proc "c" (self: ^cef_overlay_controller_t),
     set_bounds: proc "c" (self: ^cef_overlay_controller_t, bounds: ^cef_rect),
     get_bounds_in_screen: proc "c" (self: ^cef_overlay_controller_t) -> cef_rect,
-    set_size: proc "c" (self: ^cef_overlay_controller_t, size: ^cef_size_t),
-    get_size: proc "c" (self: ^cef_overlay_controller_t) -> cef_size_t,
-    set_position: proc "c" (self: ^cef_overlay_controller_t, position: ^cef_point_t),
-    get_position: proc "c" (self: ^cef_overlay_controller_t) -> cef_point_t,
+    set_size: proc "c" (self: ^cef_overlay_controller_t, size: ^cef_size),
+    get_size: proc "c" (self: ^cef_overlay_controller_t) -> cef_size,
+    set_position: proc "c" (self: ^cef_overlay_controller_t, position: ^cef_point),
+    get_position: proc "c" (self: ^cef_overlay_controller_t) -> cef_point,
     set_insets: proc "c" (self: ^cef_overlay_controller_t, insets: ^cef_insets_t),
     get_insets: proc "c" (self: ^cef_overlay_controller_t) -> cef_insets_t,
     size_to_preferred_size: proc "c" (self: ^cef_overlay_controller_t),

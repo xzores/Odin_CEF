@@ -11,7 +11,7 @@ when ODIN_OS == .Windows {
 }
 
 cef_waitable_event_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     reset: proc "c" (self: ^cef_waitable_event_t),
     signal: proc "c" (self: ^cef_waitable_event_t),

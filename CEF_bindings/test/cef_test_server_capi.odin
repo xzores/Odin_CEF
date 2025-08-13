@@ -12,36 +12,36 @@ when ODIN_OS == .Windows {
 }
 
 // Forward declarations for types that need to be defined before use
-cef_completion_callback_t :: struct {}
+Completion_callback :: struct {}
 // Request is defined in cef_request_capi.odin
 cef_test_cert_type_t :: enum c.int {
     // Add enum values as needed
 }
 
 cef_test_server_t :: struct {
-    base: common.cef_base_ref_counted_t,
+    base: common.base_ref_counted,
     
     stop: proc "c" (self: ^cef_test_server_t),
     get_origin: proc "c" (self: ^cef_test_server_t) -> common.cef_string_userfree,
 }
 
 cef_test_server_handler_t :: struct {
-    base: common.cef_base_ref_counted_t,
+    base: common.base_ref_counted,
     
     on_test_server_request: proc "c" (self: ^cef_test_server_handler_t, server: ^cef_test_server_t, request: ^Request, connection: ^cef_test_server_connection_t) -> c.int,
 }
 
 cef_test_server_connection_t :: struct {
-    base: common.cef_base_ref_counted_t,
+    base: common.base_ref_counted,
     
     send_http200_response: proc "c" (self: ^cef_test_server_connection_t, content_type: ^common.cef_string, data: rawptr, data_size: c.size_t),
     send_http404_response: proc "c" (self: ^cef_test_server_connection_t),
     send_http500_response: proc "c" (self: ^cef_test_server_connection_t, error_message: ^common.cef_string),
-    send_http_response: proc "c" (self: ^cef_test_server_connection_t, response_code: c.int, content_type: ^common.cef_string, data: rawptr, data_size: c.size_t, extra_headers: common.cef_string_multimap_t),
+    send_http_response: proc "c" (self: ^cef_test_server_connection_t, response_code: c.int, content_type: ^common.cef_string, data: rawptr, data_size: c.size_t, extra_headers: common.string_multimap),
 }
 
 // Function declarations
 @(default_calling_convention="c")
 foreign lib {
-    cef_test_server_create_and_start :: proc(port: c.int, handler: ^cef_test_server_handler_t, completion_callback: ^cef_completion_callback_t) ---
+    cef_test_server_create_and_start :: proc(port: c.int, handler: ^cef_test_server_handler_t, Completion_callback: ^Completion_callback) ---
 } 

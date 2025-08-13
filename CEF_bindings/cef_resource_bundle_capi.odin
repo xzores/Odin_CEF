@@ -24,9 +24,9 @@ cef_scale_factor_t :: enum c.int {
 }
 
 cef_resource_bundle_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     get_localized_string: proc "c" (self: ^cef_resource_bundle_t, string_id: c.int) -> cef_string_userfree,
-    get_data_resource: proc "c" (self: ^cef_resource_bundle_t, resource_id: c.int) -> ^cef_binary_value_t,
-    get_data_resource_for_scale: proc "c" (self: ^cef_resource_bundle_t, resource_id: c.int, scale_factor: cef_scale_factor_t) -> ^cef_binary_value_t,
+    get_data_resource: proc "c" (self: ^cef_resource_bundle_t, resource_id: c.int) -> ^cef_binary_value,
+    get_data_resource_for_scale: proc "c" (self: ^cef_resource_bundle_t, resource_id: c.int, scale_factor: cef_scale_factor_t) -> ^cef_binary_value,
 } 

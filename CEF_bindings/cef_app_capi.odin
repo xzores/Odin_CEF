@@ -12,11 +12,11 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser_process_handler is defined in cef_browser_process_handler_capi.odin
-// command_line is defined in cef_command_line_capi.odin
-// render_process_handler is defined in cef_render_process_handler_capi.odin
-// resource_bundle_handler is defined in cef_resource_bundle_handler_capi.odin
-// scheme_registrar is defined in cef_scheme_capi.odin
+// Browser_process_handler is defined in Browser_process_handler_capi.odin
+// Command_line is defined in cef_command_line_capi.odin
+// Render_process_handler is defined in cef_render_process_handler_capi.odin
+// Resource_bundle_handler is defined in cef_resource_bundle_handler_capi.odin
+// Scheme_registrar is defined in cef_scheme_capi.odin
 // cef_string is defined in cef_string_capi.odin
 // cef_settings is defined in cef_types_capi.odin
 // cef_main_args is defined in cef_types_capi.odin
@@ -37,7 +37,7 @@ App :: struct {
     /// Provides an opportunity to view and/or modify command-line arguments
     /// before processing by CEF and Chromium. The |process_type| value will be
     /// NULL for the browser process. Do not keep a reference to the
-    /// command_line object passed to this function. The
+    /// Command_line object passed to this function. The
     /// cef_settings.command_line_args_disabled value can be used to start with
     /// an NULL command-line object. Any values specified in CefSettings that
     /// equate to command-line arguments will be set before this function is
@@ -45,7 +45,7 @@ App :: struct {
     /// arguments for non-browser processes as this may result in undefined
     /// behavior including crashes.
     ///
-    on_before_command_line_processing: proc "c" (self: ^App, process_type: ^cef_string, command_line: ^command_line),
+    on_before_command_line_processing: proc "c" (self: ^App, process_type: ^cef_string, Command_line: ^Command_line),
 
     ///
     /// Provides an opportunity to register custom schemes. Do not keep a
@@ -53,26 +53,26 @@ App :: struct {
     /// thread for each process and the registered schemes should be the same
     /// across all processes.
     ///
-    on_register_custom_schemes: proc "c" (self: ^App, registrar: ^scheme_registrar),
+    on_register_custom_schemes: proc "c" (self: ^App, registrar: ^Scheme_registrar),
 
     ///
     /// Return the handler for resource bundle events. If no handler is returned
     /// resources will be loaded from pack files. This function is called by the
     /// browser and render processes on multiple threads.
     ///
-    get_resource_bundle_handler: proc "c" (self: ^App) -> ^resource_bundle_handler,
+    get_resource_bundle_handler: proc "c" (self: ^App) -> ^Resource_bundle_handler,
 
     ///
     /// Return the handler for functionality specific to the browser process. This
     /// function is called on multiple threads in the browser process.
     ///
-    get_browser_process_handler: proc "c" (self: ^App) -> ^browser_process_handler,
+    get_browser_process_handler: proc "c" (self: ^App) -> ^Browser_process_handler,
 
     ///
     /// Return the handler for functionality specific to the render process. This
     /// function is called on the render process main thread.
     ///
-    get_render_process_handler: proc "c" (self: ^App) -> ^render_process_handler,
+    get_render_process_handler: proc "c" (self: ^App) -> ^Render_process_handler,
 }
 
 @(default_calling_convention="c", link_prefix="cef_", require_results)
@@ -130,7 +130,7 @@ foreign lib {
 	/// function care must be taken to balance performance against excessive CPU
 	/// usage. It is recommended to enable the cef_settings.external_message_pump
 	/// option when using this function so that
-	/// browser_process_handler::on_schedule_message_pump_work() callbacks can
+	/// Browser_process_handler::on_schedule_message_pump_work() callbacks can
 	/// facilitate the scheduling process. This function should only be called on
 	/// the main application thread and only if initialize() is called with a
 	/// cef_settings.multi_threaded_message_loop value of false (0). This function

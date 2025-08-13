@@ -2,14 +2,6 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for dependencies
-// base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
-// frame is defined in cef_frame_capi.odin
-// cef_string is defined in cef_string_capi.odin
-// cef_transition_type is defined in cef_types_capi.odin
-// cef_errorcode is defined in cef_types_capi.odin
-
 ///
 /// Implement this structure to handle events related to browser load status.
 /// The functions of this structure will be called on the browser process UI
@@ -17,7 +9,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-load_handler :: struct {
+Load_handler :: struct {
     ///
     /// Base structure.
     ///
@@ -30,7 +22,7 @@ load_handler :: struct {
     /// cancellation of failure. It will be called before any calls to on_load_start
     /// and after all calls to on_load_error and/or on_load_end.
     ///
-    on_loading_state_change: proc "c" (self: ^load_handler, browser: ^Browser, isLoading: b32, canGoBack: b32, canGoForward: b32),
+    on_loading_state_change: proc "c" (self: ^Load_handler, browser: ^Browser, isLoading: b32, canGoBack: b32, canGoForward: b32),
 
     ///
     /// Called after a navigation has been committed and before the browser begins
@@ -44,7 +36,7 @@ load_handler :: struct {
     /// navigations that fail or are canceled before commit. For notification of
     /// overall browser load status use on_loading_state_change instead.
     ///
-    on_load_start: proc "c" (self: ^load_handler, browser: ^Browser, frame: ^Frame, transition_type: cef_transition_type),
+    on_load_start: proc "c" (self: ^Load_handler, browser: ^Browser, frame: ^Frame, transition_type: Transition_type),
 
     ///
     /// Called when the browser is done loading a frame. The |frame| value will
@@ -56,7 +48,7 @@ load_handler :: struct {
     /// For notification of overall browser load status use on_loading_state_change
     /// instead.
     ///
-    on_load_end: proc "c" (self: ^load_handler, browser: ^Browser, frame: ^Frame, httpStatusCode: c.int),
+    on_load_end: proc "c" (self: ^Load_handler, browser: ^Browser, frame: ^Frame, httpStatusCode: c.int),
 
     ///
     /// Called when a navigation fails or is canceled. This function may be called
@@ -65,5 +57,5 @@ load_handler :: struct {
     /// error text and |failedUrl| is the URL that failed to load. See
     /// net\base\net_error_list.h for complete descriptions of the error codes.
     ///
-    on_load_error: proc "c" (self: ^load_handler, browser: ^Browser, frame: ^Frame, errorCode: cef_errorcode, errorText: ^cef_string, failedUrl: ^cef_string),
+    on_load_error: proc "c" (self: ^Load_handler, browser: ^Browser, frame: ^Frame, errorCode: cef_errorcode, errorText: ^cef_string, failedUrl: ^cef_string),
 } 

@@ -232,7 +232,7 @@ CefString :: struct {
 // C++: Virtual functions in interfaces
 virtual void OnBeforeCommandLineProcessing(
     const CefString& process_type,
-    CefRefPtr<CefCommandLine> command_line) {}
+    CefRefPtr<CefCommandLine> Command_line) {}
 ```
 
 **Translation Strategy**:
@@ -241,7 +241,7 @@ virtual void OnBeforeCommandLineProcessing(
 CommandLine_Processing_Proc :: #type proc "c" (
     ctx: rawptr,  // 'this' pointer
     process_type: CefString,
-    command_line: CefRefPtr(CefCommandLine)
+    Command_line: CefRefPtr(CefCommandLine)
 )
 
 // Struct to hold callbacks
@@ -308,7 +308,7 @@ class CefApp {
 OnBeforeCommandLineProcessing_Proc :: #type proc "c" (
     ctx: rawptr,  // 'this' pointer
     process_type: CefString,
-    command_line: CefRefPtr(CefCommandLine)
+    Command_line: CefRefPtr(CefCommandLine)
 )
 ```
 
@@ -500,7 +500,7 @@ test_string_handling :: proc() {
     fmt.println("    Created string")
     
     // Test string conversion
-    utf8_str := cef_string_to_utf8(str)
+    utf8_str := cef_stringo_utf8(str)
     fmt.println("    Converted to UTF8")
     
     // If execution reaches here, no memory corruption
@@ -614,7 +614,7 @@ ref_ptr_destroy :: proc(ref_ptr: ^CefRefPtr_App) {
 class CefApp {
     virtual void OnBeforeCommandLineProcessing(
         const CefString& process_type,
-        CefRefPtr<CefCommandLine> command_line) = 0;
+        CefRefPtr<CefCommandLine> Command_line) = 0;
 };
 ```
 
@@ -623,7 +623,7 @@ class CefApp {
 CommandLine_Processing_Proc :: #type proc "c" (
     ctx: rawptr,
     process_type: CefString,
-    command_line: CefRefPtr_CommandLine
+    Command_line: CefRefPtr_CommandLine
 )
 
 CefApp_Handler :: struct {
@@ -685,11 +685,11 @@ All Odin files should use the package name `odin_cef` (not individual package na
 **Original C file contains**:
 ```c
 typedef struct _cef_accessibility_handler_t {
-  cef_base_ref_counted_t base;
-  void(CEF_CALLBACK* on_accessibility_tree_change)(
+  base_ref_counted base;
+  void(cef_callback* on_accessibility_tree_change)(
       struct _cef_accessibility_handler_t* self,
       struct _cef_value_t* value);
-  void(CEF_CALLBACK* on_accessibility_location_change)(
+  void(cef_callback* on_accessibility_location_change)(
       struct _cef_accessibility_handler_t* self,
       struct _cef_value_t* value);
 } cef_accessibility_handler_t;

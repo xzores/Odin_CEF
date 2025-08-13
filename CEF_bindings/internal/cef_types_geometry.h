@@ -38,10 +38,10 @@ extern "C" {
 ///
 /// Structure representing a point.
 ///
-typedef struct _cef_point_t {
+typedef struct _cef_point {
   int x;
   int y;
-} cef_point_t;
+} cef_point;
 
 ///
 /// Structure representing a rectangle.
@@ -51,15 +51,15 @@ typedef struct _cef_rect_t {
   int y;
   int width;
   int height;
-} cef_rect_t;
+} cef_rect;
 
 ///
 /// Structure representing a size.
 ///
-typedef struct _cef_size_t {
+typedef struct _cef_size {
   int width;
   int height;
-} cef_size_t;
+} cef_size;
 
 ///
 /// Structure representing insets.

@@ -101,7 +101,7 @@ server :: struct {
     /// send_raw_data function to send the content, if applicable, and call
     /// close_connection after all content has been sent.
     ///
-    send_http_response: proc "c" (self: ^server, connection_id: c.int, response_code: c.int, content_type: ^cef_string, content_length: i64, extra_headers: cef_string_multimap),
+    send_http_response: proc "c" (self: ^server, connection_id: c.int, response_code: c.int, content_type: ^cef_string, content_length: i64, extra_headers: string_multimap),
 
     ///
     /// Send raw data directly to the connection identified by |connection_id|.
@@ -219,7 +219,7 @@ server_handler :: struct {
     /// server::send_web_socket_message function after receiving the
     /// on_web_socket_connected callback to respond with WebSocket messages.
     ///
-    on_web_socket_request: proc "c" (self: ^server_handler, server: ^server, connection_id: c.int, client_address: ^cef_string, request: ^Request, callback: ^callback),
+    on_web_socket_request: proc "c" (self: ^server_handler, server: ^server, connection_id: c.int, client_address: ^cef_string, request: ^Request, callback: ^cef_callback),
 
     ///
     /// Called after the client has accepted the WebSocket connection for |server|

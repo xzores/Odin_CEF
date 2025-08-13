@@ -109,11 +109,11 @@ Frame :: struct {
 
 	/// Get the V8 context associated with the frame. This function can only be
 	/// called from the render process.
-	get_v8_context: proc "c" (self: ^Frame) -> ^v8_context,
+	get_V8_context: proc "c" (self: ^Frame) -> ^V8_context,
 
 	/// Visit the DOM document. This function can only be called from the render
 	/// process.
-	visit_dom: proc "c" (self: ^Frame, visitor: ^dom_visitor),
+	visit_dom: proc "c" (self: ^Frame, visitor: ^Dom_visitor),
 
 	/// Create a new URL request that will be treated as originating from this
 	/// frame and the associated browser. Use cef_urlrequest_t::Create instead if
@@ -128,7 +128,7 @@ Frame :: struct {
 	///
 	/// The |request| object will be marked as read-only after calling this
 	/// function.
-	create_urlrequest: proc "c" (self: ^Frame, request: ^Request, client: ^url_request_client) -> ^url_request,
+	create_urlrequest: proc "c" (self: ^Frame, request: ^Request, client: ^Url_request_client) -> ^Url_request,
 
 	/// Send a message to the specified |target_process|. Ownership of the message
 	/// contents will be transferred and the |message| reference will be
@@ -136,5 +136,5 @@ Frame :: struct {
 	/// if the browser is closing, navigating, or if the target process crashes).
 	/// Send an ACK message back from the target process if confirmation is
 	/// required.
-	send_process_message: proc "c" (self: ^Frame, target_process: process_id, message: ^process_message),
+	send_process_message: proc "c" (self: ^Frame, target_process: cef_process_id, message: ^Process_message),
 } 

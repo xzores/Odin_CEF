@@ -11,10 +11,10 @@ when ODIN_OS == .Windows {
 }
 
 cef_display_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
-    get_id: proc "c" (self: ^cef_display_t) -> c.int64,
-    get_display_id: proc "c" (self: ^cef_display_t) -> c.int64,
+    get_id: proc "c" (self: ^cef_display_t) -> c.int64_t,
+    get_display_id: proc "c" (self: ^cef_display_t) -> c.int64_t,
     get_device_scale_factor: proc "c" (self: ^cef_display_t) -> f64,
     convert_rect_to_pixels: proc "c" (self: ^cef_display_t, rect: ^cef_rect) -> cef_rect,
     convert_rect_from_pixels: proc "c" (self: ^cef_display_t, rect: ^cef_rect) -> cef_rect,

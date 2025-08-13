@@ -17,6 +17,6 @@ cef_fill_layout_t :: struct {
     set_main_axis_alignment: proc "c" (self: ^cef_fill_layout_t, alignment: cef_main_axis_alignment_t),
     set_cross_axis_alignment: proc "c" (self: ^cef_fill_layout_t, alignment: cef_cross_axis_alignment_t),
     set_inside_border_insets: proc "c" (self: ^cef_fill_layout_t, insets: ^cef_insets_t),
-    set_minimum_size: proc "c" (self: ^cef_fill_layout_t, size: ^cef_size_t),
-    set_maximum_size: proc "c" (self: ^cef_fill_layout_t, size: ^cef_size_t),
+    set_minimum_size: proc "c" (self: ^cef_fill_layout_t, size: ^cef_size),
+    set_maximum_size: proc "c" (self: ^cef_fill_layout_t, size: ^cef_size),
 } 

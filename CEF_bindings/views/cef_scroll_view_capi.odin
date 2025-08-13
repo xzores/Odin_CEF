@@ -19,8 +19,8 @@ cef_scroll_view_t :: struct {
     get_visible_content_rect: proc "c" (self: ^cef_scroll_view_t) -> cef_rect,
     get_chrome_scrollbar_mode: proc "c" (self: ^cef_scroll_view_t) -> cef_scrollbar_mode_t,
     set_chrome_scrollbar_mode: proc "c" (self: ^cef_scroll_view_t, mode: cef_scrollbar_mode_t),
-    get_minimum_preferred_size: proc "c" (self: ^cef_scroll_view_t) -> cef_size_t,
-    get_maximum_preferred_size: proc "c" (self: ^cef_scroll_view_t) -> cef_size_t,
-    calculate_preferred_size: proc "c" (self: ^cef_scroll_view_t) -> cef_size_t,
+    get_minimum_preferred_size: proc "c" (self: ^cef_scroll_view_t) -> cef_size,
+    get_maximum_preferred_size: proc "c" (self: ^cef_scroll_view_t) -> cef_size,
+    calculate_preferred_size: proc "c" (self: ^cef_scroll_view_t) -> cef_size,
     layout: proc "c" (self: ^cef_scroll_view_t),
 } 

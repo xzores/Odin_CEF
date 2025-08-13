@@ -2,6 +2,14 @@ package cef_internal
 
 import "core:c"
 
+when ODIN_OS == .Windows {
+    foreign import lib "CEF/Release/libcef.lib"
+} else when ODIN_OS == .Linux {
+    foreign import lib "CEF/Release/libcef.so"
+} else when ODIN_OS == .Darwin {
+    foreign import lib "CEF/Release/libcef.dylib"
+}
+
 // See include/base/cef_trace_event.h for macros and intended usage.
 
 // Functions for tracing counters and functions; called from macros.

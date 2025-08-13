@@ -12,10 +12,10 @@ when ODIN_OS == .Windows {
 }
 
 // Forward declarations for types that need to be defined before use
-cef_point_t :: struct { x: c.int, y: c.int }
+cef_point :: struct { x: c.int, y: c.int }
 
 cef_translator_test_t :: struct {
-    base: common.cef_base_ref_counted_t,
+    base: common.base_ref_counted,
     
     get_void: proc "c" (self: ^cef_translator_test_t),
     get_bool: proc "c" (self: ^cef_translator_test_t) -> c.int,
@@ -39,13 +39,13 @@ cef_translator_test_t :: struct {
     get_string_list_by_ref: proc "c" (self: ^cef_translator_test_t, val: common.string_list) -> c.int,
     set_string_map: proc "c" (self: ^cef_translator_test_t, val: common.cef_string_map_t) -> c.int,
     get_string_map_by_ref: proc "c" (self: ^cef_translator_test_t, val: common.cef_string_map_t) -> c.int,
-    set_string_multimap: proc "c" (self: ^cef_translator_test_t, val: common.cef_string_multimap_t) -> c.int,
-    get_string_multimap_by_ref: proc "c" (self: ^cef_translator_test_t, val: common.cef_string_multimap_t) -> c.int,
-    get_point: proc "c" (self: ^cef_translator_test_t) -> cef_point_t,
-    set_point: proc "c" (self: ^cef_translator_test_t, val: ^cef_point_t) -> c.int,
-    get_point_by_ref: proc "c" (self: ^cef_translator_test_t, val: ^cef_point_t),
-    set_point_list: proc "c" (self: ^cef_translator_test_t, val_count: c.size_t, val: ^cef_point_t) -> c.int,
-    get_point_list_by_ref: proc "c" (self: ^cef_translator_test_t, val_count: ^c.size_t, val: ^cef_point_t) -> c.int,
+    set_string_multimap: proc "c" (self: ^cef_translator_test_t, val: common.string_multimap) -> c.int,
+    get_string_multimap_by_ref: proc "c" (self: ^cef_translator_test_t, val: common.string_multimap) -> c.int,
+    get_point: proc "c" (self: ^cef_translator_test_t) -> cef_point,
+    set_point: proc "c" (self: ^cef_translator_test_t, val: ^cef_point) -> c.int,
+    get_point_by_ref: proc "c" (self: ^cef_translator_test_t, val: ^cef_point),
+    set_point_list: proc "c" (self: ^cef_translator_test_t, val_count: c.size_t, val: ^cef_point) -> c.int,
+    get_point_list_by_ref: proc "c" (self: ^cef_translator_test_t, val_count: ^c.size_t, val: ^cef_point) -> c.int,
     get_point_list_size: proc "c" (self: ^cef_translator_test_t) -> c.size_t,
     get_ref_ptr_library: proc "c" (self: ^cef_translator_test_t, val: c.int) -> ^cef_translator_test_ref_ptr_library_t,
     set_ref_ptr_library: proc "c" (self: ^cef_translator_test_t, val: ^cef_translator_test_ref_ptr_library_t) -> c.int,
@@ -80,7 +80,7 @@ cef_translator_test_t :: struct {
 }
 
 cef_translator_test_ref_ptr_library_t :: struct {
-    base: common.cef_base_ref_counted_t,
+    base: common.base_ref_counted,
     
     get_value: proc "c" (self: ^cef_translator_test_ref_ptr_library_t) -> c.int,
     set_value: proc "c" (self: ^cef_translator_test_ref_ptr_library_t, value: c.int),
@@ -101,7 +101,7 @@ cef_translator_test_ref_ptr_library_child_child_t :: struct {
 }
 
 cef_translator_test_ref_ptr_client_t :: struct {
-    base: common.cef_base_ref_counted_t,
+    base: common.base_ref_counted,
     
     get_value: proc "c" (self: ^cef_translator_test_ref_ptr_client_t) -> c.int,
 }

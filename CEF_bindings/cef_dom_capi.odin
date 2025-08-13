@@ -10,12 +10,12 @@ cef_string_map_t :: struct {}
 // cef_rect :: struct {}
 
 cef_domvisitor_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     visit: proc "c" (self: ^cef_domvisitor_t, document: ^cef_domdocument_t),
 }
 
 cef_domdocument_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     get_type: proc "c" (self: ^cef_domdocument_t) -> cef_dom_document_type_t,
     get_document: proc "c" (self: ^cef_domdocument_t) -> ^cef_domnode_t,
@@ -34,7 +34,7 @@ cef_domdocument_t :: struct {
 }
 
 cef_domnode_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     get_type: proc "c" (self: ^cef_domnode_t) -> cef_dom_node_type_t,
     is_text: proc "c" (self: ^cef_domnode_t) -> b32,

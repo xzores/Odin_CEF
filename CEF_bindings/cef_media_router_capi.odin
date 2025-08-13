@@ -17,9 +17,9 @@ cef_media_sink_icon_type_t :: enum c.int {}
 cef_media_sink_device_info_t :: struct {}
 
 cef_media_router_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
-    add_observer: proc "c" (self: ^cef_media_router_t, observer: ^cef_media_observer_t) -> ^cef_registration_t,
+    add_observer: proc "c" (self: ^cef_media_router_t, observer: ^cef_media_observer_t) -> ^Registration,
     get_source: proc "c" (self: ^cef_media_router_t, urn: ^cef_string) -> ^cef_media_source_t,
     notify_current_sinks: proc "c" (self: ^cef_media_router_t),
     create_route: proc "c" (self: ^cef_media_router_t, source: ^cef_media_source_t, sink: ^cef_media_sink_t, callback: ^cef_media_route_create_callback_t),
@@ -28,11 +28,11 @@ cef_media_router_t :: struct {
 
 @(default_calling_convention="c")
 foreign lib {
-    cef_media_router_get_global :: proc(callback: ^cef_completion_callback_t) -> ^cef_media_router_t ---
+    cef_media_router_get_global :: proc(callback: ^Completion_callback) -> ^cef_media_router_t ---
 }
 
 cef_media_observer_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     on_sinks: proc "c" (self: ^cef_media_observer_t, sinks_count: c.size_t, sinks: [^]^cef_media_sink_t),
     on_routes: proc "c" (self: ^cef_media_observer_t, routes_count: c.size_t, routes: [^]^cef_media_route_t),
@@ -41,7 +41,7 @@ cef_media_observer_t :: struct {
 }
 
 cef_media_route_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     get_id: proc "c" (self: ^cef_media_route_t) -> cef_string_userfree,
     get_source: proc "c" (self: ^cef_media_route_t) -> ^cef_media_source_t,
@@ -51,13 +51,13 @@ cef_media_route_t :: struct {
 }
 
 cef_media_route_create_callback_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     on_media_route_create_finished: proc "c" (self: ^cef_media_route_create_callback_t, result: cef_media_route_create_result_t, error: ^cef_string, route: ^cef_media_route_t),
 }
 
 cef_media_sink_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     get_id: proc "c" (self: ^cef_media_sink_t) -> cef_string_userfree,
     get_name: proc "c" (self: ^cef_media_sink_t) -> cef_string_userfree,
@@ -69,13 +69,13 @@ cef_media_sink_t :: struct {
 }
 
 cef_media_sink_device_info_callback_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     on_media_sink_device_info: proc "c" (self: ^cef_media_sink_device_info_callback_t, device_info: ^cef_media_sink_device_info_t),
 }
 
 cef_media_source_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     get_id: proc "c" (self: ^cef_media_source_t) -> cef_string_userfree,
     is_cast_source: proc "c" (self: ^cef_media_source_t) -> b32,

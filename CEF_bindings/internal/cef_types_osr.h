@@ -59,33 +59,33 @@ typedef struct _cef_accelerated_paint_info_common_t {
   ///
   /// The full dimensions of the video frame.
   ///
-  cef_size_t coded_size;
+  cef_size coded_size;
 
   ///
   /// The visible area of the video frame.
   ///
-  cef_rect_t visible_rect;
+  cef_rect visible_rect;
 
   ///
   /// The region of the video frame that capturer would like to populate.
   ///
-  cef_rect_t content_rect;
+  cef_rect content_rect;
 
   ///
   /// Full size of the source frame.
   ///
-  cef_size_t source_size;
+  cef_size source_size;
 
   ///
   /// Updated area of frame, can be considered as the `dirty` area.
   ///
-  cef_rect_t capture_update_rect;
+  cef_rect capture_update_rect;
 
   ///
   /// May reflects where the frame's contents originate from if region
   /// capture is used internally.
   ///
-  cef_rect_t region_capture_rect;
+  cef_rect region_capture_rect;
 
   ///
   /// The increamental counter of the frame.

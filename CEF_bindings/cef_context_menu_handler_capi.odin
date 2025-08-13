@@ -2,61 +2,149 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for enums and types
-cef_event_flags_t :: enum c.int {}
-cef_quick_menu_edit_state_flags_t :: enum c.int {}
-cef_context_menu_type_flags_t :: enum c.int {}
-cef_context_menu_media_type_t :: enum c.int {}
-cef_context_menu_media_state_flags_t :: enum c.int {}
-cef_context_menu_edit_state_flags_t :: enum c.int {}
-// cef_point_t :: struct {}
-// cef_size_t :: struct {}
+// Callback structure used for continuation of custom context menu display.
+// NOTE: This struct is allocated DLL-side.
+Run_context_menu_callback :: struct {
+	// Base structure.
+	base: base_ref_counted,
 
-cef_run_context_menu_callback_t :: struct {
-    base: cef_base_ref_counted_t,
-    cont: proc "c" (self: ^cef_run_context_menu_callback_t, command_id: c.int, event_flags: cef_event_flags_t),
-    cancel: proc "c" (self: ^cef_run_context_menu_callback_t),
+	// Complete context menu display by selecting |command_id| and |event_flags|.
+	cont:   proc "c" (self: ^Run_context_menu_callback, command_id: c.int, event_flags: Event_flags),
+
+	// Cancel context menu display.
+	cancel: proc "c" (self: ^Run_context_menu_callback),
 }
 
-cef_run_quick_menu_callback_t :: struct {
-    base: cef_base_ref_counted_t,
-    cont: proc "c" (self: ^cef_run_quick_menu_callback_t, command_id: c.int, event_flags: cef_event_flags_t),
-    cancel: proc "c" (self: ^cef_run_quick_menu_callback_t),
+// Callback structure used for continuation of custom quick menu display.
+// NOTE: This struct is allocated DLL-side.
+Run_quick_menu_callback :: struct {
+	// Base structure.
+	base: base_ref_counted,
+
+	// Complete quick menu display by selecting |command_id| and |event_flags|.
+	cont:   proc "c" (self: ^Run_quick_menu_callback, command_id: c.int, event_flags: Event_flags),
+
+	// Cancel quick menu display.
+	cancel: proc "c" (self: ^Run_quick_menu_callback),
 }
 
+// Implement this structure to handle context menu events. Called on the UI thread.
+// NOTE: This struct is allocated client-side.
 Context_menu_handler :: struct {
-    base: base_ref_counted,
-    
-    on_before_context_menu: proc "c" (self: ^Context_menu_handler, browser: ^Browser, frame: ^Frame, params: ^cef_context_menu_params_t, model: ^cef_menu_model_t),
-    run_context_menu: proc "c" (self: ^Context_menu_handler, browser: ^Browser, frame: ^Frame, params: ^cef_context_menu_params_t, model: ^cef_menu_model_t, callback: ^cef_run_context_menu_callback_t) -> b32,
-    on_context_menu_command: proc "c" (self: ^Context_menu_handler, browser: ^Browser, frame: ^Frame, params: ^cef_context_menu_params_t, command_id: c.int, event_flags: cef_event_flags_t) -> b32,
-    on_context_menu_dismissed: proc "c" (self: ^Context_menu_handler, browser: ^Browser, frame: ^Frame),
-    run_quick_menu: proc "c" (self: ^Context_menu_handler, browser: ^Browser, frame: ^Frame, location: ^cef_point_t, size: ^cef_size_t, edit_state_flags: cef_quick_menu_edit_state_flags_t, callback: ^cef_run_quick_menu_callback_t) -> b32,
-    on_quick_menu_command: proc "c" (self: ^Context_menu_handler, browser: ^Browser, frame: ^Frame, command_id: c.int, event_flags: cef_event_flags_t) -> b32,
-    on_quick_menu_dismissed: proc "c" (self: ^Context_menu_handler, browser: ^Browser, frame: ^Frame),
+	// Base structure.
+	base: base_ref_counted,
+
+	// Before a context menu is displayed. |params| describes state. |model| has default menu; modify/clear to customize.
+	on_before_context_menu: proc "c" (
+		self: ^Context_menu_handler,
+		browser: ^Browser,
+		frame: ^Frame,
+		params: ^Context_menu_params,
+		model: ^Menu_model,
+	),
+
+	// Allow custom display of the context menu. Return 1 to handle and execute |callback| with selected command id; 0 for default.
+	run_context_menu: proc "c" (
+		self: ^Context_menu_handler,
+		browser: ^Browser,
+		frame: ^Frame,
+		params: ^Context_menu_params,
+		model: ^Menu_model,
+		callback: ^Run_context_menu_callback,
+	) -> c.int,
+
+	// Execute a command selected from the context menu. Return 1 if handled, 0 for default.
+	on_context_menu_command: proc "c" (
+		self: ^Context_menu_handler,
+		browser: ^Browser,
+		frame: ^Frame,
+		params: ^Context_menu_params,
+		command_id: c.int,
+		event_flags: Event_flags,
+	) -> c.int,
+
+	// Called when the context menu is dismissed.
+	on_context_menu_dismissed: proc "c" (
+		self: ^Context_menu_handler,
+		browser: ^Browser,
+		frame: ^Frame,
+	),
+
+	// Custom display of the quick menu for a windowless browser. Return 1 to handle and execute |callback|; 0 to cancel.
+	run_quick_menu: proc "c" (
+		self: ^Context_menu_handler,
+		browser: ^Browser,
+		frame: ^Frame,
+		location: ^cef_point,
+		size: ^cef_size,
+		edit_state_flags: Quick_menu_edit_state_flags,
+		callback: ^Run_quick_menu_callback,
+	) -> c.int,
+
+	// Execute a command selected from the quick menu. Return 1 if handled, 0 for default.
+	on_quick_menu_command: proc "c" (
+		self: ^Context_menu_handler,
+		browser: ^Browser,
+		frame: ^Frame,
+		command_id: c.int,
+		event_flags: Event_flags,
+	) -> c.int,
+
+	// Called when the quick menu is dismissed.
+	on_quick_menu_dismissed: proc "c" (
+		self: ^Context_menu_handler,
+		browser: ^Browser,
+		frame: ^Frame,
+	),
 }
 
-cef_context_menu_params_t :: struct {
-    base: cef_base_ref_counted_t,
-    
-    get_xcoord: proc "c" (self: ^cef_context_menu_params_t) -> c.int,
-    get_ycoord: proc "c" (self: ^cef_context_menu_params_t) -> c.int,
-    get_type_flags: proc "c" (self: ^cef_context_menu_params_t) -> cef_context_menu_type_flags_t,
-    get_link_url: proc "c" (self: ^cef_context_menu_params_t) -> cef_string_userfree,
-    get_unfiltered_link_url: proc "c" (self: ^cef_context_menu_params_t) -> cef_string_userfree,
-    get_source_url: proc "c" (self: ^cef_context_menu_params_t) -> cef_string_userfree,
-    has_image_contents: proc "c" (self: ^cef_context_menu_params_t) -> b32,
-    get_title_text: proc "c" (self: ^cef_context_menu_params_t) -> cef_string_userfree,
-    get_page_url: proc "c" (self: ^cef_context_menu_params_t) -> cef_string_userfree,
-    get_frame_url: proc "c" (self: ^cef_context_menu_params_t) -> cef_string_userfree,
-    get_frame_charset: proc "c" (self: ^cef_context_menu_params_t) -> cef_string_userfree,
-    get_media_type: proc "c" (self: ^cef_context_menu_params_t) -> cef_context_menu_media_type_t,
-    get_media_state_flags: proc "c" (self: ^cef_context_menu_params_t) -> cef_context_menu_media_state_flags_t,
-    get_selection_text: proc "c" (self: ^cef_context_menu_params_t) -> cef_string_userfree,
-    get_misspelled_word: proc "c" (self: ^cef_context_menu_params_t) -> cef_string_userfree,
-    get_dictionary_suggestions: proc "c" (self: ^cef_context_menu_params_t, suggestions: string_list) -> b32,
-    is_editable: proc "c" (self: ^cef_context_menu_params_t) -> b32,
-    is_spell_check_enabled: proc "c" (self: ^cef_context_menu_params_t) -> b32,
-    get_edit_state_flags: proc "c" (self: ^cef_context_menu_params_t) -> cef_context_menu_edit_state_flags_t,
-    is_custom_menu: proc "c" (self: ^cef_context_menu_params_t) -> b32,
-} 
+// Provides information about the context menu state. UI thread only.
+// NOTE: This struct is allocated DLL-side.
+Context_menu_params :: struct {
+	// Base structure.
+	base: base_ref_counted,
+
+	// Mouse X/Y where the menu was invoked (relative to RenderView origin).
+	get_xcoord: proc "c" (self: ^Context_menu_params) -> c.int,
+	get_ycoord: proc "c" (self: ^Context_menu_params) -> c.int,
+
+	// Flags representing the node type.
+	get_type_flags: proc "c" (self: ^Context_menu_params) -> Context_menu_type_flags,
+
+	// URL values (results must be freed with cef_string_userfree_free()).
+	get_link_url:               proc "c" (self: ^Context_menu_params) -> cef_string_userfree,
+	get_unfiltered_link_url:    proc "c" (self: ^Context_menu_params) -> cef_string_userfree,
+	get_source_url:             proc "c" (self: ^Context_menu_params) -> cef_string_userfree,
+
+	// True if invoked on an image with non-NULL contents.
+	has_image_contents: proc "c" (self: ^Context_menu_params) -> c.int,
+
+	// Title/alt text if invoked on an image. (free with cef_string_userfree_free)
+	get_title_text: proc "c" (self: ^Context_menu_params) -> cef_string_userfree,
+
+	// Top-level page URL and subframe URL/charset. (free with cef_string_userfree_free)
+	get_page_url:     proc "c" (self: ^Context_menu_params) -> cef_string_userfree,
+	get_frame_url:    proc "c" (self: ^Context_menu_params) -> cef_string_userfree,
+	get_frame_charset:proc "c" (self: ^Context_menu_params) -> cef_string_userfree,
+
+	// Media type and supported actions (if invoked on a media element).
+	get_media_type:        proc "c" (self: ^Context_menu_params) -> Context_menu_media_type,
+	get_media_state_flags: proc "c" (self: ^Context_menu_params) -> Context_menu_media_state_flags,
+
+	// Selection text and misspelled word. (free with cef_string_userfree_free)
+	get_selection_text: proc "c" (self: ^Context_menu_params) -> cef_string_userfree,
+	get_misspelled_word:proc "c" (self: ^Context_menu_params) -> cef_string_userfree,
+
+	// True if suggestions exist; fills |suggestions| with spell-check suggestions.
+	get_dictionary_suggestions: proc "c" (self: ^Context_menu_params, suggestions: string_list) -> c.int,
+
+	// True if invoked on an editable node / with spell-check enabled.
+	is_editable:             proc "c" (self: ^Context_menu_params) -> c.int,
+	is_spell_check_enabled:  proc "c" (self: ^Context_menu_params) -> c.int,
+
+	// Actions supported by the editable node (if any).
+	get_edit_state_flags: proc "c" (self: ^Context_menu_params) -> Context_menu_edit_state_flags,
+
+	// True if the context menu contains items specified by the renderer process.
+	is_custom_menu: proc "c" (self: ^Context_menu_params) -> c.int,
+}

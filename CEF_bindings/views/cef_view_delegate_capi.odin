@@ -11,6 +11,6 @@ when ODIN_OS == .Windows {
 }
 
 cef_view_delegate_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     // ... methods omitted for brevity ...
 } 

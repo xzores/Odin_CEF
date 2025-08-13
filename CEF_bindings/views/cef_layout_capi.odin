@@ -11,7 +11,7 @@ when ODIN_OS == .Windows {
 }
 
 cef_layout_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     as_layout: proc "c" (self: ^cef_layout_t) -> ^cef_layout_t,
     is_valid: proc "c" (self: ^cef_layout_t) -> b32,
@@ -20,10 +20,10 @@ cef_layout_t :: struct {
     set_bounds: proc "c" (self: ^cef_layout_t, bounds: ^cef_rect),
     get_bounds: proc "c" (self: ^cef_layout_t) -> cef_rect,
     get_bounds_in_screen: proc "c" (self: ^cef_layout_t) -> cef_rect,
-    set_size: proc "c" (self: ^cef_layout_t, size: ^cef_size_t),
-    get_size: proc "c" (self: ^cef_layout_t) -> cef_size_t,
-    set_position: proc "c" (self: ^cef_layout_t, position: ^cef_point_t),
-    get_position: proc "c" (self: ^cef_layout_t) -> cef_point_t,
+    set_size: proc "c" (self: ^cef_layout_t, size: ^cef_size),
+    get_size: proc "c" (self: ^cef_layout_t) -> cef_size,
+    set_position: proc "c" (self: ^cef_layout_t, position: ^cef_point),
+    get_position: proc "c" (self: ^cef_layout_t) -> cef_point,
     set_insets: proc "c" (self: ^cef_layout_t, insets: ^cef_insets_t),
     get_insets: proc "c" (self: ^cef_layout_t) -> cef_insets_t,
     size_to_preferred_size: proc "c" (self: ^cef_layout_t),

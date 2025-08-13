@@ -14,5 +14,5 @@ cef_menu_button_delegate_t :: struct {
     base: cef_button_delegate_t,
     
     on_menu_button_pressed: proc "c" (self: ^cef_menu_button_delegate_t, menu_button: ^cef_menu_button_t),
-    get_menu_model: proc "c" (self: ^cef_menu_button_delegate_t, menu_button: ^cef_menu_button_t) -> ^cef_menu_model_t,
+    get_menu_model: proc "c" (self: ^cef_menu_button_delegate_t, menu_button: ^cef_menu_button_t) -> ^Menu_model,
 } 

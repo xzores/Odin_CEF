@@ -11,11 +11,11 @@ when ODIN_OS == .Windows {
 }
 
 // Forward declarations for types that need to be defined before use
-cef_base_ref_counted_t :: struct {}
+base_ref_counted :: struct {}
 cef_base_scoped_t :: struct {}
 
 cef_api_version_test_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     get_ref_ptr_library: proc "c" (self: ^cef_api_version_test_t, val: c.int) -> ^cef_api_version_test_ref_ptr_library_t,
     set_ref_ptr_library: proc "c" (self: ^cef_api_version_test_t, val: ^cef_api_version_test_ref_ptr_library_t) -> c.int,
@@ -50,7 +50,7 @@ cef_api_version_test_t :: struct {
 }
 
 cef_api_version_test_ref_ptr_library_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     get_value_legacy: proc "c" (self: ^cef_api_version_test_ref_ptr_library_t) -> c.int,
     set_value_legacy: proc "c" (self: ^cef_api_version_test_ref_ptr_library_t, value: c.int),
@@ -89,7 +89,7 @@ cef_api_version_test_ref_ptr_library_child_child_v2_t :: struct {
 }
 
 cef_api_version_test_ref_ptr_client_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     get_value_legacy: proc "c" (self: ^cef_api_version_test_ref_ptr_client_t) -> c.int,
     get_value_v2: proc "c" (self: ^cef_api_version_test_ref_ptr_client_t) -> c.int,

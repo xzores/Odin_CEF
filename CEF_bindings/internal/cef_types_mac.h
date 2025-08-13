@@ -102,7 +102,7 @@ typedef struct _cef_window_info_t {
   ///
   /// Initial window bounds.
   ///
-  cef_rect_t bounds;
+  cef_rect bounds;
 
   ///
   /// Set to true (1) to create the view initially hidden.

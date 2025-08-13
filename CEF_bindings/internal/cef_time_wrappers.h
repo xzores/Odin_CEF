@@ -44,14 +44,14 @@
 ///
 /// This is equivalent of Chromium `base::Time` (see base/time/time.h).
 ///
-class CefBaseTime : public cef_basetime_t {
+class CefBaseTime : public Basetime {
  public:
-  CefBaseTime() : cef_basetime_t{} {}
-  CefBaseTime(const cef_basetime_t& value) : cef_basetime_t(value) {}
+  CefBaseTime() : Basetime{} {}
+  CefBaseTime(const Basetime& value) : Basetime(value) {}
 
 #if defined(USING_CHROMIUM_INCLUDES)
   CefBaseTime(const base::Time& value)
-      : cef_basetime_t{value.ToDeltaSinceWindowsEpoch().InMicroseconds()} {}
+      : Basetime{value.ToDeltaSinceWindowsEpoch().InMicroseconds()} {}
 
   operator base::Time() const {
     return base::Time::FromDeltaSinceWindowsEpoch(base::Microseconds(val));

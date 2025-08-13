@@ -4,7 +4,7 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// completion_callback is defined in cef_callback_capi.odin
+// Completion_callback is defined in cef_callback_capi.odin
 // cef_string is defined in cef_string_capi.odin
 
 ///
@@ -47,7 +47,7 @@ end_tracing_callback :: struct {
 ///
 /// This function must be called on the browser process UI thread.
 ///
-begin_tracing :: proc "c" (categories: ^cef_string, callback: ^completion_callback) -> b32
+begin_tracing :: proc "c" (categories: ^cef_string, callback: ^Completion_callback) -> b32
 
 ///
 /// Stop tracing events on all processes.

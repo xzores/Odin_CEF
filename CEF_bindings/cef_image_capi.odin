@@ -56,9 +56,9 @@ Image :: struct {
     has_representation: proc "c" (self: ^Image, scale_factor: f32) -> b32,
     remove_representation: proc "c" (self: ^Image, scale_factor: f32) -> b32,
     get_representation_info: proc "c" (self: ^Image, scale_factor: f32, actual_scale_factor: ^f32, pixel_width: ^c.int, pixel_height: ^c.int) -> b32,
-    get_as_bitmap: proc "c" (self: ^Image, scale_factor: f32, color_type: cef_color_type_t, alpha_type: cef_alpha_type_t, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value_t,
-    get_as_png: proc "c" (self: ^Image, scale_factor: f32, with_transparency: b32, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value_t,
-    get_as_jpeg: proc "c" (self: ^Image, scale_factor: f32, quality: c.int, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value_t,
+    get_as_bitmap: proc "c" (self: ^Image, scale_factor: f32, color_type: cef_color_type_t, alpha_type: cef_alpha_type_t, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value,
+    get_as_png: proc "c" (self: ^Image, scale_factor: f32, with_transparency: b32, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value,
+    get_as_jpeg: proc "c" (self: ^Image, scale_factor: f32, quality: c.int, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value,
 }
 
 @(default_calling_convention="c")

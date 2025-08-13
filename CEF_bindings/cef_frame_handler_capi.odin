@@ -4,8 +4,8 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
-// frame is defined in cef_frame_capi.odin
+// browser is defined in Browser_capi.odin
+// frame is defined in Frame_capi.odin
 
 ///
 /// Implement this structure to handle events related to frame lifespan.
@@ -13,49 +13,49 @@ import "core:c"
 ///
 /// (1) During initial browser_host creation and navigation of the main
 /// frame:
-/// - frame_handler::on_frame_created => The initial main frame object has
+/// - Frame_handler::on_frame_created => The initial main frame object has
 ///   been created. Any commands will be queued until the frame is attached.
-/// - frame_handler::on_main_frame_changed => The initial main frame object
+/// - Frame_handler::on_main_frame_changed => The initial main frame object
 ///   has been assigned to the browser.
 /// - life_span_handler::on_after_created => The browser is now valid and
 ///   can be used.
-/// - frame_handler::on_frame_attached => The initial main frame object is
+/// - Frame_handler::on_frame_attached => The initial main frame object is
 ///   now connected to its peer in the renderer process. Commands can be routed.
 ///
 /// (2) During further browser_host navigation/loading of the main frame
 ///     and/or sub-frames:
-/// - frame_handler::on_frame_created => A new main frame or sub-frame
+/// - Frame_handler::on_frame_created => A new main frame or sub-frame
 ///   object has been created. Any commands will be queued until the frame is
 ///   attached.
-/// - frame_handler::on_frame_attached => A new main frame or sub-frame
+/// - Frame_handler::on_frame_attached => A new main frame or sub-frame
 ///   object is now connected to its peer in the renderer process. Commands can
 ///   be routed.
-/// - frame_handler::on_frame_detached => An existing main frame or sub-
+/// - Frame_handler::on_frame_detached => An existing main frame or sub-
 ///   frame object has lost its connection to the renderer process. If multiple
 ///   objects are detached at the same time then notifications will be sent for
 ///   any sub-frame objects before the main frame object. Commands can no longer
 ///   be routed and will be discarded.
-/// - frame_handler::on_frame_destroyed => An existing main frame or sub-frame
+/// - Frame_handler::on_frame_destroyed => An existing main frame or sub-frame
 ///   object has been destroyed.
-/// - frame_handler::on_main_frame_changed => A new main frame object has
+/// - Frame_handler::on_main_frame_changed => A new main frame object has
 ///   been assigned to the browser. This will only occur with cross-origin
 ///   navigation or re-navigation after renderer process termination (due to
 ///   crashes, etc).
 ///
 /// (3) During final browser_host destruction of the main frame:
-/// - frame_handler::on_frame_detached => Any sub-frame objects have lost
+/// - Frame_handler::on_frame_detached => Any sub-frame objects have lost
 ///   their connection to the renderer process. Commands can no longer be routed
 ///   and will be discarded.
-/// - frame_handler::on_frame_destroyed => Any sub-frame objects have been
+/// - Frame_handler::on_frame_destroyed => Any sub-frame objects have been
 ///   destroyed.
 /// - life_span_handler::on_before_close => The browser has been destroyed.
-/// - frame_handler::on_frame_detached => The main frame object have lost
+/// - Frame_handler::on_frame_detached => The main frame object have lost
 ///   its connection to the renderer process. Notifications will be sent for any
 ///   sub-frame objects before the main frame object. Commands can no longer be
 ///   routed and will be discarded.
-/// - frame_handler::on_frame_destroyed => The main frame object has been
+/// - Frame_handler::on_frame_destroyed => The main frame object has been
 ///   destroyed.
-/// - frame_handler::on_main_frame_changed => The final main frame object has
+/// - Frame_handler::on_main_frame_changed => The final main frame object has
 ///   been removed from the browser.
 ///
 /// Special handling applies for cross-origin loading on creation/navigation of
@@ -81,7 +81,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-frame_handler :: struct {
+Frame_handler :: struct {
     ///
     /// Base structure.
     ///
@@ -95,7 +95,7 @@ frame_handler :: struct {
     /// on_frame_attached or discarded before on_frame_destroyed if the frame never
     /// attaches.
     ///
-    on_frame_created: proc "c" (self: ^frame_handler, browser: ^Browser, frame: ^Frame),
+    on_frame_created: proc "c" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame),
 
     ///
     /// Called when an existing frame is destroyed. This will be the last
@@ -105,7 +105,7 @@ frame_handler :: struct {
     /// browser::is_valid() will return false (0) for |browser|. Any queued
     /// commands that have not been sent will be discarded before this callback.
     ///
-    on_frame_destroyed: proc "c" (self: ^frame_handler, browser: ^Browser, frame: ^Frame),
+    on_frame_destroyed: proc "c" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame),
 
     ///
     /// Called when a frame can begin routing commands to/from the associated
@@ -115,7 +115,7 @@ frame_handler :: struct {
     /// dispatched. This function will not be called for temporary frames created
     /// during cross-origin navigation.
     ///
-    on_frame_attached: proc "c" (self: ^frame_handler, browser: ^Browser, frame: ^Frame, reattached: b32),
+    on_frame_attached: proc "c" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame, reattached: b32),
 
     ///
     /// Called when a frame loses its connection to the renderer process. This may
@@ -132,7 +132,7 @@ frame_handler :: struct {
     /// function will not be called for temporary frames created during cross-
     /// origin navigation.
     ///
-    on_frame_detached: proc "c" (self: ^frame_handler, browser: ^Browser, frame: ^Frame),
+    on_frame_detached: proc "c" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame),
 
     ///
     /// Called when the main frame changes due to (a) initial browser creation,
@@ -146,5 +146,5 @@ frame_handler :: struct {
     /// termination. This function will be called after on_frame_created() for
     /// the new frame and before on_frame_destroyed() for the old frame.
     ///
-    on_main_frame_changed: proc "c" (self: ^frame_handler, browser: ^Browser, old_frame: ^Frame, new_frame: ^Frame),
+    on_main_frame_changed: proc "c" (self: ^Frame_handler, browser: ^Browser, old_frame: ^Frame, new_frame: ^Frame),
 } 

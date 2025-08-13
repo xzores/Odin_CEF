@@ -4,14 +4,14 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
+// browser is defined in Browser_capi.odin
 // client is defined in cef_client_capi.odin
-// frame is defined in cef_frame_capi.odin
+// frame is defined in Frame_capi.odin
 // cef_string is defined in cef_string_capi.odin
-// request_context is defined in cef_request_context_capi.odin
+// Request_context is defined in cef_request_context_capi.odin
 // navigation_entry is defined in cef_navigation_entry_capi.odin
 // Image is defined in cef_image_capi.odin
-// pdf_print_callback is defined in cef_browser_capi.odin
+// pdf_print_callback is defined in Browser_capi.odin
 
 ///
 /// Structure used to represent a browser. When used in the browser process the
@@ -139,8 +139,8 @@ browser_host :: struct {
     get_opener_window_handle: proc "c" (self: ^browser_host) -> rawptr,
     get_opener_identifier: proc "c" (self: ^browser_host) -> c.int,
     has_view: proc "c" (self: ^browser_host) -> b32,
-    get_client: proc "c" (self: ^browser_host) -> ^cef_client_t,
-    get_request_context: proc "c" (self: ^browser_host) -> ^request_context,
+    get_client: proc "c" (self: ^browser_host) -> ^Client,
+    get_request_context: proc "c" (self: ^browser_host) -> ^Request_context,
     // ... more function pointers as needed ...
 }
 
@@ -158,7 +158,7 @@ navigation_entry_visitor :: struct {
     /// navigation entry. |index| is the 0-based index of this entry and |total|
     /// is the total number of entries.
     ///
-    visit: proc "c" (self: ^navigation_entry_visitor, entry: ^navigation_entry, current: b32, index: c.int, total: c.int) -> b32,
+    visit: proc "c" (self: ^navigation_entry_visitor, entry: ^Navigation_entry, current: b32, index: c.int, total: c.int) -> b32,
 }
 
 ///

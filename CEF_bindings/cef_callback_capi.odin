@@ -10,7 +10,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated DLL-side.
 ///
-callback :: struct {
+cef_callback :: struct {
     ///
     /// Base structure.
     ///
@@ -19,12 +19,12 @@ callback :: struct {
     ///
     /// Continue processing.
     ///
-    cont: proc "c" (self: ^callback),
+    cont: proc "c" (self: ^cef_callback),
 
     ///
     /// Cancel processing.
     ///
-    cancel: proc "c" (self: ^callback),
+    cancel: proc "c" (self: ^cef_callback),
 }
 
 ///
@@ -32,7 +32,7 @@ callback :: struct {
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-completion_callback :: struct {
+Completion_callback :: struct {
     ///
     /// Base structure.
     ///
@@ -41,5 +41,5 @@ completion_callback :: struct {
     ///
     /// Method that will be called once the task is complete.
     ///
-    on_complete: proc "c" (self: ^completion_callback),
+    on_complete: proc "c" (self: ^Completion_callback),
 } 

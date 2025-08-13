@@ -4,8 +4,8 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
-// cef_focus_source is defined in cef_types_capi.odin
+// browser is defined in Browser_capi.odin
+// Focus_source is defined in cef_types_capi.odin
 
 ///
 /// Implement this structure to handle events related to focus. The functions of
@@ -13,7 +13,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-focus_handler :: struct {
+Focus_handler :: struct {
     ///
     /// Base structure.
     ///
@@ -26,17 +26,17 @@ focus_handler :: struct {
     /// component and false (0) if the browser is giving focus to the previous
     /// component.
     ///
-    on_take_focus: proc "c" (self: ^focus_handler, browser: ^Browser, next: b32),
+    on_take_focus: proc "c" (self: ^Focus_handler, browser: ^Browser, next: b32),
 
     ///
     /// Called when the browser component is requesting focus. |source| indicates
     /// where the focus request is originating from. Return false (0) to allow the
     /// focus to be set or true (1) to cancel setting the focus.
     ///
-    on_set_focus: proc "c" (self: ^focus_handler, browser: ^Browser, source: cef_focus_source) -> b32,
+    on_set_focus: proc "c" (self: ^Focus_handler, browser: ^Browser, source: Focus_source) -> b32,
 
     ///
     /// Called when the browser component has received focus.
     ///
-    on_got_focus: proc "c" (self: ^focus_handler, browser: ^Browser),
+    on_got_focus: proc "c" (self: ^Focus_handler, browser: ^Browser),
 } 

@@ -15,10 +15,10 @@ import "core:c"
 
 // 32-bit ARGB color value, not premultiplied. The color components are always
 // in a known order. Equivalent to the SkColor type.
-cef_color_t :: c.uint32_t;
+cef_color :: c.uint32_t;
 
 /// Log severity levels.
-log_severity :: enum u32 {
+Log_severity :: enum u32 {
 	/// Default logging (currently INFO logging).
 	LOGSEVERITY_DEFAULT,
 
@@ -46,7 +46,7 @@ log_severity :: enum u32 {
 };
 
 /// Log items prepended to each log line.
-log_items :: enum u32 {
+Log_items :: enum u32 {
 	/// Prepend the default list of items.
 	LOG_ITEMS_DEFAULT = 0,
 
@@ -68,7 +68,7 @@ log_items :: enum u32 {
 };
 
 /// Represents the state of a setting.
-state :: enum u32 {
+State :: enum u32 {
 	/// Use the default state for the setting.
 	STATE_DEFAULT = 0,
 
@@ -80,7 +80,7 @@ state :: enum u32 {
 };
 
 // Initialization settings. Specify NULL or 0 to get the recommended default values. Many of these and other settings can also configured using command-line switches.
-cef_settings :: struct {
+Settings :: struct {
 	// Size of this structure.
 	size: c.size_t,
 
@@ -130,10 +130,10 @@ cef_settings :: struct {
 	log_file: cef_string,
 
 	// The log severity. Only messages of this severity level or higher will be logged. When set to DISABLE no messages will be written to the log file, but FATAL messages will still be output to stderr. Also configurable using the "log-severity" command-line switch with a value of "verbose", "info", "warning", "error", "fatal" or "disable".
-	log_severity: log_severity_t,
+	Log_severity: Log_severity,
 
 	// The log items prepended to each log line. If not set the default log items will be used. Also configurable using the "log-items" command-line switch with a value of "none" for no log items, or a comma-delimited list of values "pid", "tid", "timestamp" or "tickcount" for custom log items.
-	log_items: cef_log_items_t,
+	log_items: Log_items,
 
 	// Custom flags that will be used when initializing the V8 JavaScript engine. The consequences of using custom flags may not be well tested. Also configurable using the "js-flags" command-line switch.
 	javascript_flags: cef_string,
@@ -151,7 +151,7 @@ cef_settings :: struct {
 	uncaught_exception_stack_size: c.int,
 
 	// Background color used for the browser before a document is loaded and when no document color is specified. The alpha component must be either fully opaque (0xFF) or fully transparent (0x00). If the alpha component is fully opaque then the RGB components will be used as the background color. If the alpha component is fully transparent for a windowed browser then the default value of opaque white be used. If the alpha component is fully transparent for a windowless (off-screen) browser then transparent painting will be enabled.
-	background_color: cef_color_t,
+	background_color: cef_color,
 
 	// Comma delimited ordered list of language codes without any whitespace that will be used in the "Accept-Language" HTTP request header and "navigator.language" JS attribute. Can be overridden for individual CefRequestContext instances via the CefRequestContextSettings.accept_language_list value.
 	accept_language_list: cef_string,
@@ -171,7 +171,7 @@ cef_settings :: struct {
 }
 
 // Request context initialization settings. Specify NULL or 0 to get the recommended default values.
-cef_request_context_settings :: struct {
+Request_context_settings :: struct {
 	// Size of this structure.
 	size: c.size_t,
 
@@ -190,7 +190,7 @@ cef_request_context_settings :: struct {
 }
 
 // Browser initialization settings. Specify NULL or 0 for recommended defaults. Consequences of custom values may not be well tested. Many of these and other settings can also be configured using command-line switches.
-cef_browser_settings :: struct {
+Browser_settings :: struct {
 	// Size of this structure.
 	size: c.size_t,
 
@@ -215,55 +215,55 @@ cef_browser_settings :: struct {
 	default_encoding: cef_string,
 
 	// Controls loading of fonts from remote sources. Also configurable via "disable-remote-fonts".
-	remote_fonts: cef_state_t,
+	remote_fonts: State,
 
 	// Controls whether JavaScript can be executed. Also configurable via "disable-javascript".
-	javascript: cef_state_t,
+	javascript: State,
 
 	// Controls whether JavaScript can close windows not opened via JavaScript. Also configurable via "disable-javascript-close-windows".
-	javascript_close_windows: cef_state_t,
+	javascript_close_windows: State,
 
 	// Controls whether JavaScript can access the clipboard. Also configurable via "disable-javascript-access-clipboard".
-	javascript_access_clipboard: cef_state_t,
+	javascript_access_clipboard: State,
 
 	// Controls whether DOM pasting via execCommand("paste") is supported. Requires javascript_access_clipboard. Also configurable via "disable-javascript-dom-paste".
-	javascript_dom_paste: cef_state_t,
+	javascript_dom_paste: State,
 
 	// Controls whether image URLs will be loaded from the network. Cached images may still render. Also configurable via "disable-image-loading".
-	image_loading: cef_state_t,
+	image_loading: State,
 
 	// Controls whether standalone images will be shrunk to fit the page. Also configurable via "image-shrink-standalone-to-fit".
-	image_shrink_standalone_to_fit: cef_state_t,
+	image_shrink_standalone_to_fit: State,
 
 	// Controls whether text areas can be resized. Also configurable via "disable-text-area-resize".
-	text_area_resize: cef_state_t,
+	text_area_resize: State,
 
 	// Controls whether the tab key can advance focus to links. Also configurable via "disable-tab-to-links".
-	tab_to_links: cef_state_t,
+	tab_to_links: State,
 
 	// Controls whether local storage can be used. Also configurable via "disable-local-storage".
-	local_storage: cef_state_t,
+	local_storage: State,
 
 	// Controls whether databases can be used. Also configurable via "disable-databases".
-	databases: cef_state_t,
+	databases: State,
 
 	// Controls whether WebGL can be used (requires HW support). Also configurable via "disable-webgl".
-	webgl: cef_state_t,
+	webgl: State,
 
 	// END values that map to WebPreferences settings.
 
 	// Background color before document load and when no document color is specified. Alpha must be 0xFF (opaque) or 0x00 (transparent). Transparent for windowed uses CefSettings.background_color; transparent for windowless enables transparent painting.
-	background_color: cef_color_t,
+	background_color: cef_color,
 
 	// Controls whether the Chrome status bubble will be used. Only supported with Chrome style. See https://www.chromium.org/user-experience/status-bubble/
-	chrome_status_bubble: cef_state_t,
+	chrome_status_bubble: State,
 
 	// Controls whether the Chrome zoom bubble will be shown when zooming. Only supported with Chrome style.
-	chrome_zoom_bubble: cef_state_t,
+	chrome_zoom_bubble: State,
 }
 
 /// Return value types.
-cef_return_value_t :: enum u32 {
+cef_return_value :: enum u32 {
 	/// Cancel immediately.
 	RV_CANCEL = 0,
 
@@ -275,7 +275,7 @@ cef_return_value_t :: enum u32 {
 };
 
 // URL component parts.
-cef_urlparts :: struct {
+Cef_urlparts :: struct {
 	// Size of this structure.
 	size: c.size_t,
 
@@ -311,14 +311,14 @@ cef_urlparts :: struct {
 }
 
 /// Cookie priority values.
-cookie_priority :: enum u32 {
+Cookie_priority :: enum i32 {
 	CEF_COOKIE_PRIORITY_LOW = -1,
 	CEF_COOKIE_PRIORITY_MEDIUM = 0,
 	CEF_COOKIE_PRIORITY_HIGH = 1,
 };
 
 /// Cookie same site values.
-cookie_same_site :: enum u32 {
+Cookie_same_site :: enum u32 {
 	CEF_COOKIE_SAME_SITE_UNSPECIFIED,
 	CEF_COOKIE_SAME_SITE_NO_RESTRICTION,
 	CEF_COOKIE_SAME_SITE_LAX_MODE,
@@ -349,24 +349,24 @@ cef_cookie :: struct {
 	httponly: c.int,
 
 	// Creation date (auto-populated on creation).
-	creation: cef_basetime_t,
+	creation: Basetime,
 
 	// Last access date (auto-populated on access).
-	last_access: cef_basetime_t,
+	last_access: Basetime,
 
 	// Expiration date is valid only if has_expires is true.
 	has_expires: c.int,
-	expires: cef_basetime_t,
+	expires: Basetime,
 
 	// SameSite attribute.
-	same_site: cef_cookie_same_site_t,
+	same_site: Cookie_same_site,
 
 	// Priority attribute.
-	priority: cef_cookie_priority_t,
+	priority: Cookie_priority,
 }
 
 // Process termination status values.
-termination_status :: enum u32 {
+Termination_status :: enum u32 {
 	/// Non-zero exit status.
 	TS_ABNORMAL_TERMINATION,
 
@@ -387,7 +387,7 @@ termination_status :: enum u32 {
 };
 
 /// Path key values.
-path_key :: enum u32 {
+Path_key :: enum u32 {
 	/// Current directory.
 	PK_DIR_CURRENT,
 
@@ -421,16 +421,20 @@ path_key :: enum u32 {
 };
 
 /// Storage types.
-storage_type :: enum u32 {
+Storage_type :: enum u32 {
 	ST_LOCALSTORAGE = 0,
 	ST_SESSIONSTORAGE,
 };
+
+cef_errorcode :: enum u32 {
+	ERR_NONE,
+}
 
 /// Supported certificate status code values. See net\cert\cert_status_flags.h
 /// for more information. CERT_STATUS_NONE is new in CEF because we use an
 /// enum while cert_status_flags.h uses a typedef and static const variables.
 //This is translated from a bit_set to an enum and then cert_status is used instead (gives better odin compatability)
-cef_cert_status_enum :: enum u32 {
+Cef_cert_status_enum :: enum u32 {
 	CERT_STATUS_NONE = 0,
 	CERT_STATUS_COMMON_NAME_INVALID = 0,
 	CERT_STATUS_DATE_INVALID = 1,
@@ -457,7 +461,7 @@ cef_cert_status_enum :: enum u32 {
 	CERT_STATUS_CT_COMPLIANCE_FAILED = 20,
 };
 
-cert_status :: bit_set[cef_cert_status_enum];
+Cert_status :: bit_set[Cef_cert_status_enum];
 
 ///
 /// Process result codes. This is not a comprehensive list, as result codes
@@ -469,7 +473,7 @@ cert_status :: bit_set[cef_cert_status_enum];
 /// might also include platform-specific crash values (Posix signal or Windows
 /// hardware exception), or internal-only implementation values.
 ///
-result_code :: enum u32 {
+Result_code :: enum u32 {
 	// The following values should be kept in sync with Chromium's
 	// content::ResultCode type.
 	RESULT_CODE_NORMAL_EXIT,
@@ -580,7 +584,7 @@ result_code :: enum u32 {
 /// their equivalents in Chromium's window_open_disposition.h and should not be
 /// renumbered.
 ///
-window_open_disposition :: enum u32 {
+Window_open_disposition :: enum u32 {
 	WOD_UNKNOWN,
 
 	/// Current tab. This is the default in most cases.
@@ -634,7 +638,7 @@ window_open_disposition :: enum u32 {
 /// destination. These constants match their equivalents in WebCore's
 /// DragActions.h and should not be renumbered.
 ///
-drag_operations_mask :: enum u32 {
+Drag_operations_mask :: enum u32 {
 	DRAG_OPERATION_NONE = 0,
 	DRAG_OPERATION_COPY = 1,
 	DRAG_OPERATION_LINK = 2,
@@ -655,7 +659,7 @@ drag_operations_mask :: enum u32 {
 /// in Chromium's text_input_mode.h and should not be renumbered.
 /// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
 ///
-text_input_mode :: enum u32 {
+Text_input_mode :: enum u32 {
 	TEXT_INPUT_MODE_DEFAULT,
 	TEXT_INPUT_MODE_NONE,
 	TEXT_INPUT_MODE_TEXT,
@@ -672,7 +676,7 @@ text_input_mode :: enum u32 {
 ///
 /// V8 property attribute values.
 ///
-v8_property_attribute :: enum u32 {
+V8_property_attribute :: enum u32 {
 	/// Writeable, Enumerable, Configurable
 	V8_PROPERTY_ATTRIBUTE_NONE = 0,
 
@@ -692,7 +696,7 @@ v8_property_attribute :: enum u32 {
 ///
 /// Post data elements may represent either bytes or files.
 ///
-postdataelement_type :: enum u32 {
+Postdataelement_type :: enum u32 {
 	PDE_TYPE_EMPTY = 0,
 	PDE_TYPE_BYTES,
 	PDE_TYPE_FILE,
@@ -708,7 +712,7 @@ postdataelement_type :: enum u32 {
 /// Resource type for a request. These constants match their equivalents in
 /// Chromium's ResourceType and should not be renumbered.
 ///
-resource_type :: enum u32 {
+Resource_type :: enum u32 {
 	/// Top level page.
 	RT_MAIN_FRAME = 0,
 
@@ -781,7 +785,7 @@ resource_type :: enum u32 {
 /// Transition type for a request. Made up of one source value and 0 or more
 /// qualifiers.
 ///
-transition_type :: enum u32 {
+Transition_type :: enum u32 {
 	/// Source is a link click or the JavaScript window.open function. This is
 	/// also the default value for requests like sub-resource loads that are not
 	/// navigations.
@@ -895,13 +899,13 @@ transition_type :: enum u32 {
 	TT_QUALIFIER_MASK = 0xFFFFFF00,
 }
 
-///
+///½
 /// Flags used to customize the behavior of CefURLRequest.
 ///
 ///
 /// Flags used to customize the behavior of CefURLRequest.
 ///
-urlrequest_flags :: enum u32 {
+Urlrequest_flags :: enum u32 {
 	/// Default behavior.
 	UR_FLAG_NONE = 0,
 
@@ -950,7 +954,7 @@ urlrequest_flags :: enum u32 {
 ///
 /// Flags that represent CefURLRequest status.
 ///
-urlrequest_status :: enum u32 {
+Url_request_status :: enum u32 {
 	/// Unknown status.
 	UR_UNKNOWN,
 
@@ -972,9 +976,9 @@ urlrequest_status :: enum u32 {
 
 /// Structure representing a draggable region.
 ///
-draggable_region :: struct {
+Draggable_region :: struct {
 	/// Bounds of the region.
-	bounds: rect_t,
+	bounds: cef_rect,
 
 	/// True (1) this this region is draggable and false (0) otherwise.
 	draggable: c.int,
@@ -986,7 +990,7 @@ draggable_region :: struct {
 ///
 /// Existing process IDs.
 ///
-process_id :: enum u32 {
+cef_process_id :: enum u32 {
 	/// Browser process.
 	PID_BROWSER,
 	/// Renderer process.
@@ -999,7 +1003,7 @@ process_id :: enum u32 {
 ///
 /// Existing thread IDs.
 ///
-thread_id :: enum u32 {
+cef_thread_id :: enum u32 {
 	// BROWSER PROCESS THREADS -- Only available in the browser process.
 
 	/// The main thread in the browser. This will be the same as the main
@@ -1061,7 +1065,7 @@ thread_id :: enum u32 {
 ///
 /// Thread priority values listed in increasing order of importance.
 ///
-thread_priority :: enum u32 {
+Thread_priority :: enum u32 {
 	/// Suitable for threads that shouldn't disrupt high priority work.
 	TP_BACKGROUND,
 
@@ -1085,7 +1089,7 @@ thread_priority :: enum u32 {
 /// Message loop types. Indicates the set of asynchronous events that a message
 /// loop can process.
 ///
-message_loop_type :: enum u32 {
+Message_loop_type :: enum u32 {
 	/// Supports tasks and timers.
 	ML_TYPE_DEFAULT,
 
@@ -1106,7 +1110,7 @@ message_loop_type :: enum u32 {
 /// Windows COM initialization mode. Specifies how COM will be initialized for a
 /// new thread.
 ///
-com_init_mode :: enum u32 {
+Com_init_mode :: enum u32 {
 	/// No COM initialization.
 	COM_INIT_MODE_NONE,
 
@@ -1123,7 +1127,7 @@ com_init_mode :: enum u32 {
 ///
 /// Supported value types.
 ///
-value_type :: enum u32 {
+cef_value_type :: enum u32 {
 	VTYPE_INVALID,
 	VTYPE_NULL,
 	VTYPE_BOOL,
@@ -1143,7 +1147,7 @@ value_type :: enum u32 {
 ///
 /// Supported JavaScript dialog types.
 ///
-jsdialog_type :: enum u32 {
+Jsdialog_type :: enum u32 {
 	JSDIALOGTYPE_ALERT,
 	JSDIALOGTYPE_CONFIRM,
 	JSDIALOGTYPE_PROMPT,
@@ -1161,7 +1165,7 @@ jsdialog_type :: enum u32 {
 /// passed as a parameter to CefRenderHandler::GetScreenInfo and should be
 /// filled in by the client.
 ///
-screen_info :: struct {
+Screen_info :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
@@ -1187,7 +1191,7 @@ screen_info :: struct {
 	//
 	/// The |rect| and |available_rect| properties are used to determine the
 	/// available surface for rendering popup views.
-	rect: rect_t,
+	rect: cef_rect,
 
 	/// This is set from the rcWork member of MONITORINFOEX, to whit:
 	///	 "A RECT structure that specifies the work area rectangle of the
@@ -1200,7 +1204,7 @@ screen_info :: struct {
 	//
 	/// The |rect| and |available_rect| properties are used to determine the
 	/// available surface for rendering popup views.
-	available_rect: rect_t,
+	available_rect: cef_rect,
 }
 
 ///
@@ -1310,7 +1314,7 @@ mouse_event :: struct {
 	y: c.int,
 
 	/// Bit flags describing any pressed modifier keys. See
-	/// event_flags_t for values.
+	/// Event_flags for values.
 	modifiers: u32,
 }
 
@@ -1379,31 +1383,21 @@ touch_event :: struct {
 	type: touch_event_type,
 
 	/// Bit flags describing any pressed modifier keys. See
-	/// event_flags_t for values.
+	/// Event_flags for values.
 	modifiers: u32,
 
 	/// The device type that caused the event.
 	pointer_type: pointer_type,
 }
 
-///
 /// Paint element types.
-///
-///
-/// Paint element types.
-///
-paint_element_type :: enum u32 {
+Paint_element_type :: enum u32 {
 	PET_VIEW = 0,
 	PET_POPUP,
 }
 
-///
 /// Supported event bit flags.
-///
-///
-/// Supported event bit flags.
-///
-event_flags :: enum u32 {
+Event_flags :: enum u32 {
 	EVENTFLAG_NONE = 0,
 	EVENTFLAG_CAPS_LOCK_ON = 1 << 0,
 	EVENTFLAG_SHIFT_DOWN = 1 << 1,
@@ -1424,13 +1418,8 @@ event_flags :: enum u32 {
 	EVENTFLAG_SCROLL_BY_PAGE = 1 << 15,
 }
 
-///
 /// Supported menu item types.
-///
-///
-/// Supported menu item types.
-///
-menu_item_type :: enum u32 {
+Menu_item_type :: enum u32 {
 	MENUITEMTYPE_NONE,
 	MENUITEMTYPE_COMMAND,
 	MENUITEMTYPE_CHECK,
@@ -1439,13 +1428,9 @@ menu_item_type :: enum u32 {
 	MENUITEMTYPE_SUBMENU,
 }
 
-///
+
 /// Supported context menu type flags.
-///
-///
-/// Supported context menu type flags.
-///
-context_menu_type_flags :: enum u32 {
+Context_menu_type_flags :: enum u32 {
 	/// No node is selected.
 	CM_TYPEFLAG_NONE = 0,
 	/// The top page is selected.
@@ -1462,15 +1447,9 @@ context_menu_type_flags :: enum u32 {
 	CM_TYPEFLAG_EDITABLE = 1 << 5,
 }
 
-///
 /// Supported context menu media types. These constants match their equivalents
 /// in Chromium's ContextMenuDataMediaType and should not be renumbered.
-///
-///
-/// Supported context menu media types. These constants match their equivalents
-/// in Chromium's ContextMenuDataMediaType and should not be renumbered.
-///
-context_menu_media_type :: enum u32 {
+Context_menu_media_type :: enum u32 {
 	/// No special node is in context.
 	CM_MEDIATYPE_NONE,
 	/// An image node is selected.
@@ -1489,17 +1468,11 @@ context_menu_media_type :: enum u32 {
 	CM_MEDIATYPE_NUM_VALUES,
 }
 
-///
+
 /// Supported context menu media state bit flags. These constants match their
 /// equivalents in Chromium's ContextMenuData::MediaFlags and should not be
 /// renumbered.
-///
-///
-/// Supported context menu media state bit flags. These constants match their
-/// equivalents in Chromium's ContextMenuData::MediaFlags and should not be
-/// renumbered.
-///
-context_menu_media_state_flags :: enum u32 {
+Context_menu_media_state_flags :: enum u32 {
 	CM_MEDIAFLAG_NONE = 0,
 	CM_MEDIAFLAG_IN_ERROR = 1 << 0,
 	CM_MEDIAFLAG_PAUSED = 1 << 1,
@@ -1516,17 +1489,10 @@ context_menu_media_state_flags :: enum u32 {
 	CM_MEDIAFLAG_CAN_LOOP = 1 << 12,
 }
 
-///
 /// Supported context menu edit state bit flags. These constants match their
 /// equivalents in Chromium's ContextMenuDataEditFlags and should not be
 /// renumbered.
-///
-///
-/// Supported context menu edit state bit flags. These constants match their
-/// equivalents in Chromium's ContextMenuDataEditFlags and should not be
-/// renumbered.
-///
-context_menu_edit_state_flags :: enum u32 {
+Context_menu_edit_state_flags :: enum u32 {
 	CM_EDITFLAG_NONE = 0,
 	CM_EDITFLAG_CAN_UNDO = 1 << 0,
 	CM_EDITFLAG_CAN_REDO = 1 << 1,
@@ -1539,13 +1505,8 @@ context_menu_edit_state_flags :: enum u32 {
 	CM_EDITFLAG_CAN_EDIT_RICHLY = 1 << 8,
 }
 
-///
 /// Supported quick menu state bit flags.
-///
-///
-/// Supported quick menu state bit flags.
-///
-quick_menu_edit_state_flags :: enum u32 {
+Quick_menu_edit_state_flags :: enum u32 {
 	QM_EDITFLAG_NONE = 0,
 	QM_EDITFLAG_CAN_ELLIPSIS = 1 << 0,
 	QM_EDITFLAG_CAN_CUT = 1 << 1,
@@ -1553,13 +1514,8 @@ quick_menu_edit_state_flags :: enum u32 {
 	QM_EDITFLAG_CAN_PASTE = 1 << 3,
 }
 
-///
 /// Key event types.
-///
-///
-/// Key event types.
-///
-key_event_type :: enum u32 {
+Key_event_type :: enum u32 {
 	/// Notification that a key transitioned from "up" to "down".
 	KEYEVENT_RAWKEYDOWN = 0,
 
@@ -1577,21 +1533,16 @@ key_event_type :: enum u32 {
 	KEYEVENT_CHAR
 }
 
-///
 /// Structure representing keyboard event information.
-///
-///
-/// Structure representing keyboard event information.
-///
-key_event :: struct {
+Key_event :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
 	/// The type of keyboard event.
-	type: key_event_type,
+	type: Key_event_type,
 
 	/// Bit flags describing any pressed modifier keys. See
-	/// event_flags_t for values.
+	/// Event_flags for values.
 	modifiers: u32,
 
 	/// The Windows key code for the key event. This value is used by the DOM
@@ -1620,13 +1571,8 @@ key_event :: struct {
 	focus_on_editable_field: c.int,
 }
 
-///
 /// Focus sources.
-///
-///
-/// Focus sources.
-///
-focus_source :: enum u32 {
+Focus_source :: enum u32 {
 	/// The source is explicit navigation via the API (LoadURL(), etc).
 	FOCUS_SOURCE_NAVIGATION,
 	/// The source is a system-generated focus event.
@@ -1635,13 +1581,8 @@ focus_source :: enum u32 {
 	FOCUS_SOURCE_NUM_VALUES,
 }
 
-///
 /// Navigation types.
-///
-///
-/// Navigation types.
-///
-navigation_type :: enum u32 {
+Navigation_type :: enum u32 {
 	NAVIGATION_LINK_CLICKED,
 	NAVIGATION_FORM_SUBMITTED,
 	NAVIGATION_BACK_FORWARD,
@@ -1651,19 +1592,12 @@ navigation_type :: enum u32 {
 	NAVIGATION_NUM_VALUES,
 }
 
-///
+
 /// Supported XML encoding types. The parser supports ASCII, ISO-8859-1, and
 /// UTF16 (LE and BE) by default. All other types must be translated to UTF8
 /// before being passed to the parser. If a BOM is detected and the correct
 /// decoder is available then that decoder will be used automatically.
-///
-///
-/// Supported XML encoding types. The parser supports ASCII, ISO-8859-1, and
-/// UTF16 (LE and BE) by default. All other types must be translated to UTF8
-/// before being passed to the parser. If a BOM is detected and the correct
-/// decoder is available then that decoder will be used automatically.
-///
-xml_encoding_type :: enum u32 {
+Xml_encoding_type :: enum u32 {
 	XML_ENCODING_NONE,
 	XML_ENCODING_UTF8,
 	XML_ENCODING_UTF16LE,
@@ -1678,7 +1612,7 @@ xml_encoding_type :: enum u32 {
 ///
 /// XML node types.
 ///
-xml_node_type :: enum u32 {
+Xml_node_type :: enum u32 {
 	XML_NODE_UNSUPPORTED,
 	XML_NODE_PROCESSING_INSTRUCTION,
 	XML_NODE_DOCUMENT_TYPE,
@@ -1693,13 +1627,8 @@ xml_node_type :: enum u32 {
 	XML_NODE_NUM_VALUES,
 }
 
-///
 /// Popup window features.
-///
-///
-/// Popup window features.
-///
-popup_features :: struct {
+Popup_features :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
@@ -1716,13 +1645,8 @@ popup_features :: struct {
 	isPopup: c.int,
 }
 
-///
 /// DOM document types.
-///
-///
-/// DOM document types.
-///
-dom_document_type :: enum u32 {
+Dom_document_type :: enum u32 {
 	DOM_DOCUMENT_TYPE_UNKNOWN,
 	DOM_DOCUMENT_TYPE_HTML,
 	DOM_DOCUMENT_TYPE_XHTML,
@@ -1730,13 +1654,8 @@ dom_document_type :: enum u32 {
 	DOM_DOCUMENT_TYPE_NUM_VALUES,
 }
 
-///
 /// DOM event category flags.
-///
-///
-/// DOM event category flags.
-///
-dom_event_category :: enum u32 {
+Dom_event_category :: enum u32 {
 	DOM_EVENT_CATEGORY_UNKNOWN = 0x0,
 	DOM_EVENT_CATEGORY_UI = 0x1,
 	DOM_EVENT_CATEGORY_MOUSE = 0x2,
@@ -1756,13 +1675,8 @@ dom_event_category :: enum u32 {
 	DOM_EVENT_CATEGORY_XMLHTTPREQUEST_PROGRESS = 0x8000,
 }
 
-///
 /// DOM event processing phases.
-///
-///
-/// DOM event processing phases.
-///
-dom_event_phase :: enum u32 {
+Dom_event_phase :: enum u32 {
 	DOM_EVENT_PHASE_UNKNOWN,
 	DOM_EVENT_PHASE_CAPTURING,
 	DOM_EVENT_PHASE_AT_TARGET,
@@ -1770,13 +1684,8 @@ dom_event_phase :: enum u32 {
 	DOM_EVENT_PHASE_NUM_VALUES,
 }
 
-///
 /// DOM node types.
-///
-///
-/// DOM node types.
-///
-dom_node_type :: enum u32 {
+Dom_node_type :: enum u32 {
 	DOM_NODE_TYPE_UNSUPPORTED,
 	DOM_NODE_TYPE_ELEMENT,
 	DOM_NODE_TYPE_ATTRIBUTE,
@@ -1790,15 +1699,9 @@ dom_node_type :: enum u32 {
 	DOM_NODE_TYPE_NUM_VALUES,
 }
 
-///
 /// DOM form control types. Should be kept in sync with Chromium's
 /// blink::mojom::FormControlType type.
-///
-///
-/// DOM form control types. Should be kept in sync with Chromium's
-/// blink::mojom::FormControlType type.
-///
-dom_form_control_type :: enum u32 {
+Dom_form_control_type :: enum u32 {
 	DOM_FORM_CONTROL_TYPE_UNSUPPORTED,
 	DOM_FORM_CONTROL_TYPE_BUTTON_BUTTON,
 	DOM_FORM_CONTROL_TYPE_BUTTON_SUBMIT,
@@ -1834,13 +1737,8 @@ dom_form_control_type :: enum u32 {
 	DOM_FORM_CONTROL_TYPE_NUM_VALUES,
 }
 
-///
 /// Supported file dialog modes.
-///
-///
-/// Supported file dialog modes.
-///
-file_dialog_mode :: enum u32 {
+File_dialog_mode :: enum u32 {
 	/// Requires that the file exists before allowing the user to pick it.
 	FILE_DIALOG_OPEN,
 
@@ -1857,13 +1755,8 @@ file_dialog_mode :: enum u32 {
 	FILE_DIALOG_NUM_VALUES,
 }
 
-///
 /// Print job color mode values.
-///
-///
-/// Print job color mode values.
-///
-color_model :: enum u32 {
+Color_model :: enum u32 {
 	COLOR_MODEL_UNKNOWN,
 	COLOR_MODEL_GRAY,
 	COLOR_MODEL_COLOR,
@@ -1888,13 +1781,8 @@ color_model :: enum u32 {
 	COLOR_MODEL_NUM_VALUES,
 }
 
-///
 /// Print job duplex mode values.
-///
-///
-/// Print job duplex mode values.
-///
-duplex_mode :: enum u32 {
+Duplex_mode :: enum u32 {
 	DUPLEX_MODE_UNKNOWN = 0xFFFFFFFF, // -1 equivalent
 	DUPLEX_MODE_SIMPLEX,
 	DUPLEX_MODE_LONG_EDGE,
@@ -1902,13 +1790,8 @@ duplex_mode :: enum u32 {
 	DUPLEX_MODE_NUM_VALUES,
 }
 
-///
 /// Cursor type values.
-///
-///
-/// Cursor type values.
-///
-cursor_type :: enum u32 {
+Cursor_type :: enum u32 {
 	CT_POINTER,
 	CT_CROSS,
 	CT_HAND,
@@ -1962,30 +1845,18 @@ cursor_type :: enum u32 {
 	CT_NUM_VALUES,
 }
 
-///
 /// Structure representing cursor information. |buffer| will be
 /// |size.width|*|size.height|*4 bytes in size and represents a BGRA image with
 /// an upper-left origin.
-///
-///
-/// Structure representing cursor information. |buffer| will be
-/// |size.width|*|size.height|*4 bytes in size and represents a BGRA image with
-/// an upper-left origin.
-///
-cursor_info :: struct {
-	hotspot: point_t,
+Cursor_info :: struct {
+	hotspot: cef_point,
 	image_scale_factor: f32,
 	buffer: rawptr,
-	size: size_t,
+	size: cef_size,
 }
 
-///
 /// URI unescape rules passed to CefURIDecode().
-///
-///
-/// URI unescape rules passed to CefURIDecode().
-///
-uri_unescape_rules :: enum u32 {
+Uri_unescape_rules :: enum u32 {
 	/// Don't unescape anything at all.
 	UU_NONE = 0,
 
@@ -2021,13 +1892,8 @@ uri_unescape_rules :: enum u32 {
 	UU_REPLACE_PLUS_WITH_SPACE = 1 << 4,
 }
 
-///
 /// Options that can be passed to CefParseJSON.
-///
-///
-/// Options that can be passed to CefParseJSON.
-///
-json_parser_options :: enum u32 {
+Json_parser_options :: enum u32 {
 	/// Parses the input strictly according to RFC 4627. See comments in
 	/// Chromium's base/json/json_reader.h file for known limitations/
 	/// deviations from the RFC.
@@ -2037,13 +1903,8 @@ json_parser_options :: enum u32 {
 	JSON_PARSER_ALLOW_TRAILING_COMMAS = 1 << 0,
 }
 
-///
 /// Options that can be passed to CefWriteJSON.
-///
-///
-/// Options that can be passed to CefWriteJSON.
-///
-json_writer_options :: enum u32 {
+Json_writer_options :: enum u32 {
 	/// Default behavior.
 	JSON_WRITER_DEFAULT = 0,
 
@@ -2064,13 +1925,8 @@ json_writer_options :: enum u32 {
 	JSON_WRITER_PRETTY_PRINT = 1 << 2,
 }
 
-///
 /// Margin type for PDF printing.
-///
-///
-/// Margin type for PDF printing.
-///
-pdf_print_margin_type :: enum u32 {
+Pdf_print_margin_type :: enum u32 {
 	/// Default margins of 1cm (~0.4 inches).
 	PDF_PRINT_MARGIN_DEFAULT,
 
@@ -2081,17 +1937,10 @@ pdf_print_margin_type :: enum u32 {
 	PDF_PRINT_MARGIN_CUSTOM,
 }
 
-///
 /// Structure representing PDF print settings. These values match the parameters
 /// supported by the DevTools Page.printToPDF function. See
 /// https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-printToPDF
-///
-///
-/// Structure representing PDF print settings. These values match the parameters
-/// supported by the DevTools Page.printToPDF function. See
-/// https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-printToPDF
-///
-pdf_print_settings :: struct {
+Pdf_print_settings :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
@@ -2117,7 +1966,7 @@ pdf_print_settings :: struct {
 	prefer_css_page_size: c.int,
 
 	/// Margin type.
-	margin_type: pdf_print_margin_type,
+	margin_type: Pdf_print_margin_type,
 
 	/// Margins in inches. Only used if |margin_type| is set to
 	/// PDF_PRINT_MARGIN_CUSTOM.
@@ -2163,17 +2012,10 @@ pdf_print_settings :: struct {
 	generate_document_outline: c.int,
 }
 
-///
 /// Supported UI scale factors for the platform. SCALE_FACTOR_NONE is used for
 /// density independent resources such as string, html/js files or an image that
 /// can be used for any scale factors (such as wallpapers).
-///
-///
-/// Supported UI scale factors for the platform. SCALE_FACTOR_NONE is used for
-/// density independent resources such as string, html/js files or an image that
-/// can be used for any scale factors (such as wallpapers).
-///
-scale_factor :: enum u32 {
+Scale_factor :: enum u32 {
 	SCALE_FACTOR_NONE,
 	SCALE_FACTOR_100P,
 	SCALE_FACTOR_125P,
@@ -2187,19 +2029,11 @@ scale_factor :: enum u32 {
 	SCALE_FACTOR_NUM_VALUES,
 }
 
-///
 /// Policy for how the Referrer HTTP header value will be sent during
 /// navigation. If the `--no-referrers` command-line flag is specified then the
 /// policy value will be ignored and the Referrer value will never be sent. Must
-/// be kept synchronized with net::URLRequest::ReferrerPolicy from Chromium.
-///
-///
-/// Policy for how the Referrer HTTP header value will be sent during
-/// navigation. If the `--no-referrers` command-line flag is specified then the
-/// policy value will be ignored and the Referrer value will never be sent. Must
-/// be kept synchronized with net::URLRequest::ReferrerPolicy from Chromium.
-///
-referrer_policy :: enum u32 {
+/// be kept synchronized with net::Url_request::ReferrerPolicy from Chromium.
+Referrer_policy :: enum u32 {
 	/// Clear the referrer header if the header value is HTTPS but the request
 	/// destination is HTTP. This is the default behavior.
 	REFERRER_POLICY_CLEAR_REFERRER_ON_TRANSITION_FROM_SECURE_TO_INSECURE,
@@ -2238,13 +2072,8 @@ referrer_policy :: enum u32 {
 	REFERRER_POLICY_NUM_VALUES,
 }
 
-///
 /// Return values for CefResponseFilter::Filter().
-///
-///
-/// Return values for CefResponseFilter::Filter().
-///
-response_filter_status :: enum u32 {
+Response_filter_status :: enum u32 {
 	/// Some or all of the pre-filter data was read successfully but more data is
 	/// needed in order to continue filtering (filtered output is pending).
 	RESPONSE_FILTER_NEED_MORE_DATA,
@@ -2257,13 +2086,8 @@ response_filter_status :: enum u32 {
 	RESPONSE_FILTER_ERROR
 }
 
-///
 /// Describes how to interpret the alpha component of a pixel.
-///
-///
-/// Describes how to interpret the alpha component of a pixel.
-///
-alpha_type :: enum u32 {
+Alpha_type :: enum u32 {
 	/// No transparency. The alpha component is ignored.
 	ALPHA_TYPE_OPAQUE,
 
@@ -2274,13 +2098,8 @@ alpha_type :: enum u32 {
 	ALPHA_TYPE_POSTMULTIPLIED,
 }
 
-///
 /// Text style types. Should be kepy in sync with gfx::TextStyle.
-///
-///
-/// Text style types. Should be kepy in sync with gfx::TextStyle.
-///
-text_style :: enum u32 {
+Text_style :: enum u32 {
 	TEXT_STYLE_BOLD,
 	TEXT_STYLE_ITALIC,
 	TEXT_STYLE_STRIKE,
@@ -2289,15 +2108,9 @@ text_style :: enum u32 {
 	TEXT_STYLE_NUM_VALUES,
 }
 
-///
 /// Specifies where along the axis the CefBoxLayout child views should be laid
 /// out. Should be kept in sync with Chromium's views::LayoutAlignment type.
-///
-///
-/// Specifies where along the axis the CefBoxLayout child views should be laid
-/// out. Should be kept in sync with Chromium's views::LayoutAlignment type.
-///
-axis_alignment :: enum u32 {
+Axis_alignment :: enum u32 {
 	/// Child views will be left/top-aligned.
 	AXIS_ALIGNMENT_START,
 
@@ -2313,13 +2126,8 @@ axis_alignment :: enum u32 {
 	AXIS_ALIGNMENT_NUM_VALUES,
 }
 
-///
 /// Settings used when initializing a CefBoxLayout.
-///
-///
-/// Settings used when initializing a CefBoxLayout.
-///
-box_layout_settings :: struct {
+Box_layout_settings :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
@@ -2336,16 +2144,16 @@ box_layout_settings :: struct {
 	inside_border_vertical_spacing: c.int,
 
 	/// Adds additional space around the child view area.
-	inside_border_insets: insets_t,
+	inside_border_insets: cef_insets,
 
 	/// Adds additional space between child views.
 	between_child_spacing: c.int,
 
 	/// Specifies where along the main axis the child views should be laid out.
-	main_axis_alignment: axis_alignment,
+	main_axis_alignment: Axis_alignment,
 
 	/// Specifies where along the cross axis the child views should be laid out.
-	cross_axis_alignment: axis_alignment,
+	cross_axis_alignment: Axis_alignment,
 
 	/// Minimum cross axis size.
 	minimum_cross_axis_size: c.int,
@@ -2359,13 +2167,8 @@ box_layout_settings :: struct {
 	default_flex: c.int,
 }
 
-///
 /// Specifies the button display state.
-///
-///
-/// Specifies the button display state.
-///
-button_state :: enum u32 {
+Button_state :: enum u32 {
 	BUTTON_STATE_NORMAL,
 	BUTTON_STATE_HOVERED,
 	BUTTON_STATE_PRESSED,
@@ -2373,13 +2176,8 @@ button_state :: enum u32 {
 	BUTTON_STATE_NUM_VALUES,
 }
 
-///
 /// Specifies the horizontal text alignment mode.
-///
-///
-/// Specifies the horizontal text alignment mode.
-///
-horizontal_alignment :: enum u32 {
+Horizontal_alignment :: enum u32 {
 	/// Align the text's left edge with that of its display area.
 	HORIZONTAL_ALIGNMENT_LEFT,
 
@@ -2390,28 +2188,17 @@ horizontal_alignment :: enum u32 {
 	HORIZONTAL_ALIGNMENT_RIGHT,
 }
 
-///
 /// Specifies how a menu will be anchored for non-RTL languages. The opposite
 /// position will be used for RTL languages.
-///
-///
-/// Specifies how a menu will be anchored for non-RTL languages. The opposite
-/// position will be used for RTL languages.
-///
-menu_anchor_position :: enum u32 {
+Menu_anchor_position :: enum u32 {
 	MENU_ANCHOR_TOPLEFT,
 	MENU_ANCHOR_TOPRIGHT,
 	MENU_ANCHOR_BOTTOMCENTER,
 	MENU_ANCHOR_NUM_VALUES,
 }
 
-///
 /// Supported color types for menu items.
-///
-///
-/// Supported color types for menu items.
-///
-menu_color_type :: enum u32 {
+Menu_color_type :: enum u32 {
 	MENU_COLOR_TEXT,
 	MENU_COLOR_TEXT_HOVERED,
 	MENU_COLOR_TEXT_ACCELERATOR,
@@ -2423,7 +2210,7 @@ menu_color_type :: enum u32 {
 
 /// Supported SSL version values. See net/ssl/ssl_connection_status_flags.h
 /// for more information.
-ssl_version :: enum u32 {
+Ssl_version :: enum u32 {
 	/// Unknown SSL version.
 	SSL_CONNECTION_VERSION_UNKNOWN,
 	SSL_CONNECTION_VERSION_SSL2,
@@ -2438,17 +2225,15 @@ ssl_version :: enum u32 {
 
 /// Supported SSL content status flags. See content/public/common/ssl_status.h
 /// for more information.
-ssl_content_status :: enum u32 {
+Ssl_content_status :: enum u32 {
 	SSL_CONTENT_NORMAL_CONTENT = 0,
 	SSL_CONTENT_DISPLAYED_INSECURE_CONTENT = 1 << 0,
 	SSL_CONTENT_RAN_INSECURE_CONTENT = 1 << 1,
 }
 
-//
 /// Configuration options for registering a custom scheme.
 /// These values are used when calling AddCustomScheme.
-//
-scheme_options :: enum u32 {
+Scheme_options :: enum u32 {
 	SCHEME_OPTION_NONE = 0,
 
 	/// If SCHEME_OPTION_STANDARD is set the scheme will be treated as a
@@ -2515,18 +2300,14 @@ scheme_options :: enum u32 {
 	SCHEME_OPTION_FETCH_ENABLED = 1 << 6,
 }
 
-///
 /// Structure representing a range.
-///
-range :: struct {
+cef_range :: struct {
 	from: u32,
 	to: u32,
 }
 
-///
 /// Composition underline style.
-///
-composition_underline_style :: enum u32 {
+Composition_underline_style :: enum u32 {
 	CUS_SOLID,
 	CUS_DOT,
 	CUS_DASH,
@@ -2534,42 +2315,33 @@ composition_underline_style :: enum u32 {
 	CUS_NUM_VALUES,
 }
 
-///
 /// Structure representing IME composition underline information. This is a thin
 /// wrapper around Blink's WebCompositionUnderline class and should be kept in
 /// sync with that.
-///
-///
-/// Structure representing IME composition underline information. This is a thin
-/// wrapper around Blink's WebCompositionUnderline class and should be kept in
-/// sync with that.
-///
-composition_underline :: struct {
+Composition_underline :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
 	/// Underline character range.
-	range: range,
+	range: cef_range,
 
 	/// Text color.
-	color: color_t,
+	color: cef_color,
 
 	/// Background color.
-	background_color: color_t,
+	background_color: cef_color,
 
 	/// Set to true (1) for thick underline.
 	thick: c.int,
 
 	/// Style.
-	style: composition_underline_style,
+	style: Composition_underline_style,
 }
 
-///
 /// Enumerates the various representations of the ordering of audio channels.
 /// Must be kept synchronized with media::ChannelLayout from Chromium.
 /// See media\base\channel_layout.h
-///
-channel_layout :: enum u32 {
+Channel_layout :: enum u32 {
 	CHANNEL_LAYOUT_NONE,
 	CHANNEL_LAYOUT_UNSUPPORTED,
 
@@ -2691,12 +2463,12 @@ channel_layout :: enum u32 {
 /// Structure representing the audio parameters for setting up the audio
 /// handler.
 ///
-audio_parameters :: struct {
+Audio_parameters :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
 	/// Layout of the audio channels
-	channel_layout: channel_layout,
+	channel_layout: Channel_layout,
 
 	/// Sample rate
 	sample_rate: c.int,
@@ -2709,7 +2481,7 @@ audio_parameters :: struct {
 /// Result codes for CefMediaRouter::CreateRoute. Should be kept in sync with
 /// Chromium's media_router::mojom::RouteRequestResultCode type.
 ///
-media_route_create_result :: enum u32 {
+Media_route_create_result :: enum u32 {
 	MRCR_UNKNOWN_ERROR,
 	MRCR_OK,
 	MRCR_TIMED_OUT,
@@ -2732,7 +2504,7 @@ media_route_create_result :: enum u32 {
 /// Connection state for a MediaRoute object. Should be kept in sync with
 /// Chromium's blink::mojom::PresentationConnectionState type.
 ///
-media_route_connection_state :: enum u32 {
+Media_route_connection_state :: enum u32 {
 	MRCS_UNKNOWN = 0xFFFFFFFF, // -1 equivalent
 	MRCS_CONNECTING,
 	MRCS_CONNECTED,
@@ -2745,7 +2517,7 @@ media_route_connection_state :: enum u32 {
 /// Icon types for a MediaSink object. Should be kept in sync with Chromium's
 /// media_router::SinkIconType type.
 ///
-media_sink_icon_type :: enum u32 {
+Media_sink_icon_type :: enum u32 {
 	MSIT_CAST,
 	MSIT_CAST_AUDIO_GROUP,
 	MSIT_CAST_AUDIO,
@@ -2760,7 +2532,7 @@ media_sink_icon_type :: enum u32 {
 ///
 /// Device information for a MediaSink object.
 ///
-media_sink_device_info :: struct {
+Media_sink_device_info :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
@@ -2773,7 +2545,7 @@ media_sink_device_info :: struct {
 /// Represents commands available to TextField. Should be kept in sync with
 /// Chromium's views::TextField::MenuCommands type.
 ///
-text_field_commands :: enum u32 {
+Text_field_commands :: enum u32 {
 	TFC_UNKNOWN,
 	TFC_CUT,
 	TFC_COPY,
@@ -2788,7 +2560,7 @@ text_field_commands :: enum u32 {
 ///
 /// Chrome toolbar types.
 ///
-chrome_toolbar_type :: enum u32 {
+Chrome_toolbar_type :: enum u32 {
 	CTT_UNKNOWN,
 	CTT_NONE,
 	CTT_NORMAL,
@@ -2800,7 +2572,7 @@ chrome_toolbar_type :: enum u32 {
 /// Chrome page action icon types. Should be kept in sync with Chromium's
 /// PageActionIconType type.
 ///
-chrome_page_action_icon_type :: enum u32 {
+Chrome_page_action_icon_type :: enum u32 {
 	CPAIT_BOOKMARK_STAR,
 	CPAIT_CLICK_TO_CALL,
 	CPAIT_COOKIE_CONTROLS,
@@ -2843,7 +2615,7 @@ chrome_page_action_icon_type :: enum u32 {
 /// Chrome toolbar button types. Should be kept in sync with CEF's internal
 /// ToolbarButtonType type.
 ///
-chrome_toolbar_button_type :: enum u32 {
+Chrome_toolbar_button_type :: enum u32 {
 	CTBT_CAST,
 	CTBT_DOWNLOAD_DEPRECATED,
 	CTBT_SEND_TAB_TO_SELF_DEPRECATED,
@@ -2854,7 +2626,7 @@ chrome_toolbar_button_type :: enum u32 {
 ///
 /// Docking modes supported by CefWindow::AddOverlay.
 ///
-docking_mode :: enum u32 {
+Docking_mode :: enum u32 {
 	DOCKING_MODE_TOP_LEFT,
 	DOCKING_MODE_TOP_RIGHT,
 	DOCKING_MODE_BOTTOM_LEFT,
@@ -2863,10 +2635,8 @@ docking_mode :: enum u32 {
 	DOCKING_MODE_NUM_VALUES,
 }
 
-///
 /// Show states supported by CefWindowDelegate::GetInitialShowState.
-///
-show_state :: enum u32 {
+Show_state :: enum u32 {
 	// Show the window as normal.
 	SHOW_STATE_NORMAL,
 
@@ -2886,10 +2656,8 @@ show_state :: enum u32 {
 	SHOW_STATE_NUM_VALUES,
 }
 
-///
 /// Values indicating what state of the touch handle is set.
-///
-touch_handle_state_flags :: enum u32 {
+Touch_handle_state_flags :: enum u32 {
 	THS_FLAG_NONE = 0,
 	THS_FLAG_ENABLED = 1 << 0,
 	THS_FLAG_ORIENTATION = 1 << 1,
@@ -2897,7 +2665,7 @@ touch_handle_state_flags :: enum u32 {
 	THS_FLAG_ALPHA = 1 << 3,
 }
 
-touch_handle_state :: struct {
+Touch_handle_state :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
@@ -2912,12 +2680,12 @@ touch_handle_state :: struct {
 	enabled: c.int,
 
 	/// Orientation state. Only set if |flags| contains THS_FLAG_ORIENTATION.
-	orientation: horizontal_alignment,
+	orientation: Horizontal_alignment,
 	mirror_vertical: c.int,
 	mirror_horizontal: c.int,
 
 	/// Origin state. Only set if |flags| contains THS_FLAG_ORIGIN.
-	origin: point_t,
+	origin: cef_point,
 
 	/// Alpha state. Only set if |flags| contains THS_FLAG_ALPHA.
 	alpha: f32,
@@ -2926,7 +2694,7 @@ touch_handle_state :: struct {
 ///
 /// Media access permissions used by OnRequestMediaAccessPermission.
 ///
-media_access_permission_types :: enum u32 {
+Media_access_permission_types :: enum u32 {
 	/// No permission.
 	MEDIA_PERMISSION_NONE = 0,
 
@@ -2948,7 +2716,7 @@ media_access_permission_types :: enum u32 {
 /// platform-specific or only supported with Chrome style. Should be kept
 /// in sync with Chromium's permissions::RequestType type.
 ///
-permission_request_types :: enum u32 {
+Permission_request_types :: enum u32 {
 	PERMISSION_TYPE_NONE = 0,
 	PERMISSION_TYPE_AR_SESSION = 1 << 0,
 	PERMISSION_TYPE_CAMERA_PAN_TILT_ZOOM = 1 << 1,
@@ -2981,7 +2749,7 @@ permission_request_types :: enum u32 {
 ///
 /// Permission request results.
 ///
-permission_request_result :: enum u32 {
+Permission_request_result :: enum u32 {
 	/// Accept the permission request as an explicit user action.
 	PERMISSION_RESULT_ACCEPT,
 
@@ -3004,7 +2772,7 @@ permission_request_result :: enum u32 {
 /// certificate file must exist in the "net/data/ssl/certificates" directory.
 /// See CefSetDataDirectoryForTests() for related configuration.
 ///
-test_cert_type :: enum u32 {
+Test_cert_type :: enum u32 {
 	/// Valid certificate using the IP (127.0.0.1). Loads the "ok_cert.pem" file.
 	TEST_CERT_OK_IP,
 
@@ -3022,7 +2790,7 @@ test_cert_type :: enum u32 {
 /// Preferences type passed to
 /// CefBrowserProcessHandler::OnRegisterCustomPreferences.
 ///
-preferences_type :: enum u32 {
+Preferences_type :: enum u32 {
 	/// Global preferences registered a single time at application startup.
 	PREFERENCES_TYPE_GLOBAL,
 
@@ -3037,7 +2805,7 @@ preferences_type :: enum u32 {
 /// Download interrupt reasons. Should be kept in sync with
 /// Chromium's download::DownloadInterruptReason type.
 ///
-download_interrupt_reason :: enum u32 {
+Download_interrupt_reason :: enum u32 {
 	DOWNLOAD_INTERRUPT_REASON_NONE = 0,
 
 	/// Generic file operation failure.
@@ -3153,7 +2921,7 @@ download_interrupt_reason :: enum u32 {
 ///
 /// Specifies the gesture commands.
 ///
-gesture_command :: enum u32 {
+Gesture_command :: enum u32 {
 	GESTURE_COMMAND_BACK,
 	GESTURE_COMMAND_FORWARD,
 }
@@ -3161,7 +2929,7 @@ gesture_command :: enum u32 {
 ///
 /// Specifies the zoom commands supported by CefBrowserHost::Zoom.
 ///
-zoom_command :: enum u32 {
+Zoom_command :: enum u32 {
 	ZOOM_COMMAND_OUT,
 	ZOOM_COMMAND_RESET,
 	ZOOM_COMMAND_IN,
@@ -3171,7 +2939,7 @@ zoom_command :: enum u32 {
 /// Specifies the color variants supported by
 /// CefRequestContext::SetChromeThemeColor.
 ///
-color_variant :: enum u32 {
+Color_variant :: enum u32 {
 	COLOR_VARIANT_SYSTEM,
 	COLOR_VARIANT_LIGHT,
 	COLOR_VARIANT_DARK,
@@ -3186,7 +2954,7 @@ color_variant :: enum u32 {
 /// Specifies the task type variants supported by CefTaskManager.
 /// Should be kept in sync with Chromium's task_manager::Task::Type type.
 ///
-task_type :: enum u32 {
+Task_type :: enum u32 {
 	TASK_TYPE_UNKNOWN,
 	/// The main browser process.
 	TASK_TYPE_BROWSER,
@@ -3219,14 +2987,14 @@ task_type :: enum u32 {
 ///
 /// Structure representing task information provided by CefTaskManager.
 ///
-task_info :: struct {
+Task_info :: struct {
 	/// Size of this structure.
 	size: c.size_t,
 
 	/// The task ID.
 	id: i64,
 	/// The task type.
-	type: task_type,
+	type: Task_type,
 	/// Set to true (1) if the task is killable.
 	is_killable: c.int,
 	/// The task title.
@@ -3249,100 +3017,6 @@ task_info :: struct {
 }
 
 ///
-/// Types of keyboard events.
-///
-key_event_type :: enum u32 {
-    /// Notification that a key transitioned from "up" to "down".
-    KEYEVENT_RAWKEYDOWN = 0,
-    /// Notification that a key was pressed.
-    KEYEVENT_KEYDOWN,
-    /// Notification that a key was released.
-    KEYEVENT_KEYUP,
-    /// Notification that a character was typed.
-    KEYEVENT_CHAR,
-}
-
-///
-/// Structure representing keyboard event information.
-///
-key_event :: struct {
-    /// Size of this structure.
-    size: c.size_t,
-    /// The type of keyboard event.
-    type: key_event_type,
-    /// Bit flags describing any pressed modifier keys.
-    modifiers: u32,
-    /// The Windows key code for the key event.
-    windows_key_code: c.int,
-    /// The actual key code generated by the platform.
-    native_key_code: c.int,
-    /// Indicates whether the event is considered a "system key" event.
-    is_system_key: c.int,
-    /// The character generated by the keystroke.
-    character: u16,
-    /// Same as |character| but unmodified by any concurrently-held modifiers.
-    unmodified_character: u16,
-    /// True if the focus is currently on an editable field on the page.
-    focus_on_editable_field: c.int,
-}
-
-///
-/// "Verb" of a drag-and-drop operation as negotiated between the source and
-/// destination. These constants match their equivalents in WebCore's
-/// DragActions.h and should not be renumbered.
-///
-drag_operations_mask :: enum u32 {
-    DRAG_OPERATION_NONE = 0,
-    DRAG_OPERATION_COPY = 1,
-    DRAG_OPERATION_LINK = 2,
-    DRAG_OPERATION_GENERIC = 4,
-    DRAG_OPERATION_PRIVATE = 8,
-    DRAG_OPERATION_MOVE = 16,
-    DRAG_OPERATION_DELETE = 32,
-    DRAG_OPERATION_EVERY = max(u32),
-}
-
-///
-/// Focus sources.
-///
-focus_source :: enum u32 {
-    /// The source is explicit navigation via the API (LoadURL(), etc).
-    FOCUS_SOURCE_NAVIGATION,
-    /// The source is a system-generated focus event.
-    FOCUS_SOURCE_SYSTEM,
-}
-
-///
-/// Flags that represent CefURLRequest status.
-///
-urlrequest_status :: enum u32 {
-    /// Unknown status.
-    UR_UNKNOWN,
-    /// Request succeeded.
-    UR_SUCCESS,
-    /// An IO request is pending, and the caller will be informed when it is completed.
-    UR_IO_PENDING,
-    /// Request was canceled programmatically.
-    UR_CANCELED,
-    /// Request failed for some reason.
-    UR_FAILED,
-}
-
-///
-/// Permission request results.
-///
-permission_request_result :: enum u32 {
-    /// Accept the permission request as an explicit user action.
-    PERMISSION_RESULT_ACCEPT,
-    /// Deny the permission request as an explicit user action.
-    PERMISSION_RESULT_DENY,
-    /// Dismiss the permission request as an explicit user action.
-    PERMISSION_RESULT_DISMISS,
-    /// Ignore the permission request.
-    PERMISSION_RESULT_IGNORE,
-}
-
-///
 /// Platform-specific event handle type.
 ///
 when ODIN_OS == .Windows {
@@ -3359,13 +3033,13 @@ when ODIN_OS == .Windows {
 /// Platform-specific cursor handle type.
 ///
 when ODIN_OS == .Windows {
-    cursor_handle :: rawptr  // HCURSOR handle on Windows
+    Cursor_handle :: rawptr  // HCURSOR handle on Windows
 } else when ODIN_OS == .Darwin {
-    cursor_handle :: rawptr
+    Cursor_handle :: rawptr
 } else when ODIN_OS == .Linux {
-    cursor_handle :: c.ulong
+    Cursor_handle :: c.ulong
 } else {
-    cursor_handle :: rawptr
+    Cursor_handle :: rawptr
 }
 
 

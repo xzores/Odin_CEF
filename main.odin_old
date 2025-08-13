@@ -10,49 +10,49 @@ import common "Odin_CEF/include/common"
 
 // Global variables for CEF
 app: ^cef.cef_app_t
-browser: ^cef.cef_browser_t
-client: ^cef.cef_client_t
-window_info: cef.cef_window_info
-browser_settings: cef.cef_browser_settings
+browser: ^cef.Browser_t
+client: ^cef.Client
+Window_info: cef.Window_info
+browser_settings: cef.Browser_settings
 
 // Simple client implementation
 SimpleClient :: struct {
-	base: cef.cef_client_t,
-	life_span_handler: ^cef.cef_life_span_handler_t,
+	base: cef.Client,
+	life_span_handler: ^cef.Life_span_handler,
 }
 
 // Simple life span handler
 SimpleLifeSpanHandler :: struct {
-	base: cef.cef_life_span_handler_t,
-	on_after_created: proc "c" (self: ^cef.cef_life_span_handler_t, browser: ^cef.cef_browser_t),
-	on_before_close: proc "c" (self: ^cef.cef_life_span_handler_t, browser: ^cef.cef_browser_t),
+	base: cef.Life_span_handler,
+	on_after_created: proc "c" (self: ^cef.Life_span_handler, browser: ^cef.Browser_t),
+	on_before_close: proc "c" (self: ^cef.Life_span_handler, browser: ^cef.Browser_t),
 }
 
 // Client callbacks
-client_get_life_span_handler :: proc "c" (self: ^cef.cef_client_t) -> ^cef.cef_life_span_handler_t {
+client_get_life_span_handler :: proc "c" (self: ^cef.Client) -> ^cef.Life_span_handler {
 	client := cast(^SimpleClient)self
 	return client.life_span_handler
 }
 
 // Life span handler callbacks
-life_span_on_after_created :: proc "c" (self: ^cef.cef_life_span_handler_t, browser_param: ^cef.cef_browser_t) {
+life_span_on_after_created :: proc "c" (self: ^cef.Life_span_handler, browser_param: ^cef.Browser_t) {
 	context = runtime.default_context()
 	fmt.println("Browser created!")
 	// Store the browser reference
 	browser = browser_param
 }
 
-life_span_on_before_close :: proc "c" (self: ^cef.cef_life_span_handler_t, browser: ^cef.cef_browser_t) {
+life_span_on_before_close :: proc "c" (self: ^cef.Life_span_handler, browser: ^cef.Browser_t) {
 	context = runtime.default_context()
 	fmt.println("Browser closing...")
 }
 
 // App callbacks
-app_get_browser_process_handler :: proc "c" (self: ^cef.cef_app_t) -> ^cef.browser_process_handler {
+app_get_browser_process_handler :: proc "c" (self: ^cef.cef_app_t) -> ^cef.Browser_process_handler {
 	return nil
 }
 
-app_get_render_process_handler :: proc "c" (self: ^cef.cef_app_t) -> ^cef.render_process_handler {
+app_get_render_process_handler :: proc "c" (self: ^cef.cef_app_t) -> ^cef.Render_process_handler {
 	return nil
 }
 
@@ -98,35 +98,35 @@ main :: proc() {
 	fmt.println("CEF initialized successfully")
 	
 	// Set up client
-	client = cast(^cef.cef_client_t)new(SimpleClient)
-	client.base.size = size_of(cef.cef_client_t)
+	client = cast(^cef.Client)new(SimpleClient)
+	client.base.size = size_of(cef.Client)
 	client.get_life_span_handler = client_get_life_span_handler
 	
 	// Set up life span handler
 	life_span_handler := new(SimpleLifeSpanHandler)
-	life_span_handler.base.base.size = size_of(cef.cef_life_span_handler_t)
+	life_span_handler.base.base.size = size_of(cef.Life_span_handler)
 	life_span_handler.on_after_created = life_span_on_after_created
 	life_span_handler.on_before_close = life_span_on_before_close
 	
 	simple_client := cast(^SimpleClient)client
-	simple_client.life_span_handler = cast(^cef.cef_life_span_handler_t)life_span_handler
+	simple_client.life_span_handler = cast(^cef.Life_span_handler)life_span_handler
 	
 	// Set up window info
-	// cef.cef_window_info_initialize(&window_info)
-	// window_info.parent_window = nil
-	// window_info.window_name = cef.cef_string_create("CEF Test")
-	// window_info.x = 100
-	// window_info.y = 100
-	// window_info.width = 1024
-	// window_info.height = 768
+	// cef.cef_window_info_initialize(&Window_info)
+	// Window_info.parent_window = nil
+	// Window_info.window_name = cef.cef_string_create("CEF Test")
+	// Window_info.x = 100
+	// Window_info.y = 100
+	// Window_info.width = 1024
+	// Window_info.height = 768
 	
 	// Set up browser settings
-	// cef.cef_browser_settings_initialize(&browser_settings)
+	// cef.Browser_settings_initialize(&browser_settings)
 	
 	// Create browser
 	// url := cef.cef_string_create("https://www.youtube.com")
 	
-	// if cef.cef_browser_host_create_browser(&window_info, client, url, &browser_settings, nil, nil) == 0 {
+	// if cef.Browser_host_create_browser(&Window_info, client, url, &browser_settings, nil, nil) == 0 {
 	// 	fmt.println("Failed to create browser")
 	// 	return
 	// }

@@ -15,7 +15,7 @@ cef_xml_node_type_t :: enum c.int {}
 cef_xml_encoding_type_t :: enum c.int {}
 
 cef_xml_reader_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     move_to_next_node: proc "c" (self: ^cef_xml_reader_t) -> b32,
     close: proc "c" (self: ^cef_xml_reader_t) -> b32,
     has_error: proc "c" (self: ^cef_xml_reader_t) -> b32,

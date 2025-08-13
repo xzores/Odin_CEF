@@ -104,7 +104,7 @@ typedef struct _cef_window_info_t {
   ///
   /// Initial window bounds.
   ///
-  cef_rect_t bounds;
+  cef_rect bounds;
 
   ///
   /// Pointer for the parent window.

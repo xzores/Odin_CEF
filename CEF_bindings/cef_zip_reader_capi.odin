@@ -11,7 +11,7 @@ when ODIN_OS == .Windows {
 }
 
 cef_zip_reader_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     move_to_next_file: proc "c" (self: ^cef_zip_reader_t) -> b32,
     move_to_file: proc "c" (self: ^cef_zip_reader_t, case_sensitive: b32, file_name: ^cef_string) -> b32,

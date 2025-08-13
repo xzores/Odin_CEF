@@ -18,7 +18,7 @@ cef_response_filter_status_t :: enum c.int {
 }
 
 cef_response_filter_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
     init_filter: proc "c" (self: ^cef_response_filter_t) -> b32,
     filter: proc "c" (self: ^cef_response_filter_t, data_in: rawptr, data_in_size: c.size_t, data_in_read: ^c.size_t, data_out: rawptr, data_out_size: c.size_t, data_out_written: ^c.size_t) -> cef_response_filter_status_t,

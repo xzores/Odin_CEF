@@ -81,7 +81,7 @@ typedef struct _cef_window_info_t {
   DWORD ex_style;
   cef_string window_name;
   DWORD style;
-  cef_rect_t bounds;
+  cef_rect bounds;
   cef_window_handle_t parent_window;
   HMENU menu;
 

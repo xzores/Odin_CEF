@@ -4,7 +4,7 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
+// browser is defined in Browser_capi.odin
 // cef_rect is defined in cef_types_capi.odin
 
 ///
@@ -13,7 +13,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-find_handler :: struct {
+Find_handler :: struct {
     ///
     /// Base structure.
     ///
@@ -28,5 +28,5 @@ find_handler :: struct {
     /// results, and |finalUpdate| is true (1) if this is the last find
     /// notification.
     ///
-    on_find_result: proc "c" (self: ^find_handler, browser: ^Browser, identifier: c.int, count: c.int, selectionRect: ^cef_rect, activeMatchOrdinal: c.int, finalUpdate: b32),
+    on_find_result: proc "c" (self: ^Find_handler, browser: ^Browser, identifier: c.int, count: c.int, selectionRect: ^cef_rect, activeMatchOrdinal: c.int, finalUpdate: b32),
 } 

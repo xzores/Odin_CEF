@@ -2,14 +2,6 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for dependencies
-// base_ref_counted is defined in cef_base_capi.odin
-
-cef_value :: struct {
-	base: base_ref_counted,
-	// ... other members will be defined in cef_values_capi.odin
-}
-
 ///
 /// Implement this structure to receive accessibility notification when
 /// accessibility events have been registered. The functions of this structure

@@ -13,17 +13,17 @@ import cef "CEF_bindings"
 
 import "furbs/utils"
 
-get_view_rect :: proc "c" (self: ^cef.render_handler, browser: ^cef.cef_browser_t, rect: ^cef.cef_rect) {
+get_view_rect :: proc "c" (self: ^cef.Render_handler, browser: ^cef.Browser, rect: ^cef.cef_rect) {
 
 	
 }
 
-on_paint :: proc "c" (self: ^cef.render_handler, browser: ^cef.cef_browser_t, type: cef.cef_paint_element_type, dirtyRectsCount: c.size_t, dirtyRects: ^cef.cef_rect, buffer: rawptr, width: c.int, height: c.int) {
+on_paint :: proc "c" (self: ^cef.Render_handler, browser: ^cef.Browser, type: cef.Paint_element_type, dirtyRectsCount: c.size_t, dirtyRects: ^cef.cef_rect, buffer: rawptr, width: c.int, height: c.int) {
 
 
 }
 
-on_loading_state_change :: proc "c" (self: ^cef.load_handler, browser: ^cef.cef_browser_t, isLoading: b32, canGoBack: b32, canGoForward: b32) {
+on_loading_state_change :: proc "c" (self: ^cef.Load_handler, browser: ^cef.Browser, isLoading: b32, canGoBack: b32, canGoForward: b32) {
 
 }
 
@@ -78,8 +78,8 @@ alloc_cef_object :: proc ($T : typeid, loc := #caller_location) -> ^T where intr
 	return &super.obj;
 }
 
-make_render_handler :: proc () -> ^cef.render_handler {
-	handler := alloc_cef_object(cef.render_handler);
+make_render_handler :: proc () -> ^cef.Render_handler {
+	handler := alloc_cef_object(cef.Render_handler);
 	
 	handler.get_view_rect = get_view_rect;
 	handler.on_paint = on_paint;
@@ -87,16 +87,16 @@ make_render_handler :: proc () -> ^cef.render_handler {
 	return handler;
 }
 
-make_load_handler :: proc () -> ^cef.load_handler {
-	handler := alloc_cef_object(cef.load_handler);
+make_load_handler :: proc () -> ^cef.Load_handler {
+	handler := alloc_cef_object(cef.Load_handler);
 
 	handler.on_loading_state_change = on_loading_state_change;
 	
 	return handler;
 }
 
-On_before_command_line_processing :: #type proc "c" (self: ^cef.App, process_type: ^cef.cef_string, command_line: ^cef.command_line);
-On_register_custom_schemes :: #type proc "c" (self: ^cef.App, registrar: ^cef.scheme_registrar);
+On_before_command_line_processing :: #type proc "c" (self: ^cef.App, process_type: ^cef.cef_string, Command_line: ^cef.Command_line);
+On_register_custom_schemes :: #type proc "c" (self: ^cef.App, registrar: ^cef.Scheme_registrar);
 
 make_application :: proc (on_cmd_process : On_before_command_line_processing, on_reg_schemes : On_register_custom_schemes) -> ^cef.App {
 	app := alloc_cef_object(cef.App);
@@ -104,21 +104,21 @@ make_application :: proc (on_cmd_process : On_before_command_line_processing, on
 	app.on_before_command_line_processing = on_cmd_process;
 	app.on_register_custom_schemes = on_reg_schemes;
 
-	app.get_resource_bundle_handler =  proc "c" (self: ^cef.App) -> ^cef.resource_bundle_handler {
+	app.get_resource_bundle_handler =  proc "c" (self: ^cef.App) -> ^cef.Resource_bundle_handler {
 		return nil;
 	}
-	app.get_browser_process_handler = proc "c" (self: ^cef.App) -> ^cef.browser_process_handler {
+	app.get_browser_process_handler = proc "c" (self: ^cef.App) -> ^cef.Browser_process_handler {
 		return nil;
 	}
-	app.get_render_process_handler = proc "c" (self: ^cef.App) -> ^cef.render_process_handler {
+	app.get_render_process_handler = proc "c" (self: ^cef.App) -> ^cef.Render_process_handler {
 		return nil;
 	}
 
 	return app;
 }
 
-g_render_handler : ^cef.render_handler;
-g_load_handler : ^cef.load_handler;
+g_render_handler : ^cef.Render_handler;
+g_load_handler : ^cef.Load_handler;
 
 entry :: proc () { 
 	
@@ -126,16 +126,16 @@ entry :: proc () {
 	set_cef_allocator();
 	
 	app := make_application(
-		proc "c" (self: ^cef.App, process_type: ^cef.cef_string, command_line: ^cef.command_line) {
+		proc "c" (self: ^cef.App, process_type: ^cef.cef_string, Command_line: ^cef.Command_line) {
 			context = runtime.default_context();
-			fmt.printf("proccessing command line arguments, %v and %v\n", process_type, command_line);
+			fmt.printf("proccessing command line arguments, %v and %v\n", process_type, Command_line);
 		},
-		proc "c" (self: ^cef.App, registrar: ^cef.scheme_registrar) {
+		proc "c" (self: ^cef.App, registrar: ^cef.Scheme_registrar) {
 			context = runtime.default_context();
 			fmt.printf("registering scheme %v\n", registrar);
 		}
 	);
-	
+
 	code := cef.initialize(nil, nil, app, nil);
 	if (code == 0) {
 		fmt.panicf("CEF initialize failed, code was %v", code);

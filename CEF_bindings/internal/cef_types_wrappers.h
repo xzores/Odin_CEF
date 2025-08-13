@@ -169,11 +169,11 @@ class CefStructBaseSimple : public struct_type {
 ///
 /// Class representing a point.
 ///
-class CefPoint : public cef_point_t {
+class CefPoint : public cef_point {
  public:
-  CefPoint() : cef_point_t{} {}
-  CefPoint(const cef_point_t& r) : cef_point_t(r) {}
-  CefPoint(int x, int y) : cef_point_t{x, y} {}
+  CefPoint() : cef_point{} {}
+  CefPoint(const cef_point& r) : cef_point(r) {}
+  CefPoint(int x, int y) : cef_point{x, y} {}
 
   bool IsEmpty() const { return x <= 0 && y <= 0; }
   void Set(int x_val, int y_val) { x = x_val, y = y_val; }
@@ -190,12 +190,12 @@ inline bool operator!=(const CefPoint& a, const CefPoint& b) {
 ///
 /// Class representing a rectangle.
 ///
-class CefRect : public cef_rect_t {
+class CefRect : public cef_rect {
  public:
-  CefRect() : cef_rect_t{} {}
-  CefRect(const cef_rect_t& r) : cef_rect_t(r) {}
+  CefRect() : cef_rect{} {}
+  CefRect(const cef_rect& r) : cef_rect(r) {}
   CefRect(int x, int y, int width, int height)
-      : cef_rect_t{x, y, width, height} {}
+      : cef_rect{x, y, width, height} {}
 
   bool IsEmpty() const { return width <= 0 || height <= 0; }
   void Set(int x_val, int y_val, int width_val, int height_val) {
@@ -227,11 +227,11 @@ inline bool operator!=(const CefRect& a, const CefRect& b) {
 ///
 /// Class representing a size.
 ///
-class CefSize : public cef_size_t {
+class CefSize : public cef_size {
  public:
-  CefSize() : cef_size_t{} {}
-  CefSize(const cef_size_t& r) : cef_size_t(r) {}
-  CefSize(int width, int height) : cef_size_t{width, height} {}
+  CefSize() : cef_size{} {}
+  CefSize(const cef_size& r) : cef_size(r) {}
+  CefSize(int width, int height) : cef_size{width, height} {}
 
   bool IsEmpty() const { return width <= 0 || height <= 0; }
   void Set(int width_val, int height_val) {
@@ -250,11 +250,11 @@ inline bool operator!=(const CefSize& a, const CefSize& b) {
 ///
 /// Class representing a range.
 ///
-class CefRange : public cef_range_t {
+class CefRange : public cef_range {
  public:
-  CefRange() : cef_range_t{} {}
-  CefRange(const cef_range_t& r) : cef_range_t(r) {}
-  CefRange(uint32_t from, uint32_t to) : cef_range_t{from, to} {}
+  CefRange() : cef_range{} {}
+  CefRange(const cef_range& r) : cef_range(r) {}
+  CefRange(uint32_t from, uint32_t to) : cef_range{from, to} {}
 
   static CefRange InvalidRange() {
     return CefRange((std::numeric_limits<uint32_t>::max)(),
@@ -304,7 +304,7 @@ class CefDraggableRegion : public cef_draggable_region_t {
   CefDraggableRegion() : cef_draggable_region_t{} {}
   CefDraggableRegion(const cef_draggable_region_t& r)
       : cef_draggable_region_t(r) {}
-  CefDraggableRegion(const cef_rect_t& bounds, bool draggable)
+  CefDraggableRegion(const cef_rect& bounds, bool draggable)
       : cef_draggable_region_t{bounds, draggable} {}
 
   void Set(const CefRect& bounds_val, bool draggable_val) {
@@ -326,9 +326,9 @@ inline bool operator!=(const CefDraggableRegion& a,
 /// Class representing the virtual screen information for use when window
 /// rendering is disabled.
 ///
-class CefScreenInfo : public CefStructBaseSimple<cef_screen_info_t> {
+class CefScreenInfo : public CefStructBaseSimple<Screen_info_t> {
  public:
-  using base_type = CefStructBaseSimple<cef_screen_info_t>;
+  using base_type = CefStructBaseSimple<Screen_info_t>;
   using base_type::CefStructBaseSimple;
   using base_type::operator=;
 
@@ -336,8 +336,8 @@ class CefScreenInfo : public CefStructBaseSimple<cef_screen_info_t> {
                 int depth,
                 int depth_per_component,
                 bool is_monochrome,
-                const cef_rect_t& rect,
-                const cef_rect_t& available_rect) {
+                const cef_rect& rect,
+                const cef_rect& available_rect) {
     Set(device_scale_factor, depth, depth_per_component, is_monochrome, rect,
         available_rect);
   }
@@ -438,7 +438,7 @@ struct CefSettingsTraits {
 
     cef_string_set(src->log_file.str, src->log_file.length, &target->log_file,
                    copy);
-    target->log_severity = src->log_severity;
+    target->Log_severity = src->Log_severity;
     target->log_items = src->log_items;
     cef_string_set(src->javascript_flags.str, src->javascript_flags.length,
                    &target->javascript_flags, copy);
@@ -512,7 +512,7 @@ using CefRequestContextSettings =
     CefStructBase<CefRequestContextSettingsTraits>;
 
 struct CefBrowserSettingsTraits {
-  using struct_type = cef_browser_settings_t;
+  using struct_type = Browser_settings_t;
 
   static inline void init(struct_type* s) { s->size = sizeof(struct_type); }
 
@@ -629,7 +629,7 @@ using CefURLParts = CefStructBase<CefURLPartsTraits>;
 ///
 /// Class representing the state of a touch handle.
 ///
-using CefTouchHandleState = CefStructBaseSimple<cef_touch_handle_state_t>;
+using CefTouchHandleState = CefStructBaseSimple<Touch_handle_state_t>;
 
 struct CefCookieTraits {
   using struct_type = cef_cookie_t;

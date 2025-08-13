@@ -4,14 +4,14 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
-// frame is defined in cef_frame_capi.odin
+// browser is defined in Browser_capi.odin
+// frame is defined in Frame_capi.odin
 // client is defined in cef_client_capi.odin
 // cef_string is defined in cef_string_capi.odin
-// cef_window_open_disposition is defined in cef_types_capi.odin
-// cef_popup_features is defined in cef_types_capi.odin
-// cef_window_info is defined in cef_types_capi.odin
-// cef_browser_settings is defined in cef_types_capi.odin
+// Window_open_disposition is defined in cef_types_capi.odin
+// Popup_features is defined in cef_types_capi.odin
+// Window_info is defined in cef_types_capi.odin
+// Browser_settings is defined in cef_types_capi.odin
 // cef_dictionary_value is defined in cef_types_capi.odin
 
 ///
@@ -21,7 +21,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-cef_life_span_handler_t :: struct {
+Life_span_handler :: struct {
     ///
     /// Base structure.
     ///
@@ -50,7 +50,7 @@ cef_life_span_handler_t :: struct {
     /// wrapped in a browser_view. The |extra_info| parameter provides an
     /// opportunity to specify extra information specific to the created popup
     /// browser that will be passed to
-    /// render_process_handler::on_browser_created() in the render process.
+    /// Render_process_handler::on_browser_created() in the render process.
     ///
     /// If popup browser creation succeeds then on_after_created will be called for
     /// the new popup browser. If popup browser creation fails, and if the opener
@@ -58,7 +58,7 @@ cef_life_span_handler_t :: struct {
     /// called for the opener browser. See on_before_popup_aborted documentation for
     /// additional details.
     ///
-    on_before_popup: proc "c" (self: ^cef_life_span_handler_t, browser: ^Browser, frame: ^Frame, popup_id: c.int, target_url: ^cef_string, target_frame_name: ^cef_string, target_disposition: cef_window_open_disposition, user_gesture: b32, popupFeatures: ^cef_popup_features, windowInfo: ^cef_window_info, client: ^^cef_client_t, settings: ^cef_browser_settings, extra_info: ^^cef_dictionary_value, no_javascript_access: ^b32) -> b32,
+    on_before_popup: proc "c" (self: ^Life_span_handler, browser: ^Browser, frame: ^Frame, popup_id: c.int, target_url: ^cef_string, target_frame_name: ^cef_string, target_disposition: Window_open_disposition, user_gesture: b32, popupFeatures: ^Popup_features, windowInfo: ^Window_info, client: ^^Client, settings: ^Browser_settings, extra_info: ^^cef_dictionary_value, no_javascript_access: ^b32) -> b32,
 
     ///
     /// Called on the UI thread if a new popup browser is aborted. This only
@@ -75,7 +75,7 @@ cef_life_span_handler_t :: struct {
     /// during popup creation, in which case browser_host::is_valid will
     /// return false (0) in this function.
     ///
-    on_before_popup_aborted: proc "c" (self: ^cef_life_span_handler_t, browser: ^Browser, popup_id: c.int),
+    on_before_popup_aborted: proc "c" (self: ^Life_span_handler, browser: ^Browser, popup_id: c.int),
 
     ///
     /// Called on the UI thread before a new DevTools popup browser is created.
@@ -87,7 +87,7 @@ cef_life_span_handler_t :: struct {
     ///
     /// The |extra_info| parameter provides an opportunity to specify extra
     /// information specific to the created popup browser that will be passed to
-    /// render_process_handler::on_browser_created() in the render process.
+    /// Render_process_handler::on_browser_created() in the render process.
     /// The existing |extra_info| object, if any, will be read-only but may be
     /// replaced with a new object.
     ///
@@ -96,15 +96,15 @@ cef_life_span_handler_t :: struct {
     /// blocked by returning true (1) from command_handler::on_chrome_command
     /// for IDC_DEV_TOOLS. Only used with Chrome style.
     ///
-    on_before_dev_tools_popup: proc "c" (self: ^cef_life_span_handler_t, browser: ^Browser, windowInfo: ^cef_window_info, client: ^^cef_client_t, settings: ^cef_browser_settings, extra_info: ^^cef_dictionary_value, use_default_window: ^b32),
+    on_before_dev_tools_popup: proc "c" (self: ^Life_span_handler, browser: ^Browser, windowInfo: ^Window_info, client: ^^Client, settings: ^Browser_settings, extra_info: ^^cef_dictionary_value, use_default_window: ^b32),
 
     ///
     /// Called after a new browser is created. It is now safe to begin performing
-    /// actions with |browser|. frame_handler callbacks related to initial
+    /// actions with |browser|. Frame_handler callbacks related to initial
     /// main frame creation will arrive before this callback. See
-    /// frame_handler documentation for additional usage information.
+    /// Frame_handler documentation for additional usage information.
     ///
-    on_after_created: proc "c" (self: ^cef_life_span_handler_t, browser: ^Browser),
+    on_after_created: proc "c" (self: ^Life_span_handler, browser: ^Browser),
 
     ///
     /// Called when an Alloy style browser is ready to be closed, meaning that the
@@ -151,20 +151,20 @@ cef_life_span_handler_t :: struct {
     /// browser object is destroyed. The application should only exit after
     /// on_before_close() has been called for all existing browsers.
     ///
-    do_close: proc "c" (self: ^cef_life_span_handler_t, browser: ^Browser) -> b32,
+    do_close: proc "c" (self: ^Life_span_handler, browser: ^Browser) -> b32,
 
     ///
     /// Called just before a browser is destroyed. Release all references to the
     /// browser object and do not attempt to execute any functions on the browser
     /// object (other than is_valid, get_identifier or is_same) after this callback
-    /// returns. frame_handler callbacks related to final main frame
+    /// returns. Frame_handler callbacks related to final main frame
     /// destruction, and on_before_popup_aborted callbacks for any pending popups,
     /// will arrive after this callback and browser::is_valid will return
     /// false (0) at that time. Any in-progress network requests associated with
     /// |browser| will be aborted when the browser is destroyed, and
-    /// resource_request_handler callbacks related to those requests may
-    /// still arrive on the IO thread after this callback. See frame_handler
+    /// Resource_request_handler callbacks related to those requests may
+    /// still arrive on the IO thread after this callback. See Frame_handler
     /// and do_close() documentation for additional usage information.
     ///
-    on_before_close: proc "c" (self: ^cef_life_span_handler_t, browser: ^Browser),
+    on_before_close: proc "c" (self: ^Life_span_handler, browser: ^Browser),
 } 

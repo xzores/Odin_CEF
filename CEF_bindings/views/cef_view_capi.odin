@@ -11,7 +11,7 @@ when ODIN_OS == .Windows {
 }
 
 // Forward declarations for types
-cef_browser_view_t :: struct {}
+Browser_view_t :: struct {}
 cef_button_t :: struct {}
 cef_panel_t :: struct {}
 cef_scroll_view_t :: struct {}
@@ -19,12 +19,12 @@ cef_textfield_t :: struct {}
 cef_window_t :: struct {}
 cef_view_delegate_t :: struct {}
 cef_insets_t :: struct {}
-cef_color_t :: struct {}
+cef_color :: struct {}
 
 cef_view_t :: struct {
-    base: cef_base_ref_counted_t,
+    base: base_ref_counted,
     
-    as_browser_view: proc "c" (self: ^cef_view_t) -> ^cef_browser_view_t,
+    as_browser_view: proc "c" (self: ^cef_view_t) -> ^Browser_view_t,
     as_button: proc "c" (self: ^cef_view_t) -> ^cef_button_t,
     as_panel: proc "c" (self: ^cef_view_t) -> ^cef_panel_t,
     as_scroll_view: proc "c" (self: ^cef_view_t) -> ^cef_scroll_view_t,
@@ -45,16 +45,16 @@ cef_view_t :: struct {
     set_bounds: proc "c" (self: ^cef_view_t, bounds: ^cef_rect),
     get_bounds: proc "c" (self: ^cef_view_t) -> cef_rect,
     get_bounds_in_screen: proc "c" (self: ^cef_view_t) -> cef_rect,
-    set_size: proc "c" (self: ^cef_view_t, size: ^cef_size_t),
-    get_size: proc "c" (self: ^cef_view_t) -> cef_size_t,
-    set_position: proc "c" (self: ^cef_view_t, position: ^cef_point_t),
-    get_position: proc "c" (self: ^cef_view_t) -> cef_point_t,
+    set_size: proc "c" (self: ^cef_view_t, size: ^cef_size),
+    get_size: proc "c" (self: ^cef_view_t) -> cef_size,
+    set_position: proc "c" (self: ^cef_view_t, position: ^cef_point),
+    get_position: proc "c" (self: ^cef_view_t) -> cef_point,
     set_insets: proc "c" (self: ^cef_view_t, insets: ^cef_insets_t),
     get_insets: proc "c" (self: ^cef_view_t) -> cef_insets_t,
-    get_preferred_size: proc "c" (self: ^cef_view_t) -> cef_size_t,
+    get_preferred_size: proc "c" (self: ^cef_view_t) -> cef_size,
     size_to_preferred_size: proc "c" (self: ^cef_view_t),
-    get_minimum_size: proc "c" (self: ^cef_view_t) -> cef_size_t,
-    get_maximum_size: proc "c" (self: ^cef_view_t) -> cef_size_t,
+    get_minimum_size: proc "c" (self: ^cef_view_t) -> cef_size,
+    get_maximum_size: proc "c" (self: ^cef_view_t) -> cef_size,
     get_height_for_width: proc "c" (self: ^cef_view_t, width: c.int) -> c.int,
     invalidate_layout: proc "c" (self: ^cef_view_t),
     set_visible: proc "c" (self: ^cef_view_t, visible: b32),
@@ -67,13 +67,13 @@ cef_view_t :: struct {
     is_accessibility_focusable: proc "c" (self: ^cef_view_t) -> b32,
     has_focus: proc "c" (self: ^cef_view_t) -> b32,
     request_focus: proc "c" (self: ^cef_view_t),
-    set_background_color: proc "c" (self: ^cef_view_t, color: cef_color_t),
-    get_background_color: proc "c" (self: ^cef_view_t) -> cef_color_t,
-    get_theme_color: proc "c" (self: ^cef_view_t, color_id: c.int) -> cef_color_t,
-    convert_point_to_screen: proc "c" (self: ^cef_view_t, point: ^cef_point_t) -> b32,
-    convert_point_from_screen: proc "c" (self: ^cef_view_t, point: ^cef_point_t) -> b32,
-    convert_point_to_window: proc "c" (self: ^cef_view_t, point: ^cef_point_t) -> b32,
-    convert_point_from_window: proc "c" (self: ^cef_view_t, point: ^cef_point_t) -> b32,
-    convert_point_to_view: proc "c" (self: ^cef_view_t, view: ^cef_view_t, point: ^cef_point_t) -> b32,
-    convert_point_from_view: proc "c" (self: ^cef_view_t, view: ^cef_view_t, point: ^cef_point_t) -> b32,
+    set_background_color: proc "c" (self: ^cef_view_t, color: cef_color),
+    get_background_color: proc "c" (self: ^cef_view_t) -> cef_color,
+    get_theme_color: proc "c" (self: ^cef_view_t, color_id: c.int) -> cef_color,
+    convert_point_to_screen: proc "c" (self: ^cef_view_t, point: ^cef_point) -> b32,
+    convert_point_from_screen: proc "c" (self: ^cef_view_t, point: ^cef_point) -> b32,
+    convert_point_to_window: proc "c" (self: ^cef_view_t, point: ^cef_point) -> b32,
+    convert_point_from_window: proc "c" (self: ^cef_view_t, point: ^cef_point) -> b32,
+    convert_point_to_view: proc "c" (self: ^cef_view_t, view: ^cef_view_t, point: ^cef_point) -> b32,
+    convert_point_from_view: proc "c" (self: ^cef_view_t, view: ^cef_view_t, point: ^cef_point) -> b32,
 } 

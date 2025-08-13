@@ -4,9 +4,9 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
-// cef_key_event is defined in cef_types_capi.odin
-// cef_event_handle is defined in cef_types_capi.odin
+// browser is defined in Browser_capi.odin
+// Key_event is defined in cef_types_capi.odin
+// Event_handle is defined in cef_types_capi.odin
 
 ///
 /// Implement this structure to handle events related to keyboard input. The
@@ -14,7 +14,7 @@ import "core:c"
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-keyboard_handler :: struct {
+Keyboard_handler :: struct {
     ///
     /// Base structure.
     ///
@@ -28,7 +28,7 @@ keyboard_handler :: struct {
     /// keyboard shortcut set |is_keyboard_shortcut| to true (1) and return false
     /// (0).
     ///
-    on_pre_key_event: proc "c" (self: ^keyboard_handler, browser: ^Browser, event: ^cef_key_event, os_event: cef_event_handle, is_keyboard_shortcut: ^b32) -> b32,
+    on_pre_key_event: proc "c" (self: ^Keyboard_handler, browser: ^Browser, event: ^Key_event, os_event: Event_handle, is_keyboard_shortcut: ^b32) -> b32,
 
     ///
     /// Called after the renderer and JavaScript in the page has had a chance to
@@ -36,5 +36,5 @@ keyboard_handler :: struct {
     /// |os_event| is the operating system event message, if any. Return true (1)
     /// if the keyboard event was handled or false (0) otherwise.
     ///
-    on_key_event: proc "c" (self: ^keyboard_handler, browser: ^Browser, event: ^cef_key_event, os_event: cef_event_handle) -> b32,
+    on_key_event: proc "c" (self: ^Keyboard_handler, browser: ^Browser, event: ^Key_event, os_event: Event_handle) -> b32,
 } 

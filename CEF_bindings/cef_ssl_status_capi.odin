@@ -4,8 +4,8 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// x509_certificate is defined in cef_x509_certificate_capi.odin
-// cef_cert_status is defined in cef_types_capi.odin
+// X509_certificate is defined in cef_x509_certificate_capi.odin
+// Cert_status is defined in cef_types_capi.odin
 // cef_ssl_version is defined in cef_types_capi.odin
 // cef_ssl_content_status is defined in cef_types_capi.odin
 
@@ -29,7 +29,7 @@ ssl_status :: struct {
     /// Returns a bitmask containing any and all problems verifying the server
     /// certificate.
     ///
-    get_cert_status: proc "c" (self: ^ssl_status) -> cef_cert_status,
+    get_cert_status: proc "c" (self: ^ssl_status) -> Cert_status,
 
     ///
     /// Returns the SSL version used for the SSL connection.
@@ -44,5 +44,5 @@ ssl_status :: struct {
     ///
     /// Returns the X.509 certificate.
     ///
-    get_x509_certificate: proc "c" (self: ^ssl_status) -> ^x509_certificate,
+    get_x509_certificate: proc "c" (self: ^ssl_status) -> ^X509_certificate,
 } 

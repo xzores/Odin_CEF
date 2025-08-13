@@ -5,7 +5,7 @@ import "core:c"
 ///
 /// Structure representing a point.
 ///
-point :: struct {
+cef_point :: struct {
 	x: c.int,
 	y: c.int,
 }
@@ -13,7 +13,7 @@ point :: struct {
 ///
 /// Structure representing a rectangle.
 ///
-rect :: struct {
+cef_rect :: struct {
 	x: c.int,
 	y: c.int,
 	width: c.int,
@@ -23,7 +23,7 @@ rect :: struct {
 ///
 /// Structure representing a size.
 ///
-size :: struct {
+cef_size :: struct {
 	width: c.int,
 	height: c.int,
 }
@@ -31,7 +31,7 @@ size :: struct {
 ///
 /// Structure representing insets.
 ///
-insets :: struct {
+cef_insets :: struct {
 	top: c.int,
 	left: c.int,
 	bottom: c.int,

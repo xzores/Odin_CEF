@@ -4,9 +4,9 @@ import "core:c"
 
 // Forward declarations for dependencies
 // base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in cef_browser_capi.odin
+// browser is defined in Browser_capi.odin
 // cef_string is defined in cef_string_capi.odin
-// download_item is defined in cef_download_item_capi.odin
+// Download_item is defined in Download_item_capi.odin
 
 ///
 /// Callback structure used to asynchronously continue a download.
@@ -61,7 +61,7 @@ download_item_callback :: struct {
 ///
 /// NOTE: This struct is allocated client-side.
 ///
-download_handler :: struct {
+Download_handler :: struct {
     ///
     /// Base structure.
     ///
@@ -74,7 +74,7 @@ download_handler :: struct {
     /// and |request_function| is the target function (GET, POST, etc). Return
     /// true (1) to proceed with the download or false (0) to cancel the download.
     ///
-    can_download: proc "c" (self: ^download_handler, browser: ^Browser, url: ^cef_string, request_method: ^cef_string) -> b32,
+    can_download: proc "c" (self: ^Download_handler, browser: ^Browser, url: ^cef_string, request_method: ^cef_string) -> b32,
 
     ///
     /// Called before a download begins. |suggested_name| is the suggested name
@@ -82,16 +82,16 @@ download_handler :: struct {
     /// asynchronously or in this function to continue or cancel the download.
     /// Return false (0) to proceed with default handling (cancel with Alloy
     /// style, download shelf with Chrome style). Do not keep a reference to
-    /// |download_item| outside of this function.
+    /// |Download_item| outside of this function.
     ///
-    on_before_download: proc "c" (self: ^download_handler, browser: ^Browser, download_item: ^Download_item, suggested_name: ^cef_string, callback: ^before_download_callback) -> b32,
+    on_before_download: proc "c" (self: ^Download_handler, browser: ^Browser, Download_item: ^Download_item, suggested_name: ^cef_string, callback: ^before_download_callback) -> b32,
 
     ///
     /// Called when a download's status or progress information has been updated.
     /// This may be called multiple times before and after on_before_download().
     /// Execute |callback| either asynchronously or in this function to cancel the
-    /// download if desired. Do not keep a reference to |download_item| outside of
+    /// download if desired. Do not keep a reference to |Download_item| outside of
     /// this function.
     ///
-    on_download_updated: proc "c" (self: ^download_handler, browser: ^Browser, download_item: ^Download_item, callback: ^download_item_callback),
+    on_download_updated: proc "c" (self: ^Download_handler, browser: ^Browser, Download_item: ^Download_item, callback: ^download_item_callback),
 } 
