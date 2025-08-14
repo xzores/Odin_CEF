@@ -4,13 +4,13 @@
 // modification, are permitted provided that the following conditions are
 // met:
 //
-//    * Redistributions of source code must retain the above copyright
+//	* Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
+//	* Redistributions in binary form must reproduce the above
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
+//	* Neither the name of Google Inc. nor the name Chromium Embedded
 // Framework nor the names of its contributors may be used to endorse
 // or promote products derived from this software without specific prior
 // written permission.
@@ -54,9 +54,7 @@ typedef pid_t cef_platform_thread_id_t;
 #define kInvalidPlatformThreadId 0
 #endif
 
-///
 /// Returns the current platform thread ID.
-///
 CEF_EXPORT cef_platform_thread_id_t cef_get_current_platform_thread_id(void);
 
 #if defined(OS_WIN)
@@ -67,14 +65,12 @@ typedef pthread_t cef_platform_thread_handle_t;
 #define kInvalidPlatformThreadHandle 0
 #endif
 
-///
 /// Returns the current platform thread handle.
-///
 CEF_EXPORT cef_platform_thread_handle_t
 cef_get_current_platform_thread_handle(void);
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif	// __cplusplus
 
-#endif  // CEF_INCLUDE_INTERNAL_CEF_THREAD_INTERNAL_H_
+#endif	// CEF_INCLUDE_INTERNAL_CEF_THREAD_INTERNAL_H_

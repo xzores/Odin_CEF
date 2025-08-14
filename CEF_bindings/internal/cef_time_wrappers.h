@@ -4,13 +4,13 @@
 // modification, are permitted provided that the following conditions are
 // met:
 //
-//    * Redistributions of source code must retain the above copyright
+//	* Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
+//	* Redistributions in binary form must reproduce the above
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
+//	* Neither the name of Google Inc. nor the name Chromium Embedded
 // Framework nor the names of its contributors may be used to endorse
 // or promote products derived from this software without specific prior
 // written permission.
@@ -37,75 +37,60 @@
 #include "base/time/time.h"
 #endif
 
-///
-/// Represents a wall clock time in UTC. Values are not guaranteed to be
-/// monotonically non-decreasing and are subject to large amounts of skew.
+/// Represents a wall clock time in UTC. Values are not guaranteed to be monotonically non-decreasing and are subject to large amounts of skew.
 /// Time is stored internally as microseconds since the Windows epoch (1601).
-///
 /// This is equivalent of Chromium `base::Time` (see base/time/time.h).
-///
 class CefBaseTime : public Basetime {
  public:
-  CefBaseTime() : Basetime{} {}
-  CefBaseTime(const Basetime& value) : Basetime(value) {}
+	CefBaseTime() : Basetime{} {}
+	CefBaseTime(const Basetime& value) : Basetime(value) {}
 
 #if defined(USING_CHROMIUM_INCLUDES)
-  CefBaseTime(const base::Time& value)
-      : Basetime{value.ToDeltaSinceWindowsEpoch().InMicroseconds()} {}
+	CefBaseTime(const base::Time& value)
+		: Basetime{value.ToDeltaSinceWindowsEpoch().InMicroseconds()} {}
 
-  operator base::Time() const {
-    return base::Time::FromDeltaSinceWindowsEpoch(base::Microseconds(val));
-  }
+	operator base::Time() const {
+	return base::Time::FromDeltaSinceWindowsEpoch(base::Microseconds(val));
+	}
 #endif
 
-  static CefBaseTime Now() { return cef_basetime_now(); }
+	static CefBaseTime Now() { return cef_basetime_now(); }
 };
 
-///
 /// Class representing a time.
-///
 class CefTime : public cef_time_t {
  public:
-  CefTime() : cef_time_t{} {}
-  CefTime(const cef_time_t& r) : cef_time_t(r) {}
-  explicit CefTime(time_t r) { SetTimeT(r); }
-  explicit CefTime(double r) { SetDoubleT(r); }
+	CefTime() : cef_time_t{} {}
+	CefTime(const cef_time_t& r) : cef_time_t(r) {}
+	explicit CefTime(time_t r) { SetTimeT(r); }
+	explicit CefTime(double r) { SetDoubleT(r); }
 
-  ///
-  /// Converts to/from time_t.
-  ///
-  void SetTimeT(time_t r) { cef_time_from_timet(r, this); }
-  time_t GetTimeT() const {
-    time_t time = 0;
-    cef_time_to_timet(this, &time);
-    return time;
-  }
+	/// Converts to/from time_t.
+	void SetTimeT(time_t r) { cef_time_from_timet(r, this); }
+	time_t GetTimeT() const {
+	time_t time = 0;
+	cef_time_to_timet(this, &time);
+	return time;
+	}
 
-  ///
-  /// Converts to/from a double which is the number of seconds since epoch
-  /// (Jan 1, 1970). Webkit uses this format to represent time. A value of 0
-  /// means "not initialized".
-  ///
-  void SetDoubleT(double r) { cef_time_from_doublet(r, this); }
-  double GetDoubleT() const {
-    double time = 0;
-    cef_time_to_doublet(this, &time);
-    return time;
-  }
+	/// Converts to/from a double which is the number of seconds since epoch (Jan 1, 1970). Webkit uses this format to represent time. A value of 0
+	/// means "not initialized".
+	void SetDoubleT(double r) { cef_time_from_doublet(r, this); }
+	double GetDoubleT() const {
+	double time = 0;
+	cef_time_to_doublet(this, &time);
+	return time;
+	}
 
-  ///
-  /// Set this object to now.
-  ///
-  void Now() { cef_time_now(this); }
+	/// Set this object to now.
+	void Now() { cef_time_now(this); }
 
-  ///
-  /// Return the delta between this object and |other| in milliseconds.
-  ///
-  long long Delta(const CefTime& other) {
-    long long delta = 0;
-    cef_time_delta(this, &other, &delta);
-    return delta;
-  }
+	/// Return the delta between this object and |other| in milliseconds.
+	long long Delta(const CefTime& other) {
+	long long delta = 0;
+	cef_time_delta(this, &other, &delta);
+	return delta;
+	}
 };
 
-#endif  // CEF_INCLUDE_INTERNAL_CEF_TIME_WRAPPERS_H_
+#endif	// CEF_INCLUDE_INTERNAL_CEF_TIME_WRAPPERS_H_

@@ -2,41 +2,22 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for dependencies
-// base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in Browser_capi.odin
-// Focus_source is defined in cef_types_capi.odin
-
-///
-/// Implement this structure to handle events related to focus. The functions of
-/// this structure will be called on the UI thread.
-///
+/// Implement this structure to handle events related to focus. The functions of this structure will be called on the UI thread.
 /// NOTE: This struct is allocated client-side.
-///
 Focus_handler :: struct {
-    ///
-    /// Base structure.
-    ///
-    base: base_ref_counted,
+	/// Base structure.
+	base: base_ref_counted,
 
-    ///
-    /// Called when the browser component is about to loose focus. For instance,
-    /// if focus was on the last HTML element and the user pressed the TAB key.
-    /// |next| will be true (1) if the browser is giving focus to the next
-    /// component and false (0) if the browser is giving focus to the previous
-    /// component.
-    ///
-    on_take_focus: proc "c" (self: ^Focus_handler, browser: ^Browser, next: b32),
+	/// Called when the browser component is about to loose focus. For instance, if focus was on the last HTML element and the user pressed the TAB key.
+	/// |next| will be true (1) if the browser is giving focus to the next
+	/// component and false (0) if the browser is giving focus to the previous
+	/// component.
+	on_take_focus: proc "c" (self: ^Focus_handler, browser: ^Browser, next: b32),
 
-    ///
-    /// Called when the browser component is requesting focus. |source| indicates
-    /// where the focus request is originating from. Return false (0) to allow the
-    /// focus to be set or true (1) to cancel setting the focus.
-    ///
-    on_set_focus: proc "c" (self: ^Focus_handler, browser: ^Browser, source: Focus_source) -> b32,
+	/// Called when the browser component is requesting focus. |source| indicates where the focus request is originating from. Return false (0) to allow the
+	/// focus to be set or true (1) to cancel setting the focus.
+	on_set_focus: proc "c" (self: ^Focus_handler, browser: ^Browser, source: Focus_source) -> b32,
 
-    ///
-    /// Called when the browser component has received focus.
-    ///
-    on_got_focus: proc "c" (self: ^Focus_handler, browser: ^Browser),
+	/// Called when the browser component has received focus.
+	on_got_focus: proc "c" (self: ^Focus_handler, browser: ^Browser),
 } 

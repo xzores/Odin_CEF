@@ -3,11 +3,11 @@ package cef_internal
 import "core:c"
 
 when ODIN_OS == .Windows {
-    foreign import lib "CEF/Release/libcef.lib"
+	foreign import lib "CEF/Release/libcef.lib"
 } else when ODIN_OS == .Linux {
-    foreign import lib "CEF/Release/libcef.so"
+	foreign import lib "CEF/Release/libcef.so"
 } else when ODIN_OS == .Darwin {
-    foreign import lib "CEF/Release/libcef.dylib"
+	foreign import lib "CEF/Release/libcef.dylib"
 }
 
 /// CEF string maps are a set of key/value string pairs.

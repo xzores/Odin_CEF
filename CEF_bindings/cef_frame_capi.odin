@@ -61,9 +61,7 @@ Frame :: struct {
 	get_text: proc "c" (self: ^Frame, visitor: ^string_visitor),
 
 	/// Load the request represented by the |request| object.
-	///
-	/// WARNING: This function will fail with "bad IPC message" reason
-	/// INVALID_INITIATOR_ORIGIN (213) unless you first navigate to the request
+	/// WARNING: This function will fail with "bad IPC message" reason INVALID_INITIATOR_ORIGIN (213) unless you first navigate to the request
 	/// origin using some other mechanism (LoadURL, link click, etc).
 	load_request: proc "c" (self: ^Frame, request: ^Request),
 
@@ -73,7 +71,7 @@ Frame :: struct {
 	/// Execute a string of JavaScript code in this frame. The |script_url|
 	/// parameter is the URL where the script in question can be found, if any.
 	/// The renderer may request this URL to show the developer the source of the
-	/// error.  The |start_line| parameter is the base line number to use for
+	/// error.	The |start_line| parameter is the base line number to use for
 	/// error reporting.
 	execute_java_script: proc "c" (self: ^Frame, code: ^cef_string, script_url: ^cef_string, start_line: c.int),
 
@@ -105,7 +103,7 @@ Frame :: struct {
 	get_url: proc "c" (self: ^Frame) -> cef_string_userfree,
 
 	/// Returns the browser that this frame belongs to.
-	    get_browser: proc "c" (self: ^Frame) -> ^Browser,
+		get_browser: proc "c" (self: ^Frame) -> ^Browser,
 
 	/// Get the V8 context associated with the frame. This function can only be
 	/// called from the render process.
@@ -121,13 +119,11 @@ Frame :: struct {
 	/// be handled differently (see documentation on that function). A request
 	/// created with this function may only originate from the browser process,
 	/// and will behave as follows:
-	///   - It may be intercepted by the client via CefResourceRequestHandler or
-	///     CefSchemeHandlerFactory.
-	///   - POST data may only contain a single element of type PDE_TYPE_FILE or
-	///     PDE_TYPE_BYTES.
-	///
-	/// The |request| object will be marked as read-only after calling this
-	/// function.
+	///	 - It may be intercepted by the client via CefResourceRequestHandler or
+	///	 CefSchemeHandlerFactory.
+	///	 - POST data may only contain a single element of type PDE_TYPE_FILE or
+	///	 PDE_TYPE_BYTES.
+	/// The |request| object will be marked as read-only after calling this function.
 	create_urlrequest: proc "c" (self: ^Frame, request: ^Request, client: ^Url_request_client) -> ^Url_request,
 
 	/// Send a message to the specified |target_process|. Ownership of the message

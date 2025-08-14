@@ -1,6 +1,15 @@
 {
 	"files.associations": {
 		"xiosbase": "cpp",
-		"xtr1common": "cpp"
+		"xtr1common": "cpp",
+		"locale": "cpp",
+		"thread": "cpp",
+		"xlocale": "cpp",
+		"xlocmes": "cpp",
+		"xlocmon": "cpp",
+		"xlocnum": "cpp",
+		"xloctime": "cpp",
+		"regex": "cpp",
+		"sstream": "cpp"
 	}
 }

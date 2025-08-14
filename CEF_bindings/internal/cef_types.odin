@@ -200,16 +200,16 @@ Browser_settings :: struct {
 	// BEGIN values that map to WebPreferences settings.
 
 	// Font settings.
-	standard_font_family:   cef_string,
-	fixed_font_family:	  cef_string,
-	serif_font_family:	  cef_string,
+	standard_font_family:	 cef_string,
+	fixed_font_family:		cef_string,
+	serif_font_family:		cef_string,
 	sans_serif_font_family: cef_string,
 	cursive_font_family:	cef_string,
 	fantasy_font_family:	cef_string,
-	default_font_size:		  c.int,
+	default_font_size:			c.int,
 	default_fixed_font_size:	c.int,
-	minimum_font_size:		  c.int,
-	minimum_logical_font_size:  c.int,
+	minimum_font_size:			c.int,
+	minimum_logical_font_size:	c.int,
 
 	// Default encoding for Web content. If empty "ISO-8859-1" will be used. Also configurable via "default-encoding".
 	default_encoding: cef_string,
@@ -463,14 +463,10 @@ Cef_cert_status_enum :: enum u32 {
 
 Cert_status :: bit_set[Cef_cert_status_enum];
 
-///
-/// Process result codes. This is not a comprehensive list, as result codes
-/// might also include platform-specific crash values (Posix signal or Windows
+/// Process result codes. This is not a comprehensive list, as result codes might also include platform-specific crash values (Posix signal or Windows
 /// hardware exception), or internal-only implementation values.
 ///
-///
-/// Process result codes. This is not a comprehensive list, as result codes
-/// might also include platform-specific crash values (Posix signal or Windows
+/// Process result codes. This is not a comprehensive list, as result codes might also include platform-specific crash values (Posix signal or Windows
 /// hardware exception), or internal-only implementation values.
 ///
 Result_code :: enum u32 {
@@ -574,14 +570,10 @@ Result_code :: enum u32 {
 	RESULT_CODE_NUM_VALUES,
 }
 
-///
-/// The manner in which a link click should be opened. These constants match
-/// their equivalents in Chromium's window_open_disposition.h and should not be
+/// The manner in which a link click should be opened. These constants match their equivalents in Chromium's window_open_disposition.h and should not be
 /// renumbered.
 ///
-///
-/// The manner in which a link click should be opened. These constants match
-/// their equivalents in Chromium's window_open_disposition.h and should not be
+/// The manner in which a link click should be opened. These constants match their equivalents in Chromium's window_open_disposition.h and should not be
 /// renumbered.
 ///
 Window_open_disposition :: enum u32 {
@@ -628,14 +620,10 @@ Window_open_disposition :: enum u32 {
 	WOD_NUM_VALUES,
 }
 
-///
-/// "Verb" of a drag-and-drop operation as negotiated between the source and
-/// destination. These constants match their equivalents in WebCore's
+/// "Verb" of a drag-and-drop operation as negotiated between the source and destination. These constants match their equivalents in WebCore's
 /// DragActions.h and should not be renumbered.
 ///
-///
-/// "Verb" of a drag-and-drop operation as negotiated between the source and
-/// destination. These constants match their equivalents in WebCore's
+/// "Verb" of a drag-and-drop operation as negotiated between the source and destination. These constants match their equivalents in WebCore's
 /// DragActions.h and should not be renumbered.
 ///
 Drag_operations_mask :: enum u32 {
@@ -649,14 +637,10 @@ Drag_operations_mask :: enum u32 {
 	DRAG_OPERATION_EVERY = max(u32), // UINT_MAX equivalent
 }
 
-///
-/// Input mode of a virtual keyboard. These constants match their equivalents
-/// in Chromium's text_input_mode.h and should not be renumbered.
+/// Input mode of a virtual keyboard. These constants match their equivalents in Chromium's text_input_mode.h and should not be renumbered.
 /// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
 ///
-///
-/// Input mode of a virtual keyboard. These constants match their equivalents
-/// in Chromium's text_input_mode.h and should not be renumbered.
+/// Input mode of a virtual keyboard. These constants match their equivalents in Chromium's text_input_mode.h and should not be renumbered.
 /// See https://html.spec.whatwg.org/#input-modalities:-the-inputmode-attribute
 ///
 Text_input_mode :: enum u32 {
@@ -673,9 +657,7 @@ Text_input_mode :: enum u32 {
 	TEXT_INPUT_MODE_NUM_VALUES,
 }
 
-///
 /// V8 property attribute values.
-///
 V8_property_attribute :: enum u32 {
 	/// Writeable, Enumerable, Configurable
 	V8_PROPERTY_ATTRIBUTE_NONE = 0,
@@ -690,12 +672,8 @@ V8_property_attribute :: enum u32 {
 	V8_PROPERTY_ATTRIBUTE_DONTDELETE = 1 << 2
 }
 
-///
 /// Post data elements may represent either bytes or files.
-///
-///
 /// Post data elements may represent either bytes or files.
-///
 Postdataelement_type :: enum u32 {
 	PDE_TYPE_EMPTY = 0,
 	PDE_TYPE_BYTES,
@@ -704,13 +682,9 @@ Postdataelement_type :: enum u32 {
 	PDE_TYPE_NUM_VALUES,
 }
 
+/// Resource type for a request. These constants match their equivalents in Chromium's ResourceType and should not be renumbered.
 ///
-/// Resource type for a request. These constants match their equivalents in
-/// Chromium's ResourceType and should not be renumbered.
-///
-///
-/// Resource type for a request. These constants match their equivalents in
-/// Chromium's ResourceType and should not be renumbered.
+/// Resource type for a request. These constants match their equivalents in Chromium's ResourceType and should not be renumbered.
 ///
 Resource_type :: enum u32 {
 	/// Top level page.
@@ -777,13 +751,9 @@ Resource_type :: enum u32 {
 	RT_NUM_VALUES,
 }
 
+/// Transition type for a request. Made up of one source value and 0 or more qualifiers.
 ///
-/// Transition type for a request. Made up of one source value and 0 or more
-/// qualifiers.
-///
-///
-/// Transition type for a request. Made up of one source value and 0 or more
-/// qualifiers.
+/// Transition type for a request. Made up of one source value and 0 or more qualifiers.
 ///
 Transition_type :: enum u32 {
 	/// Source is a link click or the JavaScript window.open function. This is
@@ -902,9 +872,7 @@ Transition_type :: enum u32 {
 ///½
 /// Flags used to customize the behavior of CefURLRequest.
 ///
-///
 /// Flags used to customize the behavior of CefURLRequest.
-///
 Urlrequest_flags :: enum u32 {
 	/// Default behavior.
 	UR_FLAG_NONE = 0,
@@ -948,12 +916,8 @@ Urlrequest_flags :: enum u32 {
 	UR_FLAG_STOP_ON_REDIRECT = 1 << 7,
 }
 
-///
 /// Flags that represent CefURLRequest status.
-///
-///
 /// Flags that represent CefURLRequest status.
-///
 Url_request_status :: enum u32 {
 	/// Unknown status.
 	UR_UNKNOWN,
@@ -984,12 +948,8 @@ Draggable_region :: struct {
 	draggable: c.int,
 }
 
-///
 /// Existing process IDs.
-///
-///
 /// Existing process IDs.
-///
 cef_process_id :: enum u32 {
 	/// Browser process.
 	PID_BROWSER,
@@ -997,12 +957,8 @@ cef_process_id :: enum u32 {
 	PID_RENDERER,
 }
 
-///
 /// Existing thread IDs.
-///
-///
 /// Existing thread IDs.
-///
 cef_thread_id :: enum u32 {
 	// BROWSER PROCESS THREADS -- Only available in the browser process.
 
@@ -1059,12 +1015,8 @@ cef_thread_id :: enum u32 {
 	TID_NUM_VALUES,
 }
 
-///
 /// Thread priority values listed in increasing order of importance.
-///
-///
 /// Thread priority values listed in increasing order of importance.
-///
 Thread_priority :: enum u32 {
 	/// Suitable for threads that shouldn't disrupt high priority work.
 	TP_BACKGROUND,
@@ -1081,13 +1033,9 @@ Thread_priority :: enum u32 {
 	TP_NUM_VALUES,
 }
 
+/// Message loop types. Indicates the set of asynchronous events that a message loop can process.
 ///
-/// Message loop types. Indicates the set of asynchronous events that a message
-/// loop can process.
-///
-///
-/// Message loop types. Indicates the set of asynchronous events that a message
-/// loop can process.
+/// Message loop types. Indicates the set of asynchronous events that a message loop can process.
 ///
 Message_loop_type :: enum u32 {
 	/// Supports tasks and timers.
@@ -1102,13 +1050,9 @@ Message_loop_type :: enum u32 {
 	ML_NUM_VALUES,
 }
 
+/// Windows COM initialization mode. Specifies how COM will be initialized for a new thread.
 ///
-/// Windows COM initialization mode. Specifies how COM will be initialized for a
-/// new thread.
-///
-///
-/// Windows COM initialization mode. Specifies how COM will be initialized for a
-/// new thread.
+/// Windows COM initialization mode. Specifies how COM will be initialized for a new thread.
 ///
 Com_init_mode :: enum u32 {
 	/// No COM initialization.
@@ -1121,12 +1065,8 @@ Com_init_mode :: enum u32 {
 	COM_INIT_MODE_MTA,
 }
 
-///
 /// Supported value types.
-///
-///
 /// Supported value types.
-///
 cef_value_type :: enum u32 {
 	VTYPE_INVALID,
 	VTYPE_NULL,
@@ -1141,12 +1081,8 @@ cef_value_type :: enum u32 {
 	VTYPE_NUM_VALUES,
 }
 
-///
 /// Supported JavaScript dialog types.
-///
-///
 /// Supported JavaScript dialog types.
-///
 Jsdialog_type :: enum u32 {
 	JSDIALOGTYPE_ALERT,
 	JSDIALOGTYPE_CONFIRM,
@@ -1155,14 +1091,10 @@ Jsdialog_type :: enum u32 {
 	JSDIALOGTYPE_NUM_VALUES,
 }
 
-///
-/// Screen information used when window rendering is disabled. This structure is
-/// passed as a parameter to CefRenderHandler::GetScreenInfo and should be
+/// Screen information used when window rendering is disabled. This structure is passed as a parameter to CefRenderHandler::GetScreenInfo and should be
 /// filled in by the client.
 ///
-///
-/// Screen information used when window rendering is disabled. This structure is
-/// passed as a parameter to CefRenderHandler::GetScreenInfo and should be
+/// Screen information used when window rendering is disabled. This structure is passed as a parameter to CefRenderHandler::GetScreenInfo and should be
 /// filled in by the client.
 ///
 Screen_info :: struct {
@@ -1207,15 +1139,11 @@ Screen_info :: struct {
 	available_rect: cef_rect,
 }
 
-///
-/// Linux window properties, such as X11's WM_CLASS or Wayland's app_id.
-/// Those are passed to CefWindowDelegate, so the client can set them
+/// Linux window properties, such as X11's WM_CLASS or Wayland's app_id. Those are passed to CefWindowDelegate, so the client can set them
 /// for the CefWindow's top-level. Thus, allowing window managers to correctly
 /// display the application's information (e.g., icons).
 ///
-///
-/// Linux window properties, such as X11's WM_CLASS or Wayland's app_id.
-/// Those are passed to CefWindowDelegate, so the client can set them
+/// Linux window properties, such as X11's WM_CLASS or Wayland's app_id. Those are passed to CefWindowDelegate, so the client can set them
 /// for the CefWindow's top-level. Thus, allowing window managers to correctly
 /// display the application's information (e.g., icons).
 ///
@@ -1236,13 +1164,9 @@ linux_window_properties :: struct {
 	wm_role_name: cef_string,
 }
 
+/// Supported menu IDs. Non-English translations can be provided for the IDS_MENU_* strings in CefResourceBundleHandler::GetLocalizedString().
 ///
-/// Supported menu IDs. Non-English translations can be provided for the
-/// IDS_MENU_* strings in CefResourceBundleHandler::GetLocalizedString().
-///
-///
-/// Supported menu IDs. Non-English translations can be provided for the
-/// IDS_MENU_* strings in CefResourceBundleHandler::GetLocalizedString().
+/// Supported menu IDs. Non-English translations can be provided for the IDS_MENU_* strings in CefResourceBundleHandler::GetLocalizedString().
 ///
 menu_id :: enum u32 {
 	// Navigation.
@@ -1288,24 +1212,16 @@ menu_id :: enum u32 {
 	MENU_ID_USER_LAST = 28500,
 }
 
-///
 /// Mouse button types.
-///
-///
 /// Mouse button types.
-///
 mouse_button_type :: enum u32 {
 	MBT_LEFT = 0,
 	MBT_MIDDLE,
 	MBT_RIGHT,
 }
 
-///
 /// Structure representing mouse event information.
-///
-///
 /// Structure representing mouse event information.
-///
 mouse_event :: struct {
 	/// X coordinate relative to the left side of the view.
 	x: c.int,
@@ -1318,12 +1234,8 @@ mouse_event :: struct {
 	modifiers: u32,
 }
 
-///
 /// Touch points states types.
-///
-///
 /// Touch points states types.
-///
 touch_event_type :: enum u32 {
 	TET_RELEASED = 0,
 	TET_PRESSED,
@@ -1331,12 +1243,8 @@ touch_event_type :: enum u32 {
 	TET_CANCELLED
 }
 
-///
 /// The device type that caused the event.
-///
-///
 /// The device type that caused the event.
-///
 pointer_type :: enum u32 {
 	POINTER_TYPE_TOUCH = 0,
 	POINTER_TYPE_MOUSE,
@@ -1345,12 +1253,8 @@ pointer_type :: enum u32 {
 	POINTER_TYPE_UNKNOWN
 }
 
-///
 /// Structure representing touch event information.
-///
-///
 /// Structure representing touch event information.
-///
 touch_event :: struct {
 	/// Id of a touch point. Must be unique per touch, can be any number except
 	/// -1. Note that a maximum of 16 concurrent touches will be tracked; touches
@@ -1606,12 +1510,8 @@ Xml_encoding_type :: enum u32 {
 	XML_ENCODING_NUM_VALUES,
 }
 
-///
 /// XML node types.
-///
-///
 /// XML node types.
-///
 Xml_node_type :: enum u32 {
 	XML_NODE_UNSUPPORTED,
 	XML_NODE_PROCESSING_INSTRUCTION,
@@ -2459,9 +2359,7 @@ Channel_layout :: enum u32 {
 	CHANNEL_NUM_VALUES,
 }
 
-///
-/// Structure representing the audio parameters for setting up the audio
-/// handler.
+/// Structure representing the audio parameters for setting up the audio handler.
 ///
 Audio_parameters :: struct {
 	/// Size of this structure.
@@ -2477,9 +2375,7 @@ Audio_parameters :: struct {
 	frames_per_buffer: c.int,
 }
 
-///
-/// Result codes for CefMediaRouter::CreateRoute. Should be kept in sync with
-/// Chromium's media_router::mojom::RouteRequestResultCode type.
+/// Result codes for CefMediaRouter::CreateRoute. Should be kept in sync with Chromium's media_router::mojom::RouteRequestResultCode type.
 ///
 Media_route_create_result :: enum u32 {
 	MRCR_UNKNOWN_ERROR,
@@ -2500,9 +2396,7 @@ Media_route_create_result :: enum u32 {
 	MRCR_NUM_VALUES,
 }
 
-///
-/// Connection state for a MediaRoute object. Should be kept in sync with
-/// Chromium's blink::mojom::PresentationConnectionState type.
+/// Connection state for a MediaRoute object. Should be kept in sync with Chromium's blink::mojom::PresentationConnectionState type.
 ///
 Media_route_connection_state :: enum u32 {
 	MRCS_UNKNOWN = 0xFFFFFFFF, // -1 equivalent
@@ -2513,9 +2407,7 @@ Media_route_connection_state :: enum u32 {
 	MRCS_NUM_VALUES,
 }
 
-///
-/// Icon types for a MediaSink object. Should be kept in sync with Chromium's
-/// media_router::SinkIconType type.
+/// Icon types for a MediaSink object. Should be kept in sync with Chromium's media_router::SinkIconType type.
 ///
 Media_sink_icon_type :: enum u32 {
 	MSIT_CAST,
@@ -2529,9 +2421,7 @@ Media_sink_icon_type :: enum u32 {
 	MSIT_NUM_VALUES,
 }
 
-///
 /// Device information for a MediaSink object.
-///
 Media_sink_device_info :: struct {
 	/// Size of this structure.
 	size: c.size_t,
@@ -2541,9 +2431,7 @@ Media_sink_device_info :: struct {
 	model_name: cef_string,
 }
 
-///
-/// Represents commands available to TextField. Should be kept in sync with
-/// Chromium's views::TextField::MenuCommands type.
+/// Represents commands available to TextField. Should be kept in sync with Chromium's views::TextField::MenuCommands type.
 ///
 Text_field_commands :: enum u32 {
 	TFC_UNKNOWN,
@@ -2557,9 +2445,7 @@ Text_field_commands :: enum u32 {
 	TFC_NUM_VALUES,
 }
 
-///
 /// Chrome toolbar types.
-///
 Chrome_toolbar_type :: enum u32 {
 	CTT_UNKNOWN,
 	CTT_NONE,
@@ -2568,9 +2454,7 @@ Chrome_toolbar_type :: enum u32 {
 	CTT_NUM_VALUES,
 }
 
-///
-/// Chrome page action icon types. Should be kept in sync with Chromium's
-/// PageActionIconType type.
+/// Chrome page action icon types. Should be kept in sync with Chromium's PageActionIconType type.
 ///
 Chrome_page_action_icon_type :: enum u32 {
 	CPAIT_BOOKMARK_STAR,
@@ -2611,9 +2495,7 @@ Chrome_page_action_icon_type :: enum u32 {
 	CPAIT_NUM_VALUES,
 }
 
-///
-/// Chrome toolbar button types. Should be kept in sync with CEF's internal
-/// ToolbarButtonType type.
+/// Chrome toolbar button types. Should be kept in sync with CEF's internal ToolbarButtonType type.
 ///
 Chrome_toolbar_button_type :: enum u32 {
 	CTBT_CAST,
@@ -2623,9 +2505,7 @@ Chrome_toolbar_button_type :: enum u32 {
 	CTBT_NUM_VALUES,
 }
 
-///
 /// Docking modes supported by CefWindow::AddOverlay.
-///
 Docking_mode :: enum u32 {
 	DOCKING_MODE_TOP_LEFT,
 	DOCKING_MODE_TOP_RIGHT,
@@ -2691,9 +2571,7 @@ Touch_handle_state :: struct {
 	alpha: f32,
 }
 
-///
 /// Media access permissions used by OnRequestMediaAccessPermission.
-///
 Media_access_permission_types :: enum u32 {
 	/// No permission.
 	MEDIA_PERMISSION_NONE = 0,
@@ -2711,9 +2589,7 @@ Media_access_permission_types :: enum u32 {
 	MEDIA_PERMISSION_DESKTOP_VIDEO_CAPTURE = 1 << 3,
 }
 
-///
-/// Permission types used with OnShowPermissionPrompt. Some types are
-/// platform-specific or only supported with Chrome style. Should be kept
+/// Permission types used with OnShowPermissionPrompt. Some types are platform-specific or only supported with Chrome style. Should be kept
 /// in sync with Chromium's permissions::RequestType type.
 ///
 Permission_request_types :: enum u32 {
@@ -2746,9 +2622,7 @@ Permission_request_types :: enum u32 {
 	PERMISSION_TYPE_LOCAL_NETWORK_ACCESS = 1 << 25,
 }
 
-///
 /// Permission request results.
-///
 Permission_request_result :: enum u32 {
 	/// Accept the permission request as an explicit user action.
 	PERMISSION_RESULT_ACCEPT,
@@ -2767,9 +2641,7 @@ Permission_request_result :: enum u32 {
 	PERMISSION_RESULT_NUM_VALUES,
 }
 
-///
-/// Certificate types supported by CefTestServer::CreateAndStart. The matching
-/// certificate file must exist in the "net/data/ssl/certificates" directory.
+/// Certificate types supported by CefTestServer::CreateAndStart. The matching certificate file must exist in the "net/data/ssl/certificates" directory.
 /// See CefSetDataDirectoryForTests() for related configuration.
 ///
 Test_cert_type :: enum u32 {
@@ -2786,9 +2658,7 @@ Test_cert_type :: enum u32 {
 	TEST_CERT_NUM_VALUES,
 }
 
-///
-/// Preferences type passed to
-/// CefBrowserProcessHandler::OnRegisterCustomPreferences.
+/// Preferences type passed to CefBrowserProcessHandler::OnRegisterCustomPreferences.
 ///
 Preferences_type :: enum u32 {
 	/// Global preferences registered a single time at application startup.
@@ -2801,9 +2671,7 @@ Preferences_type :: enum u32 {
 	PREFERENCES_TYPE_NUM_VALUES,
 }
 
-///
-/// Download interrupt reasons. Should be kept in sync with
-/// Chromium's download::DownloadInterruptReason type.
+/// Download interrupt reasons. Should be kept in sync with Chromium's download::DownloadInterruptReason type.
 ///
 Download_interrupt_reason :: enum u32 {
 	DOWNLOAD_INTERRUPT_REASON_NONE = 0,
@@ -2918,26 +2786,20 @@ Download_interrupt_reason :: enum u32 {
 	DOWNLOAD_INTERRUPT_REASON_CRASH = 50,
 }
 
-///
 /// Specifies the gesture commands.
-///
 Gesture_command :: enum u32 {
 	GESTURE_COMMAND_BACK,
 	GESTURE_COMMAND_FORWARD,
 }
 
-///
 /// Specifies the zoom commands supported by CefBrowserHost::Zoom.
-///
 Zoom_command :: enum u32 {
 	ZOOM_COMMAND_OUT,
 	ZOOM_COMMAND_RESET,
 	ZOOM_COMMAND_IN,
 }
 
-///
-/// Specifies the color variants supported by
-/// CefRequestContext::SetChromeThemeColor.
+/// Specifies the color variants supported by CefRequestContext::SetChromeThemeColor.
 ///
 Color_variant :: enum u32 {
 	COLOR_VARIANT_SYSTEM,
@@ -2950,9 +2812,7 @@ Color_variant :: enum u32 {
 	COLOR_VARIANT_NUM_VALUES,
 }
 
-///
-/// Specifies the task type variants supported by CefTaskManager.
-/// Should be kept in sync with Chromium's task_manager::Task::Type type.
+/// Specifies the task type variants supported by CefTaskManager. Should be kept in sync with Chromium's task_manager::Task::Type type.
 ///
 Task_type :: enum u32 {
 	TASK_TYPE_UNKNOWN,
@@ -2984,9 +2844,7 @@ Task_type :: enum u32 {
 	TASK_TYPE_NUM_VALUES,
 }
 
-///
 /// Structure representing task information provided by CefTaskManager.
-///
 Task_info :: struct {
 	/// Size of this structure.
 	size: c.size_t,
@@ -3016,30 +2874,26 @@ Task_info :: struct {
 	is_gpu_memory_inflated: c.int,
 }
 
-///
 /// Platform-specific event handle type.
-///
 when ODIN_OS == .Windows {
-    event_handle :: rawptr  // MSG* on Windows
+	event_handle :: rawptr	// MSG* on Windows
 } else when ODIN_OS == .Darwin {
-    event_handle :: rawptr  // void* on macOS
+	event_handle :: rawptr	// void* on macOS
 } else when ODIN_OS == .Linux {
-    event_handle :: rawptr  // XEvent* on Linux
+	event_handle :: rawptr	// XEvent* on Linux
 } else {
-    event_handle :: rawptr
+	event_handle :: rawptr
 }
 
-///
 /// Platform-specific cursor handle type.
-///
 when ODIN_OS == .Windows {
-    Cursor_handle :: rawptr  // HCURSOR handle on Windows
+	Cursor_handle :: rawptr	// HCURSOR handle on Windows
 } else when ODIN_OS == .Darwin {
-    Cursor_handle :: rawptr
+	Cursor_handle :: rawptr
 } else when ODIN_OS == .Linux {
-    Cursor_handle :: c.ulong
+	Cursor_handle :: c.ulong
 } else {
-    Cursor_handle :: rawptr
+	Cursor_handle :: rawptr
 }
 
 

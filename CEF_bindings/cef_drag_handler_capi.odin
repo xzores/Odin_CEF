@@ -10,12 +10,8 @@ import "core:c"
 // Drag_operations_mask is defined in cef_types_capi.odin
 // Draggable_region is defined in cef_types_capi.odin
 
-///
-/// Implement this structure to handle events related to dragging. The functions
-/// of this structure will be called on the UI thread.
-///
+/// Implement this structure to handle events related to dragging. The functions of this structure will be called on the UI thread.
 /// NOTE: This struct is allocated client-side.
-///
 Drag_handler :: struct {
 	/// Base structure.
 	base: base_ref_counted,

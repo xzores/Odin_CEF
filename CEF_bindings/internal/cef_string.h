@@ -4,13 +4,13 @@
 // modification, are permitted provided that the following conditions are
 // met:
 //
-//    * Redistributions of source code must retain the above copyright
+//	* Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
+//	* Redistributions in binary form must reproduce the above
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
+//	* Neither the name of Google Inc. nor the name Chromium Embedded
 // Framework nor the names of its contributors may be used to endorse
 // or promote products derived from this software without specific prior
 // written permission.
@@ -55,7 +55,7 @@ typedef CefStringUTF8 CefString;
 #elif defined(cef_stringYPE_WIDE)
 typedef CefStringWide CefString;
 #endif
-#endif  // __cplusplus
+#endif	// __cplusplus
 
 #if defined(cef_stringYPE_UTF8)
 typedef char cef_char_t;
@@ -109,4 +109,4 @@ typedef cef_string_userfree_wide_t cef_string_userfree;
 #error Please choose a string type.
 #endif
 
-#endif  // CEF_INCLUDE_INTERNAL_CEF_STRING_H_
+#endif	// CEF_INCLUDE_INTERNAL_CEF_STRING_H_

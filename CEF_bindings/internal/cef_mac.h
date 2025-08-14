@@ -39,31 +39,29 @@
 #define CefEventHandle cef_event_handle_t
 #define CefWindowHandle cef_window_handle_t
 
-///
 /// Class representing CefExecuteProcess arguments.
-///
 class CefMainArgs : public cef_main_args_t {
  public:
-  CefMainArgs() : cef_main_args_t{} {}
-  CefMainArgs(const cef_main_args_t& r) : cef_main_args_t(r) {}
-  CefMainArgs(int argc_arg, char** argv_arg)
-	  : cef_main_args_t{argc_arg, argv_arg} {}
+	CefMainArgs() : cef_main_args_t{} {}
+	CefMainArgs(const cef_main_args_t& r) : cef_main_args_t(r) {}
+	CefMainArgs(int argc_arg, char** argv_arg)
+		: cef_main_args_t{argc_arg, argv_arg} {}
 };
 
 struct CefWindowInfoTraits {
-  typedef cef_window_info_t struct_type;
+	typedef cef_window_info_t struct_type;
 
-  static inline void init(struct_type* s) { s->size = sizeof(struct_type); }
+	static inline void init(struct_type* s) { s->size = sizeof(struct_type); }
 
-  static inline void clear(struct_type* s) {
+	static inline void clear(struct_type* s) {
 	cef_string_clear(&s->window_name);
-  }
+	}
 
-  static inline void set(const struct_type* src,
+	static inline void set(const struct_type* src,
 						 struct_type* target,
 						 bool copy) {
 	cef_string_set(src->window_name.str, src->window_name.length,
-				   &target->window_name, copy);
+					 &target->window_name, copy);
 	target->bounds = src->bounds;
 	target->hidden = src->hidden;
 	target->parent_view = src->parent_view;
@@ -72,44 +70,37 @@ struct CefWindowInfoTraits {
 	target->external_begin_frame_enabled = src->external_begin_frame_enabled;
 	target->view = src->view;
 	target->runtime_style = src->runtime_style;
-  }
+	}
 };
 
-///
 /// Class representing window information.
-///
 class CefWindowInfo : public CefStructBase<CefWindowInfoTraits> {
  public:
-  using base_type = CefStructBase<CefWindowInfoTraits>;
-  using base_type::CefStructBase;
-  using base_type::operator=;
+	using base_type = CefStructBase<CefWindowInfoTraits>;
+	using base_type::CefStructBase;
+	using base_type::operator=;
 
-  ///
-  /// Create the browser as a child view.
-  ///
-  void SetAsChild(CefWindowHandle parent, const CefRect& bounds) {
+	/// Create the browser as a child view.
+	void SetAsChild(CefWindowHandle parent, const CefRect& bounds) {
 	parent_view = parent;
 	this->bounds = bounds;
 	hidden = false;
-  }
+	}
 
-  ///
-  /// Create the browser using windowless (off-screen) rendering. No view
-  /// will be created for the browser and all rendering will occur via the
-  /// CefRenderHandler interface. The |parent| value will be used to identify
-  /// monitor info and to act as the parent view for dialogs, context menus,
-  /// etc. If |parent| is not provided then the main screen monitor will be used
-  /// and some functionality that requires a parent view may not function
-  /// correctly. In order to create windowless browsers the
-  /// CefSettings.windowless_rendering_enabled value must be set to true.
-  /// Transparent painting is enabled by default but can be disabled by setting
-  /// CefBrowserSettings.background_color to an opaque value.
-  ///
-  void SetAsWindowless(CefWindowHandle parent) {
+	/// Create the browser using windowless (off-screen) rendering. No view will be created for the browser and all rendering will occur via the
+	/// CefRenderHandler interface. The |parent| value will be used to identify
+	/// monitor info and to act as the parent view for dialogs, context menus,
+	/// etc. If |parent| is not provided then the main screen monitor will be used
+	/// and some functionality that requires a parent view may not function
+	/// correctly. In order to create windowless browsers the
+	/// CefSettings.windowless_rendering_enabled value must be set to true.
+	/// Transparent painting is enabled by default but can be disabled by setting
+	/// CefBrowserSettings.background_color to an opaque value.
+	void SetAsWindowless(CefWindowHandle parent) {
 	windowless_rendering_enabled = true;
 	parent_view = parent;
 	runtime_style = CEF_RUNTIME_STYLE_ALLOY;
-  }
+	}
 };
 
-#endif  // CEF_INCLUDE_INTERNAL_CEF_MAC_H_
+#endif	// CEF_INCLUDE_INTERNAL_CEF_MAC_H_

@@ -13,25 +13,25 @@ import "core:c"
 /// of creating a new one; see task.h for details.
 /// NOTE: This struct is allocated DLL-side.
 thread :: struct {
-    /// Base structure.
-    base: base_ref_counted,
+	/// Base structure.
+	base: base_ref_counted,
 
-    /// Returns the task_runner that will execute code on this thread's
-    /// message loop. This function is safe to call from any thread.
-    get_task_runner: proc "c" (self: ^thread) -> ^task_runner,
+	/// Returns the task_runner that will execute code on this thread's
+	/// message loop. This function is safe to call from any thread.
+	get_task_runner: proc "c" (self: ^thread) -> ^task_runner,
 
-    /// Returns the platform thread ID. It will return the same value after stop()
-    /// is called. This function is safe to call from any thread.
-    get_platform_thread_id: proc "c" (self: ^thread) -> cef_platform_thread_id,
+	/// Returns the platform thread ID. It will return the same value after stop()
+	/// is called. This function is safe to call from any thread.
+	get_platform_thread_id: proc "c" (self: ^thread) -> cef_platform_thread_id,
 
-    /// Stop and join the thread. This function must be called from the same
-    /// thread that called thread_create(). Do not call this function if
-    /// thread_create() was called with a |stoppable| value of false (0).
-    stop: proc "c" (self: ^thread),
+	/// Stop and join the thread. This function must be called from the same
+	/// thread that called thread_create(). Do not call this function if
+	/// thread_create() was called with a |stoppable| value of false (0).
+	stop: proc "c" (self: ^thread),
 
-    /// Returns true (1) if the thread is currently running. This function must be
-    /// called from the same thread that called thread_create().
-    is_running: proc "c" (self: ^thread) -> b32,
+	/// Returns true (1) if the thread is currently running. This function must be
+	/// called from the same thread that called thread_create().
+	is_running: proc "c" (self: ^thread) -> b32,
 }
 
 /// Create and start a new thread. This function does not block waiting for the

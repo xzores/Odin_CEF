@@ -4,13 +4,13 @@
 // modification, are permitted provided that the following conditions are
 // met:
 //
-//    * Redistributions of source code must retain the above copyright
+//	* Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
+//	* Redistributions in binary form must reproduce the above
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
+//	* Neither the name of Google Inc. nor the name Chromium Embedded
 // Framework nor the names of its contributors may be used to endorse
 // or promote products derived from this software without specific prior
 // written permission.
@@ -40,77 +40,48 @@
 extern "C" {
 #endif
 
-///
-/// Structure containing shared texture common metadata.
-/// For documentation on each field, please refer to
+/// Structure containing shared texture common metadata. For documentation on each field, please refer to
 /// src/media/base/video_frame_metadata.h for actual details.
 ///
 typedef struct _cef_accelerated_paint_info_common_t {
-  ///
-  /// Size of this structure.
-  ///
-  size_t size;
+	/// Size of this structure.
+	size_t size;
 
-  ///
-  /// Timestamp of the frame in microseconds since capture start.
-  ///
-  uint64_t timestamp;
+	/// Timestamp of the frame in microseconds since capture start.
+	uint64_t timestamp;
 
-  ///
-  /// The full dimensions of the video frame.
-  ///
-  cef_size coded_size;
+	/// The full dimensions of the video frame.
+	cef_size coded_size;
 
-  ///
-  /// The visible area of the video frame.
-  ///
-  cef_rect visible_rect;
+	/// The visible area of the video frame.
+	cef_rect visible_rect;
 
-  ///
-  /// The region of the video frame that capturer would like to populate.
-  ///
-  cef_rect content_rect;
+	/// The region of the video frame that capturer would like to populate.
+	cef_rect content_rect;
 
-  ///
-  /// Full size of the source frame.
-  ///
-  cef_size source_size;
+	/// Full size of the source frame.
+	cef_size source_size;
 
-  ///
-  /// Updated area of frame, can be considered as the `dirty` area.
-  ///
-  cef_rect capture_update_rect;
+	/// Updated area of frame, can be considered as the `dirty` area.
+	cef_rect capture_update_rect;
 
-  ///
-  /// May reflects where the frame's contents originate from if region
-  /// capture is used internally.
-  ///
-  cef_rect region_capture_rect;
+	/// May reflects where the frame's contents originate from if region capture is used internally.
+	cef_rect region_capture_rect;
 
-  ///
-  /// The increamental counter of the frame.
-  ///
-  uint64_t capture_counter;
+	/// The increamental counter of the frame.
+	uint64_t capture_counter;
 
-  ///
-  /// Optional flag of capture_update_rect
-  ///
-  uint8_t has_capture_update_rect;
+	/// Optional flag of capture_update_rect
+	uint8_t has_capture_update_rect;
 
-  ///
-  /// Optional flag of region_capture_rect
-  ///
-  uint8_t has_region_capture_rect;
+	/// Optional flag of region_capture_rect
+	uint8_t has_region_capture_rect;
 
-  ///
-  /// Optional flag of source_size
-  ///
-  uint8_t has_source_size;
+	/// Optional flag of source_size
+	uint8_t has_source_size;
 
-  ///
-  /// Optional flag of capture_counter
-  ///
-  uint8_t has_capture_counter;
+	/// Optional flag of capture_counter
+	uint8_t has_capture_counter;
 
 } cef_accelerated_paint_info_common_t;
 
@@ -118,4 +89,4 @@ typedef struct _cef_accelerated_paint_info_common_t {
 }
 #endif
 
-#endif  // CEF_INCLUDE_INTERNAL_CEF_TYPES_OSR_H_
+#endif	// CEF_INCLUDE_INTERNAL_CEF_TYPES_OSR_H_

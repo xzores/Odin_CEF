@@ -3,11 +3,11 @@ package cef_internal
 import "core:c"
 
 when ODIN_OS == .Windows {
-    foreign import lib "CEF/Release/libcef.lib"
+	foreign import lib "CEF/Release/libcef.lib"
 } else when ODIN_OS == .Linux {
-    foreign import lib "CEF/Release/libcef.so"
+	foreign import lib "CEF/Release/libcef.so"
 } else when ODIN_OS == .Darwin {
-    foreign import lib "CEF/Release/libcef.dylib"
+	foreign import lib "CEF/Release/libcef.dylib"
 }
 
 when ODIN_OS == .Windows {
@@ -25,13 +25,9 @@ when ODIN_OS == .Windows {
 
 @(default_calling_convention="c", link_prefix="cef_", require_results)
 foreign lib {
-	///
 	/// Returns the current platform thread ID.
-	///
 	get_current_platform_thread_id :: proc () -> cef_platform_thread_id ---
 
-	///
 	/// Returns the current platform thread handle.
-	///
 	get_current_platform_thread_handle :: proc () -> platform_thread_handle ---
 }

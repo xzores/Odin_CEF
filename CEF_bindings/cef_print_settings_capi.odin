@@ -3,11 +3,11 @@ package odin_cef
 import "core:c"
 
 when ODIN_OS == .Windows {
-    foreign import lib "CEF/Release/libcef.lib"
+	foreign import lib "CEF/Release/libcef.lib"
 } else when ODIN_OS == .Linux {
-    foreign import lib "CEF/Release/libcef.so"
+	foreign import lib "CEF/Release/libcef.so"
 } else when ODIN_OS == .Darwin {
-    foreign import lib "CEF/Release/libcef.dylib"
+	foreign import lib "CEF/Release/libcef.dylib"
 }
 
 // Structure representing print settings.
@@ -57,10 +57,10 @@ Print_settings :: struct {
 
 	// Set whether only the selection will be printed / query it.
 	set_selection_only: proc "c" (self: ^Print_settings, selection_only: c.int),
-	is_selection_only:  proc "c" (self: ^Print_settings) -> c.int,
+	is_selection_only:	proc "c" (self: ^Print_settings) -> c.int,
 
 	// Set whether pages will be collated / query it.
-	set_collate:  proc "c" (self: ^Print_settings, collate: c.int),
+	set_collate:	proc "c" (self: ^Print_settings, collate: c.int),
 	will_collate: proc "c" (self: ^Print_settings) -> c.int,
 
 	// Set/Get color model.

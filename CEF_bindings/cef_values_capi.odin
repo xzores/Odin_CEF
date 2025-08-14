@@ -218,88 +218,88 @@ cef_list_value :: struct {
 	// Returns 1 if this object is valid. May become invalid if owned by another object
 	// (e.g., list/dictionary) that is later modified or destroyed. Do not call other
 	// functions if this returns 0.
-	is_valid:    proc "c" (self: ^cef_list_value) -> c.int,
+	is_valid:	proc "c" (self: ^cef_list_value) -> c.int,
 
 	// Returns 1 if this object is currently owned by another object.
-	is_owned:    proc "c" (self: ^cef_list_value) -> c.int,
+	is_owned:	proc "c" (self: ^cef_list_value) -> c.int,
 
 	// Returns 1 if the values of this object are read-only (some APIs expose read-only objects).
 	is_read_only: proc "c" (self: ^cef_list_value) -> c.int,
 
 	// Returns 1 if this and |that| share the same underlying data (mutations affect both).
-	is_same:     proc "c" (self: ^cef_list_value, that: ^cef_list_value) -> c.int,
+	is_same:	 proc "c" (self: ^cef_list_value, that: ^cef_list_value) -> c.int,
 
 	// Returns 1 if this and |that| have equivalent values (not necessarily the same object).
-	is_equal:    proc "c" (self: ^cef_list_value, that: ^cef_list_value) -> c.int,
+	is_equal:	proc "c" (self: ^cef_list_value, that: ^cef_list_value) -> c.int,
 
 	// Returns a writable copy of this object.
-	copy:        proc "c" (self: ^cef_list_value) -> ^cef_list_value,
+	copy:		proc "c" (self: ^cef_list_value) -> ^cef_list_value,
 
 	// Sets the number of values. New slots default to null. Returns 1 on success.
-	set_size:    proc "c" (self: ^cef_list_value, size: c.size_t) -> c.int,
+	set_size:	proc "c" (self: ^cef_list_value, size: c.size_t) -> c.int,
 
 	// Number of values.
-	get_size:    proc "c" (self: ^cef_list_value) -> c.size_t,
+	get_size:	proc "c" (self: ^cef_list_value) -> c.size_t,
 
 	// Removes all values. Returns 1 on success.
-	clear:       proc "c" (self: ^cef_list_value) -> c.int,
+	clear:		 proc "c" (self: ^cef_list_value) -> c.int,
 
 	// Removes the value at |index|.
-	remove:      proc "c" (self: ^cef_list_value, index: c.size_t) -> c.int,
+	remove:		proc "c" (self: ^cef_list_value, index: c.size_t) -> c.int,
 
 	// Returns the value type at |index|.
-	get_type:    proc "c" (self: ^cef_list_value, index: c.size_t) -> cef_value_type,
+	get_type:	proc "c" (self: ^cef_list_value, index: c.size_t) -> cef_value_type,
 
 	// Returns the value at |index|. Simple types copy data; complex types reference existing data.
-	get_value:   proc "c" (self: ^cef_list_value, index: c.size_t) -> ^cef_value,
+	get_value:	 proc "c" (self: ^cef_list_value, index: c.size_t) -> ^cef_value,
 
 	// Returns the value at |index| as bool.
-	get_bool:    proc "c" (self: ^cef_list_value, index: c.size_t) -> c.int,
+	get_bool:	proc "c" (self: ^cef_list_value, index: c.size_t) -> c.int,
 
 	// Returns the value at |index| as int.
-	get_int:     proc "c" (self: ^cef_list_value, index: c.size_t) -> c.int,
+	get_int:	 proc "c" (self: ^cef_list_value, index: c.size_t) -> c.int,
 
 	// Returns the value at |index| as double.
-	get_double:  proc "c" (self: ^cef_list_value, index: c.size_t) -> f64,
+	get_double:	proc "c" (self: ^cef_list_value, index: c.size_t) -> f64,
 
 	// Returns the value at |index| as string. Result must be freed with cef_string_userfree_free().
-	get_string:  proc "c" (self: ^cef_list_value, index: c.size_t) -> cef_string_userfree,
+	get_string:	proc "c" (self: ^cef_list_value, index: c.size_t) -> cef_string_userfree,
 
 	// Returns the value at |index| as binary (references existing data).
-	get_binary:  proc "c" (self: ^cef_list_value, index: c.size_t) -> ^cef_binary_value,
+	get_binary:	proc "c" (self: ^cef_list_value, index: c.size_t) -> ^cef_binary_value,
 
 	// Returns the value at |index| as dictionary (references existing data; mutations modify this object).
 	get_dictionary: proc "c" (self: ^cef_list_value, index: c.size_t) -> ^cef_dictionary_value,
 
 	// Returns the value at |index| as list (references existing data; mutations modify this object).
-	get_list:    proc "c" (self: ^cef_list_value, index: c.size_t) -> ^cef_list_value,
+	get_list:	proc "c" (self: ^cef_list_value, index: c.size_t) -> ^cef_list_value,
 
 	// Sets the value at |index|. Returns 1 on success. Simple data is copied; complex data is referenced.
-	set_value:   proc "c" (self: ^cef_list_value, index: c.size_t, value: ^cef_value) -> c.int,
+	set_value:	 proc "c" (self: ^cef_list_value, index: c.size_t, value: ^cef_value) -> c.int,
 
 	// Sets null at |index|. Returns 1 on success.
-	set_null:    proc "c" (self: ^cef_list_value, index: c.size_t) -> c.int,
+	set_null:	proc "c" (self: ^cef_list_value, index: c.size_t) -> c.int,
 
 	// Sets bool at |index|. Returns 1 on success.
-	set_bool:    proc "c" (self: ^cef_list_value, index: c.size_t, value: c.int) -> c.int,
+	set_bool:	proc "c" (self: ^cef_list_value, index: c.size_t, value: c.int) -> c.int,
 
 	// Sets int at |index|. Returns 1 on success.
-	set_int:     proc "c" (self: ^cef_list_value, index: c.size_t, value: c.int) -> c.int,
+	set_int:	 proc "c" (self: ^cef_list_value, index: c.size_t, value: c.int) -> c.int,
 
 	// Sets double at |index|. Returns 1 on success.
-	set_double:  proc "c" (self: ^cef_list_value, index: c.size_t, value: f64) -> c.int,
+	set_double:	proc "c" (self: ^cef_list_value, index: c.size_t, value: f64) -> c.int,
 
 	// Sets string at |index|. Returns 1 on success.
-	set_string:  proc "c" (self: ^cef_list_value, index: c.size_t, value: ^cef_string) -> c.int,
+	set_string:	proc "c" (self: ^cef_list_value, index: c.size_t, value: ^cef_string) -> c.int,
 
 	// Sets binary at |index|. If |value| owned by another object it is copied; otherwise ownership is transferred and the |value| reference is invalidated. Returns 1 on success.
-	set_binary:  proc "c" (self: ^cef_list_value, index: c.size_t, value: ^cef_binary_value) -> c.int,
+	set_binary:	proc "c" (self: ^cef_list_value, index: c.size_t, value: ^cef_binary_value) -> c.int,
 
 	// Sets dictionary at |index|. Same ownership semantics as set_binary. Returns 1 on success.
 	set_dictionary: proc "c" (self: ^cef_list_value, index: c.size_t, value: ^cef_dictionary_value) -> c.int,
 
 	// Sets list at |index|. Same ownership semantics as set_binary. Returns 1 on success.
-	set_list:    proc "c" (self: ^cef_list_value, index: c.size_t, value: ^cef_list_value) -> c.int,
+	set_list:	proc "c" (self: ^cef_list_value, index: c.size_t, value: ^cef_list_value) -> c.int,
 }
 
 @(default_calling_convention="c", link_prefix="cef_", require_results)

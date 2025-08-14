@@ -3,22 +3,22 @@ package cef_internal
 import "core:c"
 
 when ODIN_OS == .Windows {
-    foreign import lib "CEF/Release/libcef.lib"
+	foreign import lib "CEF/Release/libcef.lib"
 } else when ODIN_OS == .Linux {
-    foreign import lib "CEF/Release/libcef.so"
+	foreign import lib "CEF/Release/libcef.so"
 } else when ODIN_OS == .Darwin {
-    foreign import lib "CEF/Release/libcef.dylib"
+	foreign import lib "CEF/Release/libcef.dylib"
 }
 
 // See include/base/cef_trace_event.h for macros and intended usage.
 
 // Functions for tracing counters and functions; called from macros.
 // - |category| string must have application lifetime (static or literal). They
-//   may not include "(quotes) chars.
+//	 may not include "(quotes) chars.
 // - |argX_name|, |argX_val|, |valueX_name|, |valeX_val| are optional parameters
-//   and represent pairs of name and values of arguments
+//	 and represent pairs of name and values of arguments
 // - |id| is used to disambiguate counters with the same name, or match async
-//   trace events
+//	 trace events
 
 @(default_calling_convention="c", link_prefix="cef_", require_results)
 foreign lib {

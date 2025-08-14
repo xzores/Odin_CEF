@@ -4,13 +4,13 @@
 // modification, are permitted provided that the following conditions are
 // met:
 //
-//    * Redistributions of source code must retain the above copyright
+//	* Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
+//	* Redistributions in binary form must reproduce the above
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
+//	* Neither the name of Google Inc. nor the name Chromium Embedded
 // Framework nor the names of its contributors may be used to endorse
 // or promote products derived from this software without specific prior
 // written permission.
@@ -35,44 +35,36 @@
 extern "C" {
 #endif
 
-///
 /// Structure representing a point.
-///
 typedef struct _cef_point {
-  int x;
-  int y;
+	int x;
+	int y;
 } cef_point;
 
-///
 /// Structure representing a rectangle.
-///
 typedef struct _cef_rect_t {
-  int x;
-  int y;
-  int width;
-  int height;
+	int x;
+	int y;
+	int width;
+	int height;
 } cef_rect;
 
-///
 /// Structure representing a size.
-///
 typedef struct _cef_size {
-  int width;
-  int height;
+	int width;
+	int height;
 } cef_size;
 
-///
 /// Structure representing insets.
-///
 typedef struct _cef_insets_t {
-  int top;
-  int left;
-  int bottom;
-  int right;
+	int top;
+	int left;
+	int bottom;
+	int right;
 } cef_insets_t;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // CEF_INCLUDE_INTERNAL_CEF_TYPES_GEOMETRY_H_
+#endif	// CEF_INCLUDE_INTERNAL_CEF_TYPES_GEOMETRY_H_

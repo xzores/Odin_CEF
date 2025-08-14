@@ -4,13 +4,13 @@
 // modification, are permitted provided that the following conditions are
 // met:
 //
-//    * Redistributions of source code must retain the above copyright
+//	* Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
+//	* Redistributions in binary form must reproduce the above
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
+//	* Neither the name of Google Inc. nor the name Chromium Embedded
 // Framework nor the names of its contributors may be used to endorse
 // or promote products derived from this software without specific prior
 // written permission.
@@ -35,9 +35,7 @@
 extern "C" {
 #endif
 
-///
-/// CEF supports both a Chrome runtime style (based on the Chrome UI layer) and
-/// an Alloy runtime style (based on the Chromium content layer). Chrome style
+/// CEF supports both a Chrome runtime style (based on the Chrome UI layer) and an Alloy runtime style (based on the Chromium content layer). Chrome style
 /// provides the full Chrome UI and browser functionality whereas Alloy style
 /// provides less default browser functionality but adds additional client
 /// callbacks and support for windowless (off-screen) rendering. The style type
@@ -45,9 +43,7 @@ extern "C" {
 /// different styles can be mixed during runtime. For additional comparative
 /// details on runtime styles see
 /// https://bitbucket.org/chromiumembedded/cef/wiki/Architecture.md#markdown-header-cef3
-///
-/// Windowless rendering will always use Alloy style. Windowed rendering with a
-/// default window or client-provided parent window can configure the style via
+/// Windowless rendering will always use Alloy style. Windowed rendering with a default window or client-provided parent window can configure the style via
 /// CefWindowInfo.runtime_style. Windowed rendering with the Views framework can
 /// configure the style via CefWindowDelegate::GetWindowRuntimeStyle and
 /// CefBrowserViewDelegate::GetBrowserRuntimeStyle. Alloy style Windows with the
@@ -58,24 +54,18 @@ extern "C" {
 /// documentation for any additional platform-specific limitations.
 ///
 typedef enum {
-  ///
-  /// Use the default style. See above documentation for exceptions.
-  ///
-  CEF_RUNTIME_STYLE_DEFAULT,
+	/// Use the default style. See above documentation for exceptions.
+	CEF_RUNTIME_STYLE_DEFAULT,
 
-  ///
-  /// Use Chrome style.
-  ///
-  CEF_RUNTIME_STYLE_CHROME,
+	/// Use Chrome style.
+	CEF_RUNTIME_STYLE_CHROME,
 
-  ///
-  /// Use Alloy style.
-  ///
-  CEF_RUNTIME_STYLE_ALLOY,
+	/// Use Alloy style.
+	CEF_RUNTIME_STYLE_ALLOY,
 } cef_runtime_style_t;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // CEF_INCLUDE_INTERNAL_CEF_TYPES_RUNTIME_H_
+#endif	// CEF_INCLUDE_INTERNAL_CEF_TYPES_RUNTIME_H_

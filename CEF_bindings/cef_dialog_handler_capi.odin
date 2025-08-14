@@ -2,52 +2,28 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for dependencies
-// base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in Browser_capi.odin
-// cef_string is defined in cef_string_capi.odin
-// string_list is defined in cef_string_capi.odin
-// cef_file_dialog_mode is defined in cef_types_capi.odin
-
-///
 /// Callback structure for asynchronous continuation of file dialog requests.
-///
 /// NOTE: This struct is allocated DLL-side.
 ///
 File_dialog_callback :: struct {
-	///
 	/// Base structure.
-	///
 	base: base_ref_counted,
 
-	///
-	/// Continue the file selection. |file_paths| should be a single value or a
-	/// list of values depending on the dialog mode. An NULL |file_paths| value is
+	/// Continue the file selection. |file_paths| should be a single value or a list of values depending on the dialog mode. An NULL |file_paths| value is
 	/// treated the same as calling cancel().
-	///
 	cont: proc "c" (self: ^File_dialog_callback, file_paths: string_list),
 
-	///
 	/// Cancel the file selection.
-	///
 	cancel: proc "c" (self: ^File_dialog_callback),
 }
 
-///
-/// Implement this structure to handle dialog events. The functions of this
-/// structure will be called on the browser process UI thread.
-///
+/// Implement this structure to handle dialog events. The functions of this structure will be called on the browser process UI thread.
 /// NOTE: This struct is allocated client-side.
-///
 Dialog_handler :: struct {
-	///
 	/// Base structure.
-	///
 	base: base_ref_counted,
 
-	///
-	/// Called to run a file chooser dialog. |mode| represents the type of dialog
-	/// to display. |title| to the title to be used for the dialog and may be NULL
+	/// Called to run a file chooser dialog. |mode| represents the type of dialog to display. |title| to the title to be used for the dialog and may be NULL
 	/// to show the default title ("Open" or "Save" depending on the mode).
 	/// |default_file_path| is the path with optional directory and/or file name
 	/// component that should be initially selected in the dialog.
@@ -65,7 +41,6 @@ Dialog_handler :: struct {
 	/// return false (0). If this function returns false (0) it may be called an
 	/// additional time for the same dialog (both before and after MIME type
 	/// expansion).
-	///
 	on_file_dialog: proc "c" (self: ^Dialog_handler, browser: ^Browser, mode: File_dialog_mode, title: ^cef_string, default_file_path: ^cef_string,
 		 accept_filters: string_list, accept_extensions: string_list, accept_descriptions: string_list, callback: ^File_dialog_callback) -> b32,
 } 

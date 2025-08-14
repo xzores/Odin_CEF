@@ -3,11 +3,11 @@ package odin_cef
 import "core:c"
 
 when ODIN_OS == .Windows {
-    foreign import lib "CEF/Release/libcef.lib"
+	foreign import lib "CEF/Release/libcef.lib"
 } else when ODIN_OS == .Linux {
-    foreign import lib "CEF/Release/libcef.so"
+	foreign import lib "CEF/Release/libcef.so"
 } else when ODIN_OS == .Darwin {
-    foreign import lib "CEF/Release/libcef.dylib"
+	foreign import lib "CEF/Release/libcef.dylib"
 }
 
 // A Window is a top-level widget in the Views hierarchy. By default it has a non-client area with title bar, icon and buttons that supports moving and resizing.
@@ -56,14 +56,14 @@ cef_window :: struct {
 	// Maximize / Minimize / Restore.
 	maximize: proc "c" (self: ^cef_window),
 	minimize: proc "c" (self: ^cef_window),
-	restore:  proc "c" (self: ^cef_window),
+	restore:	proc "c" (self: ^cef_window),
 
 	// Set fullscreen state. Window delegate OnWindowFullscreenTransition will be notified.
 	set_fullscreen: proc "c" (self: ^cef_window, fullscreen: c.int),
 
 	// Query maximized / minimized / fullscreen.
-	is_maximized:  proc "c" (self: ^cef_window) -> c.int,
-	is_minimized:  proc "c" (self: ^cef_window) -> c.int,
+	is_maximized:	proc "c" (self: ^cef_window) -> c.int,
+	is_minimized:	proc "c" (self: ^cef_window) -> c.int,
 	is_fullscreen: proc "c" (self: ^cef_window) -> c.int,
 
 	// View that currently has focus in this Window (or nil).
@@ -74,8 +74,8 @@ cef_window :: struct {
 	get_title: proc "c" (self: ^cef_window) -> cef_string_userfree,
 
 	// Set/Get 16x16 Window icon (title bar) and larger App icon (task switcher, etc.).
-	set_window_icon:     proc "c" (self: ^cef_window, image: ^cef_image),
-	get_window_icon:     proc "c" (self: ^cef_window) -> ^cef_image,
+	set_window_icon:	 proc "c" (self: ^cef_window, image: ^cef_image),
+	get_window_icon:	 proc "c" (self: ^cef_window) -> ^cef_image,
 	set_window_app_icon: proc "c" (self: ^cef_window, image: ^cef_image),
 	get_window_app_icon: proc "c" (self: ^cef_window) -> ^cef_image,
 
@@ -117,7 +117,7 @@ cef_window :: struct {
 	get_window_handle: proc "c" (self: ^cef_window) -> cef_window_handle_t,
 
 	// Simulate input (primarily for testing).
-	send_key_press:  proc "c" (self: ^cef_window, key_code: c.int, event_flags: c.uint32_t),
+	send_key_press:	proc "c" (self: ^cef_window, key_code: c.int, event_flags: c.uint32_t),
 	send_mouse_move: proc "c" (self: ^cef_window, screen_x: c.int, screen_y: c.int),
 	send_mouse_events: proc "c" (
 		self: ^cef_window,
@@ -136,8 +136,8 @@ cef_window :: struct {
 		alt_pressed: c.int,
 		high_priority: c.int,
 	),
-	remove_accelerator:       proc "c" (self: ^cef_window, command_id: c.int),
-	remove_all_accelerators:  proc "c" (self: ^cef_window),
+	remove_accelerator:		 proc "c" (self: ^cef_window, command_id: c.int),
+	remove_all_accelerators:	proc "c" (self: ^cef_window),
 
 	// Override a standard theme color or add a custom color for |color_id|.
 	set_theme_color: proc "c" (self: ^cef_window, color_id: c.int, color: cef_color),

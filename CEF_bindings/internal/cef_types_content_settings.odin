@@ -276,7 +276,7 @@ Content_setting_types :: enum c.int {
 	CEF_CONTENT_SETTING_TYPE_REVOKED_ABUSIVE_NOTIFICATION_PERMISSIONS,
 
 	// Tracking protection per site:
-	//   BLOCK (default): protections enabled; ALLOW: protections disabled.
+	//	 BLOCK (default): protections enabled; ALLOW: protections disabled.
 	CEF_CONTENT_SETTING_TYPE_TRACKING_PROTECTION,
 
 	// Allow returning system audio track from getDisplayMedia without picker (WebUI only).

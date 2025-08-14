@@ -4,13 +4,13 @@
 // modification, are permitted provided that the following conditions are
 // met:
 //
-//    * Redistributions of source code must retain the above copyright
+//	* Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
+//	* Redistributions in binary form must reproduce the above
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
+//	* Neither the name of Google Inc. nor the name Chromium Embedded
 // Framework nor the names of its contributors may be used to endorse
 // or promote products derived from this software without specific prior
 // written permission.
@@ -38,52 +38,36 @@
 extern "C" {
 #endif
 
-///
 /// CEF string maps are a set of key/value string pairs.
-///
 typedef struct _string_list* string_list;
 
-///
 /// Allocate a new string map.
-///
 CEF_EXPORT string_list cef_string_list_alloc(void);
 
-///
 /// Return the number of elements in the string list.
-///
 CEF_EXPORT size_t cef_string_list_size(string_list list);
 
-///
-/// Retrieve the value at the specified zero-based string list index. Returns
-/// true (1) if the value was successfully retrieved.
+/// Retrieve the value at the specified zero-based string list index. Returns true (1) if the value was successfully retrieved.
 ///
 CEF_EXPORT int cef_string_list_value(string_list list,
-                                     size_t index,
-                                     cef_string* value);
+									 size_t index,
+									 cef_string* value);
 
-///
 /// Append a new value at the end of the string list.
-///
 CEF_EXPORT void cef_string_list_append(string_list list,
-                                       const cef_string* value);
+										 const cef_string* value);
 
-///
 /// Clear the string list.
-///
 CEF_EXPORT void cef_string_list_clear(string_list list);
 
-///
 /// Free the string list.
-///
 CEF_EXPORT void cef_string_list_free(string_list list);
 
-///
 /// Creates a copy of an existing string list.
-///
 CEF_EXPORT string_list cef_string_list_copy(string_list list);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // CEF_INCLUDE_INTERNAL_CEF_STRING_LIST_H_
+#endif	// CEF_INCLUDE_INTERNAL_CEF_STRING_LIST_H_

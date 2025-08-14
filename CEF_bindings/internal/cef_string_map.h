@@ -4,13 +4,13 @@
 // modification, are permitted provided that the following conditions are
 // met:
 //
-//    * Redistributions of source code must retain the above copyright
+//	* Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
+//	* Redistributions in binary form must reproduce the above
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
+//	* Neither the name of Google Inc. nor the name Chromium Embedded
 // Framework nor the names of its contributors may be used to endorse
 // or promote products derived from this software without specific prior
 // written permission.
@@ -38,62 +38,44 @@
 extern "C" {
 #endif
 
-///
 /// CEF string maps are a set of key/value string pairs.
-///
 typedef struct _cef_string_map_t* cef_string_map_t;
 
-///
 /// Allocate a new string map.
-///
 CEF_EXPORT cef_string_map_t cef_string_map_alloc(void);
 
-///
 /// Return the number of elements in the string map.
-///
 CEF_EXPORT size_t cef_string_map_size(cef_string_map_t map);
 
-///
 /// Return the value assigned to the specified key.
-///
 CEF_EXPORT int cef_string_map_find(cef_string_map_t map,
-                                   const cef_string* key,
-                                   cef_string* value);
+									 const cef_string* key,
+									 cef_string* value);
 
-///
 /// Return the key at the specified zero-based string map index.
-///
 CEF_EXPORT int cef_string_map_key(cef_string_map_t map,
-                                  size_t index,
-                                  cef_string* key);
+									size_t index,
+									cef_string* key);
 
-///
 /// Return the value at the specified zero-based string map index.
-///
 CEF_EXPORT int cef_string_map_value(cef_string_map_t map,
-                                    size_t index,
-                                    cef_string* value);
+									size_t index,
+									cef_string* value);
 
-///
-/// Append a new key/value pair at the end of the string map. If the key exists,
-/// overwrite the existing value with a new value w/o changing the pair order.
+/// Append a new key/value pair at the end of the string map. If the key exists, overwrite the existing value with a new value w/o changing the pair order.
 ///
 CEF_EXPORT int cef_string_map_append(cef_string_map_t map,
-                                     const cef_string* key,
-                                     const cef_string* value);
+									 const cef_string* key,
+									 const cef_string* value);
 
-///
 /// Clear the string map.
-///
 CEF_EXPORT void cef_string_map_clear(cef_string_map_t map);
 
-///
 /// Free the string map.
-///
 CEF_EXPORT void cef_string_map_free(cef_string_map_t map);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // CEF_INCLUDE_INTERNAL_CEF_STRING_MAP_H_
+#endif	// CEF_INCLUDE_INTERNAL_CEF_STRING_MAP_H_
