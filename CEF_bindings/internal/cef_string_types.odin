@@ -3,91 +3,84 @@ package cef_internal;
 import "core:c"
 
 when ODIN_OS == .Windows {
-	foreign import lib "CEF/Release/libcef.lib"
+	foreign import lib "../CEF/Release/libcef.lib"
 } else when ODIN_OS == .Linux {
-	foreign import lib "CEF/Release/libcef.so"
+	foreign import lib "../CEF/Release/libcef.so"
 } else when ODIN_OS == .Darwin {
-	foreign import lib "CEF/Release/libcef.dylib"
+	foreign import lib "../CEF/Release/libcef.dylib"
 }
 
-string_wide :: struct {
-	str : [^]c.wchar_t,
-	length : c.size_t,
-	dtor: proc "c" (str: [^]c.wchar_t),
-};
+/// CEF string type definitions. Whoever allocates `str` must provide an
+/// appropriate `dtor` that frees the string in the same memory space.
+/// When reusing an existing string, call `dtor` for the old value before
+/// assigning new `str`/`dtor` values. Static strings will have a nil `dtor`.
+cef_string_wide :: struct {
+	str:   ^c.wchar_t,
+	length: c.size_t,
+	dtor:  proc "c" (str: ^c.wchar_t),
+}
 
-string_utf8 :: struct {
-	str : [^]c.char,
-	length : c.size_t,
-	dtor : proc "c" (str : [^]c.char),
-};
+cef_string_utf8 :: struct {
+	str:   ^u8,
+	length: c.size_t,
+	dtor:  proc "c" (str: ^u8),
+}
 
-string_utf16 :: struct {
-	str : [^]u16,
-	length : c.size_t,
-	dtor : proc "c" (str : [^]u16),
-};
+cef_string_utf16 :: struct {
+	str:   ^u16,
+	length: c.size_t,
+	dtor:  proc "c" (str: ^u16),
+}
 
-/// It is sometimes necessary for the system to allocate string structures with
-/// the expectation that the user will free them. The userfree types act as a
-/// hint that the user is responsible for freeing the structure.
-cef_string_userfree_wide_t	:: ^string_wide
-cef_string_userfree_utf8_t	:: ^string_utf8
-cef_string_userfree_utf16_t :: ^string_utf16
-
-// CEF is built with UTF16 as default, so cef_string_userfree maps to UTF16
-cef_string_userfree :: cef_string_userfree_utf16_t
-
-// CEF is built with UTF16 as default, so cef_string maps to UTF16
-cef_string :: string_utf16
-
-/// These functions set string values. If |copy| is true (1) the value will be copied instead of referenced. It is up to the user to properly manage
-/// the lifespan of references.
-///
 @(default_calling_convention="c", link_prefix="cef_", require_results)
 foreign lib {
-	cef_string_wide_set :: proc (src : [^]c.wchar_t, src_len : c.size_t, output : ^string_wide, copy : c.int) -> c.int ---
-	cef_string_utf8_set	:: proc (src: [^]c.char,	 src_len: c.size_t, output: ^string_utf8,	copy: c.int) -> c.int ---
-	cef_string_utf16_set :: proc (src: [^]u16, src_len: c.size_t, output: ^string_utf16, copy: c.int) -> c.int ---
+	// Set string values. If `copy` is 1 the value will be copied.
+	string_wide_set  :: proc (src: ^c.wchar_t, src_len: c.size_t, output: ^cef_string_wide,  copy: c.int) -> c.int ---
+	string_utf8_set  :: proc (src: ^u8,         src_len: c.size_t, output: ^cef_string_utf8,  copy: c.int) -> c.int ---
+	string_utf16_set :: proc (src: ^u16,        src_len: c.size_t, output: ^cef_string_utf16, copy: c.int) -> c.int ---
 
-	/// These functions clear string values. The structure itself is not freed.
-	cef_string_wide_clear	:: proc (str: ^string_wide) ---
-	cef_string_utf8_clear	:: proc (str: ^string_utf8) ---
-	cef_string_utf16_clear :: proc (str: ^string_utf16) ---
+	// Clear string values (does not free the struct itself).
+	string_wide_clear  :: proc (str: ^cef_string_wide)  ---
+	string_utf8_clear  :: proc (str: ^cef_string_utf8)  ---
+	string_utf16_clear :: proc (str: ^cef_string_utf16) ---
 
-	/// These functions compare two string values with the same results as strcmp().
-	cef_string_wide_cmp	:: proc (str1: ^string_wide,	str2: ^string_wide)	 -> c.int ---
-	cef_string_utf8_cmp	:: proc (str1: ^string_utf8,	str2: ^string_utf8)	 -> c.int ---
-	cef_string_utf16_cmp :: proc (str1: ^string_utf16, str2: ^string_utf16)	-> c.int ---
+	// strcmp-style comparisons.
+	string_wide_cmp  :: proc (str1: ^cef_string_wide,  str2: ^cef_string_wide)  -> c.int ---
+	string_utf8_cmp  :: proc (str1: ^cef_string_utf8,  str2: ^cef_string_utf8)  -> c.int ---
+	string_utf16_cmp :: proc (str1: ^cef_string_utf16, str2: ^cef_string_utf16) -> c.int ---
 
-	/// These functions convert between UTF-8, -16, and -32 strings. They are potentially slow so unnecessary conversions should be avoided. The best
-	/// possible result will always be written to |output| with the boolean return
-	/// value indicating whether the conversion is 100% valid.
-	cef_string_wide_to_utf8	:: proc (src: [^]c.wchar_t,	src_len: c.size_t, output: ^string_utf8)	-> c.int ---
-	cef_string_utf8_to_wide	:: proc (src: [^]c.char,	 src_len: c.size_t, output: ^string_wide)	-> c.int ---
+	// Conversions between UTF-8/16 and wide.
+	string_wide_to_utf8  :: proc (src: ^c.wchar_t, src_len: c.size_t, output: ^cef_string_utf8)  -> c.int ---
+	string_utf8_to_wide  :: proc (src: ^u8,        src_len: c.size_t, output: ^cef_string_wide)  -> c.int ---
+	string_wide_to_utf16 :: proc (src: ^c.wchar_t, src_len: c.size_t, output: ^cef_string_utf16) -> c.int ---
+	string_utf16_to_wide :: proc (src: ^u16,       src_len: c.size_t, output: ^cef_string_wide)  -> c.int ---
+	string_utf8_to_utf16 :: proc (src: ^u8,        src_len: c.size_t, output: ^cef_string_utf16) -> c.int ---
+	string_utf16_to_utf8 :: proc (src: ^u16,       src_len: c.size_t, output: ^cef_string_utf8)  -> c.int ---
 
-	cef_string_wide_to_utf16 :: proc (src: [^]c.wchar_t,	src_len: c.size_t, output: ^string_utf16) -> c.int ---
-	cef_string_utf16_to_wide :: proc (src: [^]u16, src_len: c.size_t, output: ^string_wide)	-> c.int ---
+	// ASCII helpers (for known-ASCII literals).
+	string_ascii_to_wide  :: proc (src: ^u8,  src_len: c.size_t, output: ^cef_string_wide)  -> c.int ---
+	string_ascii_to_utf16 :: proc (src: ^u8,  src_len: c.size_t, output: ^cef_string_utf16) -> c.int ---
 
-	cef_string_utf8_to_utf16 :: proc (src: [^]c.char,	 src_len: c.size_t, output: ^string_utf16) -> c.int ---
-	cef_string_utf16_to_utf8 :: proc (src: [^]u16, src_len: c.size_t, output: ^string_utf8)	-> c.int ---
+	// Userfree alloc/free (caller must free).
+	string_userfree_wide_alloc  :: proc () -> ^cef_string_wide  ---
+	string_userfree_utf8_alloc  :: proc () -> ^cef_string_utf8  ---
+	string_userfree_utf16_alloc :: proc () -> ^cef_string_utf16 ---
 
-	/// These functions convert an ASCII string, typically a hardcoded constant, to a Wide/UTF16 string. Use instead of the UTF8 conversion routines if you know
-	/// the string is ASCII.
-	cef_string_ascii_to_wide	:: proc (src: [^]c.char, src_len: c.size_t, output: ^string_wide)	-> c.int ---
-	cef_string_ascii_to_utf16 :: proc (src: [^]c.char, src_len: c.size_t, output: ^string_utf16) -> c.int ---
+	string_userfree_wide_free  :: proc (str: ^cef_string_wide)  ---
+	string_userfree_utf8_free  :: proc (str: ^cef_string_utf8)  ---
+	string_userfree_utf16_free :: proc (str: ^cef_string_utf16) ---
 
-	/// These functions allocate a new string structure. They must be freed by calling the associated free function.
-	cef_string_userfree_wide_alloc	:: proc () -> cef_string_userfree_wide_t ---
-	cef_string_userfree_utf8_alloc	:: proc () -> cef_string_userfree_utf8_t ---
-	cef_string_userfree_utf16_alloc :: proc () -> cef_string_userfree_utf16_t ---
-
-	/// These functions free the string structure allocated by the associated alloc function. Any string contents will first be cleared.
-	cef_string_userfree_wide_free	:: proc (str: cef_string_userfree_wide_t) ---
-	cef_string_userfree_utf8_free	:: proc (str: cef_string_userfree_utf8_t) ---
-	cef_string_userfree_utf16_free :: proc (str: cef_string_userfree_utf16_t) ---
-
-	/// These functions convert utf16 string case using the current ICU locale. This may change the length of the string in some cases.
-	cef_string_utf16_to_lower :: proc (src: [^]u16, src_len: c.size_t, output: ^string_utf16) -> c.int ---
-	cef_string_utf16_to_upper :: proc (src: [^]u16, src_len: c.size_t, output: ^string_utf16) -> c.int ---
+	// UTF-16 case conversion using current ICU locale.
+	string_utf16_to_lower :: proc (src: ^u16, src_len: c.size_t, output: ^cef_string_utf16) -> c.int ---
+	string_utf16_to_upper :: proc (src: ^u16, src_len: c.size_t, output: ^cef_string_utf16) -> c.int ---
 }
+
+// Convenience “macros” as inline helpers (Odin doesn’t use C macros).
+string_wide_copy  :: proc (src: ^c.wchar_t, src_len: c.size_t, output: ^cef_string_wide)  -> c.int { return string_wide_set(src,  src_len, output, c.int(1)) }
+string_utf8_copy  :: proc (src: ^u8,        src_len: c.size_t, output: ^cef_string_utf8)  -> c.int { return string_utf8_set(src,  src_len, output, c.int(1)) }
+string_utf16_copy :: proc (src: ^u16,       src_len: c.size_t, output: ^cef_string_utf16) -> c.int { return string_utf16_set(src, src_len, output, c.int(1)) }
+
+// Userfree pointer aliases (mirroring C typedefs).
+cef_string_userfree_wide  :: ^cef_string_wide;
+cef_string_userfree_utf8  :: ^cef_string_utf8;
+cef_string_userfree_utf16 :: ^cef_string_utf16;

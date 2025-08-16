@@ -18,7 +18,7 @@ package cef_internal
 /// multiple Alloy style BrowserViews. See CefWindowInfo.runtime_style
 /// documentation for any additional platform-specific limitations.
 ///
-runtime_style :: enum u32 {
+Runtime_style :: enum u32 {
 	/// Use the default style. See above documentation for exceptions.
 	RUNTIME_STYLE_DEFAULT,
 

@@ -2,14 +2,6 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for dependencies
-// base_ref_counted is defined in cef_base_capi.odin
-// browser is defined in Browser_capi.odin
-// frame is defined in Frame_capi.odin
-// Drag_data is defined in cef_drag_data_capi.odin
-// Drag_operations_mask is defined in cef_types_capi.odin
-// Draggable_region is defined in cef_types_capi.odin
-
 /// Implement this structure to handle events related to dragging. The functions of this structure will be called on the UI thread.
 /// NOTE: This struct is allocated client-side.
 Drag_handler :: struct {

@@ -275,7 +275,7 @@ cef_return_value :: enum u32 {
 };
 
 // URL component parts.
-Cef_urlparts :: struct {
+Urlparts :: struct {
 	// Size of this structure.
 	size: c.size_t,
 
@@ -1756,7 +1756,7 @@ Cursor_info :: struct {
 }
 
 /// URI unescape rules passed to CefURIDecode().
-Uri_unescape_rules :: enum u32 {
+Uri_unescape_rule :: enum u32 {
 	/// Don't unescape anything at all.
 	UU_NONE = 0,
 
@@ -2123,7 +2123,7 @@ Ssl_version :: enum u32 {
 	SSL_CONNECTION_VERSION_NUM_VALUES,
 }
 
-/// Supported SSL content status flags. See content/public/common/ssl_status.h
+/// Supported SSL content status flags. See content/public/common/Ssl_status.h
 /// for more information.
 Ssl_content_status :: enum u32 {
 	SSL_CONTENT_NORMAL_CONTENT = 0,
@@ -2873,27 +2873,3 @@ Task_info :: struct {
 	/// has this value set to true because it is the aggregate of all processes).
 	is_gpu_memory_inflated: c.int,
 }
-
-/// Platform-specific event handle type.
-when ODIN_OS == .Windows {
-	event_handle :: rawptr	// MSG* on Windows
-} else when ODIN_OS == .Darwin {
-	event_handle :: rawptr	// void* on macOS
-} else when ODIN_OS == .Linux {
-	event_handle :: rawptr	// XEvent* on Linux
-} else {
-	event_handle :: rawptr
-}
-
-/// Platform-specific cursor handle type.
-when ODIN_OS == .Windows {
-	Cursor_handle :: rawptr	// HCURSOR handle on Windows
-} else when ODIN_OS == .Darwin {
-	Cursor_handle :: rawptr
-} else when ODIN_OS == .Linux {
-	Cursor_handle :: c.ulong
-} else {
-	Cursor_handle :: rawptr
-}
-
-

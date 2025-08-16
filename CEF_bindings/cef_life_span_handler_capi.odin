@@ -35,7 +35,9 @@ Life_span_handler :: struct {
 	/// browser has not yet been destroyed, then on_before_popup_aborted will be
 	/// called for the opener browser. See on_before_popup_aborted documentation for
 	/// additional details.
-	on_before_popup: proc "c" (self: ^Life_span_handler, browser: ^Browser, frame: ^Frame, popup_id: c.int, target_url: ^cef_string, target_frame_name: ^cef_string, target_disposition: Window_open_disposition, user_gesture: b32, popupFeatures: ^Popup_features, windowInfo: ^Window_info, client: ^^Client, settings: ^Browser_settings, extra_info: ^^cef_dictionary_value, no_javascript_access: ^b32) -> b32,
+	on_before_popup: proc "c" (self: ^Life_span_handler, browser: ^Browser, frame: ^Frame, popup_id: c.int,
+		target_url: ^cef_string, target_frame_name: ^cef_string, target_disposition: Window_open_disposition, user_gesture: b32,
+		popupFeatures: ^Popup_features, windowInfo: ^Window_info, client: ^^Client, settings: ^Browser_settings, extra_info: ^^cef_dictionary_value, no_javascript_access: ^b32) -> b32,
 
 	/// Called on the UI thread if a new popup browser is aborted. This only occurs if the popup is allowed in on_before_popup and creation fails before
 	/// on_after_created is called for the new popup browser. The |browser| value is
@@ -61,7 +63,8 @@ Life_span_handler :: struct {
 	/// Views-hosted source browsers will create Views-hosted DevTools popups unless |use_default_window| is set to to true (1). DevTools popups can be
 	/// blocked by returning true (1) from command_handler::on_chrome_command
 	/// for IDC_DEV_TOOLS. Only used with Chrome style.
-	on_before_dev_tools_popup: proc "c" (self: ^Life_span_handler, browser: ^Browser, windowInfo: ^Window_info, client: ^^Client, settings: ^Browser_settings, extra_info: ^^cef_dictionary_value, use_default_window: ^b32),
+	on_before_dev_tools_popup: proc "c" (self: ^Life_span_handler, browser: ^Browser, windowInfo: ^Window_info,
+		 client: ^^Client,settings: ^Browser_settings, extra_info: ^^cef_dictionary_value, use_default_window: ^b32),
 
 	/// Called after a new browser is created. It is now safe to begin performing actions with |browser|. Frame_handler callbacks related to initial
 	/// main frame creation will arrive before this callback. See

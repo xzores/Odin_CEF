@@ -66,7 +66,7 @@ Drag_data :: struct {
 	/// into |writer|. Returns the number of bytes sent to |writer|. If the
 	/// size of the file is unknown set |max_size| to -1 and the read will
 	/// continue until the file is exhausted.
-	get_file_contents: proc "c" (self: ^Drag_data, writer: ^stream_writer) -> c.size_t,
+	get_file_contents: proc "c" (self: ^Drag_data, writer: ^Stream_writer) -> c.size_t,
 
 	/// Retrieve the list of file names that are being dragged into the browser
 	/// window.

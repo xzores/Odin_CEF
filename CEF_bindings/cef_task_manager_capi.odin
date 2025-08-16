@@ -2,10 +2,6 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for dependencies
-// base_ref_counted is defined in cef_base_capi.odin
-// cef_task_info is defined in cef_types_capi.odin
-
 /// Structure that facilitates managing the browser-related tasks. The functions of this structure may only be called on the UI thread.
 /// NOTE: This struct is allocated DLL-side.
 task_manager :: struct {
@@ -26,7 +22,7 @@ task_manager :: struct {
 
 	/// Gets information about the task with |task_id|. Returns true (1) if the information about the task was successfully retrieved and false (0) if the
 	/// |task_id| is invalid or the function was called from the incorrect thread.
-	get_task_info: proc "c" (self: ^task_manager, task_id: i64, info: ^cef_task_info) -> b32,
+	get_task_info: proc "c" (self: ^task_manager, task_id: i64, info: ^Task_info) -> b32,
 
 	/// Attempts to terminate a task with |task_id|. Returns false (0) if the |task_id| is invalid, the call is made from an incorrect thread, or if the
 	/// task cannot be terminated.

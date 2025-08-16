@@ -25,22 +25,22 @@ App :: struct {
 	/// called. Be cautious when using this function to modify command-line
 	/// arguments for non-browser processes as this may result in undefined
 	/// behavior including crashes.
-	on_before_command_line_processing: proc "c" (self: ^App, process_type: ^cef_string, Command_line: ^Command_line),
+	on_before_command_line_processing: proc "stdcall" (self: ^App, process_type: ^cef_string, Command_line: ^Command_line),
 
 	/// Provides an opportunity to register custom schemes. Do not keep a reference to the |registrar| object. This function is called on the main
 	/// thread for each process and the registered schemes should be the same
 	/// across all processes.
-	on_register_custom_schemes: proc "c" (self: ^App, registrar: ^Scheme_registrar),
+	on_register_custom_schemes: proc "stdcall" (self: ^App, registrar: ^Scheme_registrar),
 
 	/// Return the handler for resource bundle events. If no handler is returned resources will be loaded from pack files. This function is called by the
 	/// browser and render processes on multiple threads.
-	get_resource_bundle_handler: proc "c" (self: ^App) -> ^Resource_bundle_handler,
+	get_resource_bundle_handler: proc "stdcall" (self: ^App) -> ^Resource_bundle_handler,
 
 	/// Return the handler for functionality specific to the browser process. This function is called on multiple threads in the browser process.
-	get_browser_process_handler: proc "c" (self: ^App) -> ^Browser_process_handler,
+	get_browser_process_handler: proc "stdcall" (self: ^App) -> ^Browser_process_handler,
 
 	/// Return the handler for functionality specific to the render process. This function is called on the render process main thread.
-	get_render_process_handler: proc "c" (self: ^App) -> ^Render_process_handler,
+	get_render_process_handler: proc "stdcall" (self: ^App) -> ^Render_process_handler,
 }
 
 @(default_calling_convention="c", link_prefix="cef_", require_results)
@@ -54,7 +54,7 @@ foreign lib {
 	/// return the process exit code. The |application| parameter may be NULL. The
 	/// |windows_sandbox_info| parameter is only used on Windows and may be NULL
 	/// (see cef_sandbox_win.h for details).
-	execute_process :: proc "c" (args: ^cef_main_args, application: ^App, windows_sandbox_info: rawptr) -> c.int ---
+	execute_process :: proc "c" (args: ^Main_args, application: ^App, windows_sandbox_info: rawptr) -> c.int ---
 
 	/// This function should be called on the main application thread to initialize the CEF browser process. The |application| parameter may be NULL. Returns
 	/// true (1) if initialization succeeds. Returns false (0) if initialization
@@ -63,7 +63,7 @@ foreign lib {
 	/// should exit immediately without calling any other CEF functions except,
 	/// optionally, get_exit_code. The |windows_sandbox_info| parameter is only
 	/// used on Windows and may be NULL (see cef_sandbox_win.h for details).
-	initialize :: proc "c" (args: ^cef_main_args, settings: ^cef_settings, application: ^App, windows_sandbox_info: rawptr) -> c.int ---
+	initialize :: proc "c" (args: ^Main_args, settings: ^Settings, application: ^App, windows_sandbox_info: rawptr) -> c.int ---
 
 	/// This function can optionally be called on the main application thread after initialize to retrieve the initialization exit code. When initialize
 	/// returns true (1) the exit code will be 0 (RESULT_CODE_NORMAL_EXIT).

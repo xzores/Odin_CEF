@@ -18,7 +18,7 @@ cef_zip_reader_t :: struct {
 	close: proc "c" (self: ^cef_zip_reader_t) -> b32,
 	get_file_name: proc "c" (self: ^cef_zip_reader_t) -> cef_string_userfree,
 	get_file_size: proc "c" (self: ^cef_zip_reader_t) -> i64,
-	get_file_last_modified: proc "c" (self: ^cef_zip_reader_t) -> cef_time_t,
+	get_file_last_modified: proc "c" (self: ^cef_zip_reader_t) -> Time,
 	open_file: proc "c" (self: ^cef_zip_reader_t, password: ^cef_string) -> b32,
 	close_file: proc "c" (self: ^cef_zip_reader_t) -> b32,
 	read_file: proc "c" (self: ^cef_zip_reader_t, buffer: rawptr, buffer_size: c.size_t) -> c.int,
@@ -28,5 +28,5 @@ cef_zip_reader_t :: struct {
 
 @(default_calling_convention="c")
 foreign lib {
-	cef_zip_reader_create :: proc(stream: ^cef_stream_reader_t) -> ^cef_zip_reader_t ---
+	cef_zip_reader_create :: proc(stream: ^Stream_reader) -> ^cef_zip_reader_t ---
 } 

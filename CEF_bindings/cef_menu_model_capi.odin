@@ -10,68 +10,107 @@ when ODIN_OS == .Windows {
 	foreign import lib "CEF/Release/libcef.dylib"
 }
 
+// Supports creation and modification of menus. Use MENU_ID_USER_FIRST..MENU_ID_USER_LAST for custom IDs.
+// Accessible only on the browser process UI thread.
+// NOTE: This struct is allocated DLL-side.
 Menu_model :: struct {
+	// Base structure.
 	base: base_ref_counted,
-	
-	is_sub_menu: proc "c" (self: ^Menu_model) -> b32,
-	clear: proc "c" (self: ^Menu_model) -> b32,
+
+	// True if this menu is a submenu.
+	is_sub_menu: proc "c" (self: ^Menu_model) -> c.int,
+
+	// Clear the menu. Returns 1 on success.
+	clear: proc "c" (self: ^Menu_model) -> c.int,
+
+	// Number of items in this menu.
 	get_count: proc "c" (self: ^Menu_model) -> c.size_t,
-	add_separator: proc "c" (self: ^Menu_model) -> b32,
-	add_item: proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string) -> b32,
-	add_check_item: proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string) -> b32,
-	add_radio_item: proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string, group_id: c.int) -> b32,
-	add_sub_menu: proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string) -> ^Menu_model,
-	insert_separator_at: proc "c" (self: ^Menu_model, index: c.size_t) -> b32,
-	insert_item_at: proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int, label: ^cef_string) -> b32,
-	insert_check_item_at: proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int, label: ^cef_string) -> b32,
-	insert_radio_item_at: proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int, label: ^cef_string, group_id: c.int) -> b32,
-	insert_sub_menu_at: proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int, label: ^cef_string) -> ^Menu_model,
-	remove: proc "c" (self: ^Menu_model, command_id: c.int) -> b32,
-	remove_at: proc "c" (self: ^Menu_model, index: c.size_t) -> b32,
-	get_index_of: proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
-	get_command_id_at: proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
-	set_command_id_at: proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int) -> b32,
-	get_label: proc "c" (self: ^Menu_model, command_id: c.int) -> cef_string_userfree,
+
+	// Add items.
+	add_separator:  proc "c" (self: ^Menu_model) -> c.int,
+	add_item:       proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string) -> c.int,
+	add_check_item: proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string) -> c.int,
+	add_radio_item: proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string, group_id: c.int) -> c.int,
+	add_sub_menu:   proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string) -> ^Menu_model,
+
+	// Insert items at index.
+	insert_separator_at:  proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
+	insert_item_at:       proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int, label: ^cef_string) -> c.int,
+	insert_check_item_at: proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int, label: ^cef_string) -> c.int,
+	insert_radio_item_at: proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int, label: ^cef_string, group_id: c.int) -> c.int,
+	insert_sub_menu_at:   proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int, label: ^cef_string) -> ^Menu_model,
+
+	// Remove by command_id or index.
+	remove:    proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
+	remove_at: proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
+
+	// Lookups.
+	get_index_of:     proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
+	get_command_id_at:proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
+	set_command_id_at:proc "c" (self: ^Menu_model, index: c.size_t, command_id: c.int) -> c.int,
+
+	// Labels (free returned strings with cef_string_userfree_free).
+	get_label:    proc "c" (self: ^Menu_model, command_id: c.int) -> cef_string_userfree,
 	get_label_at: proc "c" (self: ^Menu_model, index: c.size_t) -> cef_string_userfree,
-	set_label: proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string) -> b32,
-	set_label_at: proc "c" (self: ^Menu_model, index: c.size_t, label: ^cef_string) -> b32,
-	get_type: proc "c" (self: ^Menu_model, command_id: c.int) -> cef_menu_item_type_t,
-	get_type_at: proc "c" (self: ^Menu_model, index: c.size_t) -> cef_menu_item_type_t,
-	get_group_id: proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
+	set_label:    proc "c" (self: ^Menu_model, command_id: c.int, label: ^cef_string) -> c.int,
+	set_label_at: proc "c" (self: ^Menu_model, index: c.size_t, label: ^cef_string) -> c.int,
+
+	// Item type.
+	get_type:    proc "c" (self: ^Menu_model, command_id: c.int) -> Menu_item_type,
+	get_type_at: proc "c" (self: ^Menu_model, index: c.size_t) -> Menu_item_type,
+
+	// Group IDs.
+	get_group_id:    proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
 	get_group_id_at: proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
-	set_group_id: proc "c" (self: ^Menu_model, command_id: c.int, group_id: c.int) -> b32,
-	set_group_id_at: proc "c" (self: ^Menu_model, index: c.size_t, group_id: c.int) -> b32,
-	get_sub_menu: proc "c" (self: ^Menu_model, command_id: c.int) -> ^Menu_model,
+	set_group_id:    proc "c" (self: ^Menu_model, command_id: c.int, group_id: c.int) -> c.int,
+	set_group_id_at: proc "c" (self: ^Menu_model, index: c.size_t, group_id: c.int) -> c.int,
+
+	// Submenus.
+	get_sub_menu:    proc "c" (self: ^Menu_model, command_id: c.int) -> ^Menu_model,
 	get_sub_menu_at: proc "c" (self: ^Menu_model, index: c.size_t) -> ^Menu_model,
-	is_visible: proc "c" (self: ^Menu_model, command_id: c.int) -> b32,
-	is_visible_at: proc "c" (self: ^Menu_model, index: c.size_t) -> b32,
-	set_visible: proc "c" (self: ^Menu_model, command_id: c.int, visible: b32) -> b32,
-	set_visible_at: proc "c" (self: ^Menu_model, index: c.size_t, visible: b32) -> b32,
-	is_enabled: proc "c" (self: ^Menu_model, command_id: c.int) -> b32,
-	is_enabled_at: proc "c" (self: ^Menu_model, index: c.size_t) -> b32,
-	set_enabled: proc "c" (self: ^Menu_model, command_id: c.int, enabled: b32) -> b32,
-	set_enabled_at: proc "c" (self: ^Menu_model, index: c.size_t, enabled: b32) -> b32,
-	is_checked: proc "c" (self: ^Menu_model, command_id: c.int) -> b32,
-	is_checked_at: proc "c" (self: ^Menu_model, index: c.size_t) -> b32,
-	set_checked: proc "c" (self: ^Menu_model, command_id: c.int, checked: b32) -> b32,
-	set_checked_at: proc "c" (self: ^Menu_model, index: c.size_t, checked: b32) -> b32,
-	has_accelerator: proc "c" (self: ^Menu_model, command_id: c.int) -> b32,
-	has_accelerator_at: proc "c" (self: ^Menu_model, index: c.size_t) -> b32,
-	set_accelerator: proc "c" (self: ^Menu_model, command_id: c.int, key_code: c.int, shift_pressed: b32, ctrl_pressed: b32, alt_pressed: b32) -> b32,
-	set_accelerator_at: proc "c" (self: ^Menu_model, index: c.size_t, key_code: c.int, shift_pressed: b32, ctrl_pressed: b32, alt_pressed: b32) -> b32,
-	remove_accelerator: proc "c" (self: ^Menu_model, command_id: c.int) -> b32,
-	remove_accelerator_at: proc "c" (self: ^Menu_model, index: c.size_t) -> b32,
-	get_accelerator: proc "c" (self: ^Menu_model, command_id: c.int, key_code: ^c.int, shift_pressed: ^b32, ctrl_pressed: ^b32, alt_pressed: ^b32) -> b32,
-	get_accelerator_at: proc "c" (self: ^Menu_model, index: c.size_t, key_code: ^c.int, shift_pressed: ^b32, ctrl_pressed: ^b32, alt_pressed: ^b32) -> b32,
-	set_color: proc "c" (self: ^Menu_model, command_id: c.int, color_type: cef_menu_color_type_t, color: cef_color) -> b32,
-	set_color_at: proc "c" (self: ^Menu_model, index: c.int, color_type: cef_menu_color_type_t, color: cef_color) -> b32,
-	get_color: proc "c" (self: ^Menu_model, command_id: c.int, color_type: cef_menu_color_type_t, color: ^cef_color) -> b32,
-	get_color_at: proc "c" (self: ^Menu_model, index: c.int, color_type: cef_menu_color_type_t, color: ^cef_color) -> b32,
-	set_font_list: proc "c" (self: ^Menu_model, command_id: c.int, font_list: ^cef_string) -> b32,
-	set_font_list_at: proc "c" (self: ^Menu_model, index: c.int, font_list: ^cef_string) -> b32,
+
+	// Visibility.
+	is_visible:    proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
+	is_visible_at: proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
+	set_visible:   proc "c" (self: ^Menu_model, command_id: c.int, visible: c.int) -> c.int,
+	set_visible_at:proc "c" (self: ^Menu_model, index: c.size_t, visible: c.int) -> c.int,
+
+	// Enabled.
+	is_enabled:    proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
+	is_enabled_at: proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
+	set_enabled:   proc "c" (self: ^Menu_model, command_id: c.int, enabled: c.int) -> c.int,
+	set_enabled_at:proc "c" (self: ^Menu_model, index: c.size_t, enabled: c.int) -> c.int,
+
+	// Checked (check/radio items).
+	is_checked:    proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
+	is_checked_at: proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
+	set_checked:   proc "c" (self: ^Menu_model, command_id: c.int, checked: c.int) -> c.int,
+	set_checked_at:proc "c" (self: ^Menu_model, index: c.size_t, checked: c.int) -> c.int,
+
+	// Keyboard accelerators.
+	has_accelerator:    proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
+	has_accelerator_at: proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
+	set_accelerator:    proc "c" (self: ^Menu_model, command_id: c.int, key_code: c.int, shift_pressed: c.int, ctrl_pressed: c.int, alt_pressed: c.int) -> c.int,
+	set_accelerator_at: proc "c" (self: ^Menu_model, index: c.size_t, key_code: c.int, shift_pressed: c.int, ctrl_pressed: c.int, alt_pressed: c.int) -> c.int,
+	remove_accelerator: proc "c" (self: ^Menu_model, command_id: c.int) -> c.int,
+	remove_accelerator_at: proc "c" (self: ^Menu_model, index: c.size_t) -> c.int,
+	get_accelerator:    proc "c" (self: ^Menu_model, command_id: c.int, key_code: ^c.int, shift_pressed: ^c.int, ctrl_pressed: ^c.int, alt_pressed: ^c.int) -> c.int,
+	get_accelerator_at: proc "c" (self: ^Menu_model, index: c.size_t, key_code: ^c.int, shift_pressed: ^c.int, ctrl_pressed: ^c.int, alt_pressed: ^c.int) -> c.int,
+
+	// Colors.
+	set_color:    proc "c" (self: ^Menu_model, command_id: c.int, color_type: Menu_color_type, color: cef_color) -> c.int,
+	set_color_at: proc "c" (self: ^Menu_model, index: c.int, color_type: Menu_color_type, color: cef_color) -> c.int,
+	get_color:    proc "c" (self: ^Menu_model, command_id: c.int, color_type: Menu_color_type, color: ^cef_color) -> c.int,
+	get_color_at: proc "c" (self: ^Menu_model, index: c.int, color_type: Menu_color_type, color: ^cef_color) -> c.int,
+
+	// Fonts (description format: "<FAMILY_LIST>,[STYLES] <SIZE>px").
+	set_font_list:    proc "c" (self: ^Menu_model, command_id: c.int, font_list: ^cef_string) -> c.int,
+	set_font_list_at: proc "c" (self: ^Menu_model, index: c.int, font_list: ^cef_string) -> c.int,
 }
 
-@(default_calling_convention="c")
+
+/// Create a new MenuModel with the specified |delegate|.
+@(default_calling_convention="c", link_prefix="cef_", require_results)
 foreign lib {
-	Menu_model_create :: proc(delegate: ^Menu_model_delegate_t) -> ^Menu_model ---
-} 
+	menu_model_create :: proc "c" (delegate: ^Menu_model_delegate) -> ^Menu_model ---
+}

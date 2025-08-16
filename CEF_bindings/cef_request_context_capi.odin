@@ -152,9 +152,9 @@ foreign lib {
 	request_context_get_global_context :: proc "c" () -> ^Request_context ---
 
 	// Creates a new context object with the specified |settings| and optional |handler|.
-	request_context_create_context :: proc "c" (settings: ^cef_request_context_settings, handler: ^cef_request_context_handler) -> ^Request_context ---
+	request_context_create_context :: proc "c" (settings: ^Request_context_settings, handler: ^Request_context_handler) -> ^Request_context ---
 
 	// Creates a new context object that shares storage with |other| and uses an optional |handler|.
 	// (Symbol name per header snippet.)
-	request_context_cef_create_context_shared :: proc "c" (other: ^Request_context, handler: ^cef_request_context_handler) -> ^Request_context ---
+	request_context_cef_create_context_shared :: proc "c" (other: ^Request_context, handler: ^Request_context_handler) -> ^Request_context ---
 }

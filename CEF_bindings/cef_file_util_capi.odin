@@ -10,14 +10,41 @@ when ODIN_OS == .Windows {
 	foreign import lib "CEF/Release/libcef.dylib"
 }
 
-@(default_calling_convention="c")
+@(default_calling_convention="c", link_prefix="cef_", require_results)
 foreign lib {
-	cef_create_directory :: proc(full_path: ^cef_string) -> b32 ---
-	cef_get_temp_directory :: proc(temp_dir: ^cef_string) -> b32 ---
-	cef_create_new_temp_directory :: proc(prefix: ^cef_string, new_temp_path: ^cef_string) -> b32 ---
-	cef_create_temp_directory_in_directory :: proc(base_dir: ^cef_string, prefix: ^cef_string, new_dir: ^cef_string) -> b32 ---
-	cef_directory_exists :: proc(path: ^cef_string) -> b32 ---
-	cef_delete_file :: proc(path: ^cef_string, recursive: b32) -> b32 ---
-	cef_zip_directory :: proc(src_dir: ^cef_string, dest_file: ^cef_string, include_hidden_files: b32) -> b32 ---
-	cef_load_crlsets_file :: proc(path: ^cef_string) ---
-} 
+	// Creates a directory (and parents if needed). Returns 1 on success or if it already exists.
+	// Directory is readable only by the current user. Not allowed on browser UI/IO threads.
+	create_directory :: proc "c" (full_path: ^cef_string) -> c.int ---
+
+	// Get the system temporary directory.
+	// WARNING: Prefer the temp-directory variants below which set safer permissions.
+	get_temp_directory :: proc "c" (temp_dir: ^cef_string) -> c.int ---
+
+	// Creates a new temp directory. On Windows, if |prefix| is provided the name is "prefixyyyy".
+	// Returns 1 on success and sets |new_temp_path|. Readable only by current user.
+	// Not allowed on browser UI/IO threads.
+	create_new_temp_directory :: proc "c" (prefix: ^cef_string, new_temp_path: ^cef_string) -> c.int ---
+
+	// Creates a temp directory inside |base_dir| with a unique name based on |prefix|.
+	// Returns 1 on success and sets |new_dir|. Readable only by current user.
+	// Not allowed on browser UI/IO threads.
+	create_temp_directory_in_directory :: proc "c" (base_dir: ^cef_string, prefix: ^cef_string, new_dir: ^cef_string) -> c.int ---
+
+	// Returns 1 if the given path exists and is a directory.
+	// Not allowed on browser UI/IO threads.
+	directory_exists :: proc "c" (path: ^cef_string) -> c.int ---
+
+	// Deletes |path| (file or directory). If directory, all contents are deleted.
+	// If |recursive|=1, also deletes subdirectories (like "rm -rf"). On POSIX, a symlink deletion
+	// removes only the link. Returns 1 on success or if |path| does not exist.
+	// Not allowed on browser UI/IO threads.
+	delete_file :: proc "c" (path: ^cef_string, recursive: c.int) -> c.int ---
+
+	// Zips the contents of |src_dir| into |dest_file|. If |include_hidden_files|=1, includes dotfiles.
+	// Returns 1 on success. Not allowed on browser UI/IO threads.
+	zip_directory :: proc "c" (src_dir: ^cef_string, dest_file: ^cef_string, include_hidden_files: c.int) -> c.int ---
+
+	// Loads the existing Chrome "Certificate Revocation Lists" (CRLSets) file.
+	// Call in the browser process after context initialization.
+	load_crlsets_file :: proc "c" (path: ^cef_string) ---
+}

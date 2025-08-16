@@ -12,5 +12,5 @@ when ODIN_OS == .Windows {
 
 @(default_calling_convention="c")
 foreign lib {
-	cef_get_path :: proc(key: cef_path_key_t, path: ^cef_string) -> b32 ---
+	cef_get_path :: proc(key: Path_key, path: ^cef_string) -> b32 ---
 } 

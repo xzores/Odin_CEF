@@ -2,10 +2,6 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for dependencies
-// base_ref_counted is defined in cef_base_capi.odin
-// cef_string is defined in cef_string_capi.odin
-
 /// Implement this structure to receive string values asynchronously.
 /// NOTE: This struct is allocated client-side.
 ///

@@ -10,17 +10,13 @@ when ODIN_OS == .Windows {
 	foreign import lib "CEF/Release/libcef.dylib"
 }
 
-// Forward declarations for enums and types
-cef_xml_node_type_t :: enum c.int {}
-cef_xml_encoding_type_t :: enum c.int {}
-
 cef_xml_reader_t :: struct {
 	base: base_ref_counted,
 	move_to_next_node: proc "c" (self: ^cef_xml_reader_t) -> b32,
 	close: proc "c" (self: ^cef_xml_reader_t) -> b32,
 	has_error: proc "c" (self: ^cef_xml_reader_t) -> b32,
 	get_error: proc "c" (self: ^cef_xml_reader_t) -> cef_string_userfree,
-	get_type: proc "c" (self: ^cef_xml_reader_t) -> cef_xml_node_type_t,
+	get_type: proc "c" (self: ^cef_xml_reader_t) -> Xml_node_type,
 	get_depth: proc "c" (self: ^cef_xml_reader_t) -> c.int,
 	get_local_name: proc "c" (self: ^cef_xml_reader_t) -> cef_string_userfree,
 	get_prefix: proc "c" (self: ^cef_xml_reader_t) -> cef_string_userfree,
@@ -49,5 +45,5 @@ cef_xml_reader_t :: struct {
 
 @(default_calling_convention="c")
 foreign lib {
-	cef_xml_reader_create :: proc(stream: ^cef_stream_reader_t, encoding_type: cef_xml_encoding_type_t, uri: ^cef_string) -> ^cef_xml_reader_t ---
+	cef_xml_reader_create :: proc(stream: ^Stream_reader, encoding_type: Xml_encoding_type, uri: ^cef_string) -> ^cef_xml_reader_t ---
 } 

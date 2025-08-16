@@ -2,11 +2,6 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for dependencies
-// base_ref_counted is defined in cef_base_capi.odin
-// Completion_callback is defined in cef_callback_capi.odin
-// cef_string is defined in cef_string_capi.odin
-
 /// Implement this structure to receive notification when tracing has completed. The functions of this structure will be called on the browser process UI
 /// thread.
 /// NOTE: This struct is allocated client-side.

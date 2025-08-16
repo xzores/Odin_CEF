@@ -54,9 +54,9 @@ foreign lib {
 	// The |request| object will be marked read-only after this call.
 	urlrequest_create :: proc "c" (
 		request: ^Request,
-		client: ^cef_urlrequest_client,
+		client: ^Url_request_client,
 		Request_context: ^Request_context,
-	) -> ^cef_urlrequest ---
+	) -> ^Url_request ---
 }
 
 /// Structure that should be implemented by the Url_request client. The functions of this structure will be called on the same thread that created

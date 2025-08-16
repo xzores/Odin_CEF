@@ -10,28 +10,85 @@ when ODIN_OS == .Windows {
 	foreign import lib "CEF/Release/libcef.dylib"
 }
 
-// cef_preference_registrar_t :: struct {}
+// ---- Compile-time feature gate --------------------------------------------
+// Keep this in sync with your CEF build.
+CEF_VERSION_MAJOR   :: 139
+CEF_HAS_API_13401   :: CEF_VERSION_MAJOR >= 134
+// ---------------------------------------------------------------------------
 
-cef_preference_observer_t :: struct {
-	base: base_ref_counted,
-	
-	on_preference_changed: proc "c" (self: ^cef_preference_observer_t, name: ^cef_string),
+// Manages custom preference registrations. (Allocated DLL-side.)
+Preference_registrar :: struct {
+	base: base_scoped,
+
+	// Register a preference with |name| and |default_value|. Returns true (1) on success.
+	// Must be called from Browser_process_handler.on_register_custom_preferences.
+	add_preference: proc "c" (
+		self: ^Preference_registrar,
+		name: ^cef_string,
+		default_value: ^cef_value,
+	) -> c.int,
 }
 
-cef_preference_manager_t :: struct {
-	base: base_ref_counted,
-	
-	has_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string) -> b32,
-	get_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string) -> ^cef_value,
-	get_all_preferences: proc "c" (self: ^cef_preference_manager_t, include_defaults: b32) -> ^cef_dictionary_value,
-	can_set_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string) -> b32,
-	set_preference: proc "c" (self: ^cef_preference_manager_t, name: ^cef_string, value: ^cef_value, error: ^cef_string) -> b32,
-	clear_preferences: proc "c" (self: ^cef_preference_manager_t, error: ^cef_string) -> b32,
+// Observe preference changes. Registered via Preference_manager.add_preference_observer.
+// (Allocated client-side.)
+when CEF_HAS_API_13401 {
+	Preference_observer :: struct {
+		base: base_ref_counted,
+
+		// Called when a preference has changed.
+		on_preference_changed: proc "c" (
+			self: ^Preference_observer,
+			name: ^cef_string,
+		)
+	}
 }
 
-@(default_calling_convention="c")
+// Manage access to preferences. (Allocated DLL-side.)
+Preference_manager :: struct {
+	base: base_ref_counted,
+
+	// Returns true (1) if a preference named |name| exists. UI thread.
+	has_preference: proc "c" (self: ^Preference_manager, name: ^cef_string) -> c.int,
+
+	// Get the value for preference |name| (copy). Returns NULL if it doesn't exist. UI thread.
+	get_preference: proc "c" (self: ^Preference_manager, name: ^cef_string) -> ^cef_value,
+
+	// Get all preferences as a dictionary (copy). If |include_defaults| is true (1) include defaults. UI thread.
+	get_all_preferences: proc "c" (self: ^Preference_manager, include_defaults: c.int) -> ^cef_dictionary_value,
+
+	// Returns true (1) if preference |name| can be modified via set_preference. UI thread.
+	can_set_preference: proc "c" (self: ^Preference_manager, name: ^cef_string) -> c.int,
+
+	// Set |value| for preference |name|. If |value| is NULL restore default. UI thread.
+	// On failure returns false (0) and populates |error|.
+	set_preference: proc "c" (
+		self: ^Preference_manager,
+		name: ^cef_string,
+		value: ^cef_value,
+		error: ^cef_string,
+	) -> c.int,
+
+	/* TODO
+	// Added in 13401+
+	when CEF_HAS_API_13401 {
+		// Add an observer for preference changes. If |name| is NULL observe all. UI thread.
+		add_preference_observer: proc "c" (
+			self: ^Preference_manager,
+			name: ^cef_string,
+			observer: ^Preference_observer,
+		) -> ^registration,
+	}
+	*/
+}
+
+@(default_calling_convention="c", link_prefix="cef_", require_results)
 foreign lib {
-	cef_preference_manager_get_chrome_variations_as_switches :: proc() -> string_list ---
-	cef_preference_manager_get_chrome_variations_as_strings :: proc() -> string_list ---
-	cef_preference_manager_get_global :: proc() -> ^cef_preference_manager_t ---
-} 
+	// Variations helpers (13401+). UI thread.
+	when CEF_HAS_API_13401 {
+		preference_manager_get_chrome_variations_as_switches :: proc "c" (switches: string_list) ---
+		preference_manager_get_chrome_variations_as_strings  :: proc "c" (strings:  string_list) ---
+	}
+
+	// Returns the global preference manager object.
+	preference_manager_get_global :: proc "c" () -> ^Preference_manager ---
+}

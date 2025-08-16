@@ -80,7 +80,7 @@ main :: proc() {
 	fmt.println("Translator test double value: (would call get_double)")
 	
 	// Initialize CEF
-	settings: cef.cef_settings
+	settings: cef.Settings
 	// cef.cef_settings_initialize(&settings)
 	
 	// Set up app

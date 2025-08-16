@@ -2,6 +2,14 @@ package odin_cef
 
 import "core:c"
 
+when ODIN_OS == .Windows {
+	foreign import lib "CEF/Release/libcef.lib"
+} else when ODIN_OS == .Linux {
+	foreign import lib "CEF/Release/libcef.so"
+} else when ODIN_OS == .Darwin {
+	foreign import lib "CEF/Release/libcef.dylib"
+}
+
 // Structure that wraps other data value types. Complex types (binary, dictionary and list)
 // will be referenced but not owned by this object. Can be used on any process and thread.
 // NOTE: This struct is allocated DLL-side.

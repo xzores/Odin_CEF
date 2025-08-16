@@ -16,7 +16,7 @@ base_ref_counted :: struct {
 
 	/// Returns true (1) if the current reference count is 1.
 	has_one_ref: proc "c" (self: ^base_ref_counted) -> b32,
-
+	
 	/// Returns true (1) if the current reference count is at least 1.
 	has_at_least_one_ref: proc "c" (self: ^base_ref_counted) -> b32,
 }

@@ -17,4 +17,5 @@ cef_shared_process_message_builder_t :: struct {
 	size: proc "c" (self: ^cef_shared_process_message_builder_t) -> c.size_t,
 	memory: proc "c" (self: ^cef_shared_process_message_builder_t) -> rawptr,
 	build: proc "c" (self: ^cef_shared_process_message_builder_t) -> ^cef_process_message_t,
-} 
+}
+

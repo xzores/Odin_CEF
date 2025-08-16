@@ -2,10 +2,6 @@ package odin_cef
 
 import "core:c"
 
-// Forward declarations for dependencies
-// base_ref_counted is defined in cef_base_capi.odin
-// cef_thread_id is defined in cef_types_capi.odin
-
 /// Implement this structure for asynchronous task execution. If the task is posted successfully and if the associated message loop is still running then
 /// the execute() function will be called on the target thread. If the task
 /// fails to post then the task object may be destroyed on the source thread
