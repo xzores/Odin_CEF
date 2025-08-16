@@ -10,5 +10,5 @@ string_visitor :: struct {
 	base: base_ref_counted,
 
 	/// Method that will be executed.
-	visit: proc "c" (self: ^string_visitor, string: ^cef_string),
+	visit: proc "system" (self: ^string_visitor, string: ^cef_string),
 } 

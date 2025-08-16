@@ -10,13 +10,13 @@ Cookie_manager :: struct {
 
 	/// Visit all cookies on the UI thread. The returned cookies are ordered by longest path, then by earliest creation date. Returns false (0) if cookies
 	/// cannot be accessed.
-	visit_all_cookies: proc "c" (self: ^Cookie_manager, visitor: ^Cookie_visitor) -> b32,
+	visit_all_cookies: proc "system" (self: ^Cookie_manager, visitor: ^Cookie_visitor) -> b32,
 
 	/// Visit a subset of cookies on the UI thread. The results are filtered by the given url scheme, host, domain and path. If |includeHttpOnly| is true
 	/// (1) HTTP-only cookies will also be included in the results. The returned
 	/// cookies are ordered by longest path, then by earliest creation date.
 	/// Returns false (0) if cookies cannot be accessed.
-	visit_url_cookies: proc "c" (self: ^Cookie_manager, url: ^cef_string, includeHttpOnly: b32, visitor: ^Cookie_visitor) -> b32,
+	visit_url_cookies: proc "system" (self: ^Cookie_manager, url: ^cef_string, includeHttpOnly: b32, visitor: ^Cookie_visitor) -> b32,
 
 	/// Sets a cookie given a valid URL and explicit user-provided cookie attributes. This function expects each attribute to be well-formed. It
 	/// will check for disallowed characters (e.g. the ';' character is disallowed
@@ -24,7 +24,7 @@ Cookie_manager :: struct {
 	/// such characters are found. If |callback| is non-NULL it will be executed
 	/// asnychronously on the UI thread after the cookie has been set. Returns
 	/// false (0) if an invalid URL is specified or if cookies cannot be accessed.
-	set_cookie: proc "c" (self: ^Cookie_manager, url: ^cef_string, cookie: ^cef_cookie, callback: ^Set_cookie_callback) -> b32,
+	set_cookie: proc "system" (self: ^Cookie_manager, url: ^cef_string, cookie: ^cef_cookie, callback: ^Set_cookie_callback) -> b32,
 
 	/// Delete all cookies that match the specified parameters. If both |url| and |cookie_name| values are specified all host and domain cookies matching
 	/// both will be deleted. If only |url| is specified all host cookies (but not
@@ -34,11 +34,11 @@ Cookie_manager :: struct {
 	/// have been deleted. Returns false (0) if a non-NULL invalid URL is
 	/// specified or if cookies cannot be accessed. Cookies can alternately be
 	/// deleted using the Visit*Cookies() functions.
-	delete_cookies: proc "c" (self: ^Cookie_manager, url: ^cef_string, cookie_name: ^cef_string, callback: ^Delete_cookies_callback) -> b32,
+	delete_cookies: proc "system" (self: ^Cookie_manager, url: ^cef_string, cookie_name: ^cef_string, callback: ^Delete_cookies_callback) -> b32,
 
 	/// Flush the backing store (if any) to disk. If |callback| is non-NULL it will be executed asnychronously on the UI thread after the flush is
 	/// complete. Returns false (0) if cookies cannot be accessed.
-	flush_store: proc "c" (self: ^Cookie_manager, callback: ^Completion_callback) -> b32,
+	flush_store: proc "system" (self: ^Cookie_manager, callback: ^Completion_callback) -> b32,
 }
 
 /// Returns the global cookie manager. By default data will be stored at cef_settings.cache_path if specified or in memory otherwise. If |callback|
@@ -46,7 +46,7 @@ Cookie_manager :: struct {
 /// manager's storage has been initialized. Using this function is equivalent to
 /// calling Request_context::get_global_context()->get_default_cookie_manager().
 ///
-get_global_manager :: proc "c" (callback: ^Completion_callback) -> ^Cookie_manager
+get_global_manager :: proc "system" (callback: ^Completion_callback) -> ^Cookie_manager
 
 /// Structure to implement for visiting cookie values. The functions of this structure will always be called on the UI thread.
 /// NOTE: This struct is allocated client-side.
@@ -58,7 +58,7 @@ Cookie_visitor :: struct {
 	/// |deleteCookie| to true (1) to delete the cookie currently being visited.
 	/// Return false (0) to stop visiting cookies. This function may never be
 	/// called if no cookies are found.
-	visit: proc "c" (self: ^Cookie_visitor, cookie: ^cef_cookie, count: c.int, total: c.int, deleteCookie: ^c.int) -> b32,
+	visit: proc "system" (self: ^Cookie_visitor, cookie: ^cef_cookie, count: c.int, total: c.int, deleteCookie: ^c.int) -> b32,
 }
 
 /// Structure to implement to be notified of asynchronous completion via Cookie_manager::set_cookie().
@@ -68,7 +68,7 @@ Set_cookie_callback :: struct {
 	base: base_ref_counted,
 
 	/// Method that will be called upon completion. |success| will be true (1) if the cookie was set successfully.
-	on_complete: proc "c" (self: ^Set_cookie_callback, success: b32),
+	on_complete: proc "system" (self: ^Set_cookie_callback, success: b32),
 }
 
 /// Structure to implement to be notified of asynchronous completion via Cookie_manager::delete_cookies().
@@ -78,5 +78,5 @@ Delete_cookies_callback :: struct {
 	base: base_ref_counted,
 
 	/// Method that will be called upon completion. |num_deleted| will be the number of cookies that were deleted or -1 if unknown.
-	on_complete: proc "c" (self: ^Delete_cookies_callback, num_deleted: c.int),
+	on_complete: proc "system" (self: ^Delete_cookies_callback, num_deleted: c.int),
 } 

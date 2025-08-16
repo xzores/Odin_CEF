@@ -13,6 +13,6 @@ when ODIN_OS == .Windows {
 cef_menu_button_delegate_t :: struct {
 	base: cef_button_delegate_t,
 	
-	on_menu_button_pressed: proc "c" (self: ^cef_menu_button_delegate_t, menu_button: ^cef_menu_button_t),
-	get_menu_model: proc "c" (self: ^cef_menu_button_delegate_t, menu_button: ^cef_menu_button_t) -> ^Menu_model,
+	on_menu_button_pressed: proc "system" (self: ^cef_menu_button_delegate_t, menu_button: ^cef_menu_button_t),
+	get_menu_model: proc "system" (self: ^cef_menu_button_delegate_t, menu_button: ^cef_menu_button_t) -> ^Menu_model,
 } 

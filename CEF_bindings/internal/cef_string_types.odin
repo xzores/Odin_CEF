@@ -17,22 +17,22 @@ when ODIN_OS == .Windows {
 cef_string_wide :: struct {
 	str:   ^c.wchar_t,
 	length: c.size_t,
-	dtor:  proc "c" (str: ^c.wchar_t),
+	dtor:  proc "system" (str: ^c.wchar_t),
 }
 
 cef_string_utf8 :: struct {
 	str:   ^u8,
 	length: c.size_t,
-	dtor:  proc "c" (str: ^u8),
+	dtor:  proc "system" (str: ^u8),
 }
 
 cef_string_utf16 :: struct {
 	str:   ^u16,
 	length: c.size_t,
-	dtor:  proc "c" (str: ^u16),
+	dtor:  proc "system" (str: ^u16),
 }
 
-@(default_calling_convention="c", link_prefix="cef_", require_results)
+@(default_calling_convention="system", link_prefix="cef_", require_results)
 foreign lib {
 	// Set string values. If `copy` is 1 the value will be copied.
 	string_wide_set  :: proc (src: ^c.wchar_t, src_len: c.size_t, output: ^cef_string_wide,  copy: c.int) -> c.int ---

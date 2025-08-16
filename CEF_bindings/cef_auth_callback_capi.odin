@@ -9,8 +9,8 @@ auth_callback :: struct {
 	base: base_ref_counted,
 
 	/// Continue the authentication request.
-	cont: proc "c" (self: ^auth_callback, username: ^cef_string, password: ^cef_string),
+	cont: proc "system" (self: ^auth_callback, username: ^cef_string, password: ^cef_string),
 
 	/// Cancel the authentication request.
-	cancel: proc "c" (self: ^auth_callback),
+	cancel: proc "system" (self: ^auth_callback),
 } 

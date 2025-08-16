@@ -13,5 +13,5 @@ when ODIN_OS == .Windows {
 cef_panel_delegate_t :: struct {
 	base: cef_view_delegate_t,
 	
-	on_panel_bounds_changed: proc "c" (self: ^cef_panel_delegate_t, panel: ^cef_panel_t),
+	on_panel_bounds_changed: proc "system" (self: ^cef_panel_delegate_t, panel: ^cef_panel_t),
 } 

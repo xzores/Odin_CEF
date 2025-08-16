@@ -20,7 +20,7 @@ when ODIN_OS == .Windows {
 // - |id| is used to disambiguate counters with the same name, or match async
 //	 trace events
 
-@(default_calling_convention="c", link_prefix="cef_", require_results)
+@(default_calling_convention="system", link_prefix="cef_", require_results)
 foreign lib {
 	trace_event_instant :: proc (category: cstring, name: cstring, arg1_name: cstring, arg1_val: u64, arg2_name: cstring, arg2_val: u64) ---
 	trace_event_begin :: proc (category: cstring, name: cstring, arg1_name: cstring, arg1_val: u64, arg2_name: cstring, arg2_val: u64) ---

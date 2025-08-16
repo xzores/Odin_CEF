@@ -35,7 +35,7 @@ Life_span_handler :: struct {
 	/// browser has not yet been destroyed, then on_before_popup_aborted will be
 	/// called for the opener browser. See on_before_popup_aborted documentation for
 	/// additional details.
-	on_before_popup: proc "c" (self: ^Life_span_handler, browser: ^Browser, frame: ^Frame, popup_id: c.int,
+	on_before_popup: proc "system" (self: ^Life_span_handler, browser: ^Browser, frame: ^Frame, popup_id: c.int,
 		target_url: ^cef_string, target_frame_name: ^cef_string, target_disposition: Window_open_disposition, user_gesture: b32,
 		popupFeatures: ^Popup_features, windowInfo: ^Window_info, client: ^^Client, settings: ^Browser_settings, extra_info: ^^cef_dictionary_value, no_javascript_access: ^b32) -> b32,
 
@@ -49,7 +49,7 @@ Life_span_handler :: struct {
 	/// may be called before this function in cases where the opener is closing
 	/// during popup creation, in which case browser_host::is_valid will
 	/// return false (0) in this function.
-	on_before_popup_aborted: proc "c" (self: ^Life_span_handler, browser: ^Browser, popup_id: c.int),
+	on_before_popup_aborted: proc "system" (self: ^Life_span_handler, browser: ^Browser, popup_id: c.int),
 
 	/// Called on the UI thread before a new DevTools popup browser is created. The |browser| value represents the source of the popup request. Optionally
 	/// modify |windowInfo|, |client|, |settings| and |extra_info| values. The
@@ -63,13 +63,13 @@ Life_span_handler :: struct {
 	/// Views-hosted source browsers will create Views-hosted DevTools popups unless |use_default_window| is set to to true (1). DevTools popups can be
 	/// blocked by returning true (1) from command_handler::on_chrome_command
 	/// for IDC_DEV_TOOLS. Only used with Chrome style.
-	on_before_dev_tools_popup: proc "c" (self: ^Life_span_handler, browser: ^Browser, windowInfo: ^Window_info,
+	on_before_dev_tools_popup: proc "system" (self: ^Life_span_handler, browser: ^Browser, windowInfo: ^Window_info,
 		 client: ^^Client,settings: ^Browser_settings, extra_info: ^^cef_dictionary_value, use_default_window: ^b32),
 
 	/// Called after a new browser is created. It is now safe to begin performing actions with |browser|. Frame_handler callbacks related to initial
 	/// main frame creation will arrive before this callback. See
 	/// Frame_handler documentation for additional usage information.
-	on_after_created: proc "c" (self: ^Life_span_handler, browser: ^Browser),
+	on_after_created: proc "system" (self: ^Life_span_handler, browser: ^Browser),
 
 	/// Called when an Alloy style browser is ready to be closed, meaning that the close has already been initiated and that JavaScript unload handlers have
 	/// already executed or should be ignored. This may result directly from a
@@ -103,7 +103,7 @@ Life_span_handler :: struct {
 	/// The life_span_handler::on_before_close() function will be called after do_close() (if do_close() is called) and immediately before the
 	/// browser object is destroyed. The application should only exit after
 	/// on_before_close() has been called for all existing browsers.
-	do_close: proc "c" (self: ^Life_span_handler, browser: ^Browser) -> b32,
+	do_close: proc "system" (self: ^Life_span_handler, browser: ^Browser) -> b32,
 
 	/// Called just before a browser is destroyed. Release all references to the browser object and do not attempt to execute any functions on the browser
 	/// object (other than is_valid, get_identifier or is_same) after this callback
@@ -115,5 +115,5 @@ Life_span_handler :: struct {
 	/// Resource_request_handler callbacks related to those requests may
 	/// still arrive on the IO thread after this callback. See Frame_handler
 	/// and do_close() documentation for additional usage information.
-	on_before_close: proc "c" (self: ^Life_span_handler, browser: ^Browser),
+	on_before_close: proc "system" (self: ^Life_span_handler, browser: ^Browser),
 } 

@@ -10,7 +10,7 @@ jsdialog_callback :: struct {
 
 	/// Continue the JS dialog request. Set |success| to true (1) if the OK button was pressed. The |user_input| value should be specified for prompt
 	/// dialogs.
-	cont: proc "c" (self: ^jsdialog_callback, success: b32, user_input: ^cef_string),
+	cont: proc "system" (self: ^jsdialog_callback, success: b32, user_input: ^cef_string),
 }
 
 /// Implement this structure to handle events related to JavaScript dialogs. The functions of this structure will be called on the UI thread.
@@ -34,7 +34,7 @@ Jsdialog_handler :: struct {
 	/// immediately. Custom dialogs may be either modal or modeless. If a custom
 	/// dialog is used the application must execute |callback| once the custom
 	/// dialog is dismissed.
-	on_jsdialog: proc "c" (self: ^Jsdialog_handler, browser: ^Browser, origin_url: ^cef_string, dialog_type: Jsdialog_type, message_text: ^cef_string, default_prompt_text: ^cef_string, callback: ^jsdialog_callback, suppress_message: ^b32) -> b32,
+	on_jsdialog: proc "system" (self: ^Jsdialog_handler, browser: ^Browser, origin_url: ^cef_string, dialog_type: Jsdialog_type, message_text: ^cef_string, default_prompt_text: ^cef_string, callback: ^jsdialog_callback, suppress_message: ^b32) -> b32,
 
 	/// Called to run a dialog asking the user if they want to leave a page.
 	/// Return false (0) to use the default dialog implementation. Return true (1)
@@ -42,13 +42,13 @@ Jsdialog_handler :: struct {
 	/// executed immediately. Custom dialogs may be either modal or modeless. If a
 	/// custom dialog is used the application must execute |callback| once the
 	/// custom dialog is dismissed.
-	on_before_unload_dialog: proc "c" (self: ^Jsdialog_handler, browser: ^Browser, message_text: ^cef_string, is_reload: b32, callback: ^jsdialog_callback) -> b32,
+	on_before_unload_dialog: proc "system" (self: ^Jsdialog_handler, browser: ^Browser, message_text: ^cef_string, is_reload: b32, callback: ^jsdialog_callback) -> b32,
 
 	/// Called to cancel any pending dialogs and reset any saved dialog state.
 	/// Will be called due to events like page navigation irregardless of whether
 	/// any dialogs are currently pending.
-	on_reset_dialog_state: proc "c" (self: ^Jsdialog_handler, browser: ^Browser),
+	on_reset_dialog_state: proc "system" (self: ^Jsdialog_handler, browser: ^Browser),
 
 	/// Called when the dialog is closed.
-	on_dialog_closed: proc "c" (self: ^Jsdialog_handler, browser: ^Browser),
+	on_dialog_closed: proc "system" (self: ^Jsdialog_handler, browser: ^Browser),
 } 

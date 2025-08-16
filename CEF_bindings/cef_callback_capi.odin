@@ -10,10 +10,10 @@ cef_callback :: struct {
 	base: base_ref_counted,
 
 	/// Continue processing.
-	cont: proc "c" (self: ^cef_callback),
+	cont: proc "system" (self: ^cef_callback),
 
 	/// Cancel processing.
-	cancel: proc "c" (self: ^cef_callback),
+	cancel: proc "system" (self: ^cef_callback),
 }
 
 /// Generic callback structure used for asynchronous completion.
@@ -24,5 +24,5 @@ Completion_callback :: struct {
 	base: base_ref_counted,
 
 	/// Method that will be called once the task is complete.
-	on_complete: proc "c" (self: ^Completion_callback),
+	on_complete: proc "system" (self: ^Completion_callback),
 } 

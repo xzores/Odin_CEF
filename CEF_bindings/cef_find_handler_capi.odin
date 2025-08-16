@@ -14,5 +14,5 @@ Find_handler :: struct {
 	/// coordinates), |activeMatchOrdinal| is the current position in the search
 	/// results, and |finalUpdate| is true (1) if this is the last find
 	/// notification.
-	on_find_result: proc "c" (self: ^Find_handler, browser: ^Browser, identifier: c.int, count: c.int, selectionRect: ^cef_rect, activeMatchOrdinal: c.int, finalUpdate: b32),
+	on_find_result: proc "system" (self: ^Find_handler, browser: ^Browser, identifier: c.int, count: c.int, selectionRect: ^cef_rect, activeMatchOrdinal: c.int, finalUpdate: b32),
 } 

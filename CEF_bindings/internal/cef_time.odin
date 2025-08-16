@@ -47,7 +47,7 @@ Time :: struct {
 	millisecond: c.int,
 }
 
-@(default_calling_convention="c", link_prefix="cef_", require_results)
+@(default_calling_convention="system", link_prefix="cef_", require_results)
 foreign lib {
 	/// Converts time to/from time_t. Returns true (1) on success and false
 	/// (0) on failure.

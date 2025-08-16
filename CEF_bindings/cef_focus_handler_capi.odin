@@ -12,12 +12,12 @@ Focus_handler :: struct {
 	/// |next| will be true (1) if the browser is giving focus to the next
 	/// component and false (0) if the browser is giving focus to the previous
 	/// component.
-	on_take_focus: proc "c" (self: ^Focus_handler, browser: ^Browser, next: b32),
+	on_take_focus: proc "system" (self: ^Focus_handler, browser: ^Browser, next: b32),
 
 	/// Called when the browser component is requesting focus. |source| indicates where the focus request is originating from. Return false (0) to allow the
 	/// focus to be set or true (1) to cancel setting the focus.
-	on_set_focus: proc "c" (self: ^Focus_handler, browser: ^Browser, source: Focus_source) -> b32,
+	on_set_focus: proc "system" (self: ^Focus_handler, browser: ^Browser, source: Focus_source) -> b32,
 
 	/// Called when the browser component has received focus.
-	on_got_focus: proc "c" (self: ^Focus_handler, browser: ^Browser),
+	on_got_focus: proc "system" (self: ^Focus_handler, browser: ^Browser),
 } 

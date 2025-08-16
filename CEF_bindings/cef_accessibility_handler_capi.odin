@@ -10,8 +10,8 @@ accessibility_handler :: struct {
 	base: base_ref_counted,
 
 	/// Called after renderer process sends accessibility tree changes to the browser process.
-	on_accessibility_tree_change: proc "c" (self: ^accessibility_handler, value: ^cef_value),
+	on_accessibility_tree_change: proc "system" (self: ^accessibility_handler, value: ^cef_value),
 
 	/// Called after renderer process sends accessibility location changes to the browser process.
-	on_accessibility_location_change: proc "c" (self: ^accessibility_handler, value: ^cef_value),
+	on_accessibility_location_change: proc "system" (self: ^accessibility_handler, value: ^cef_value),
 } 

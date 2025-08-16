@@ -11,7 +11,7 @@ end_tracing_callback :: struct {
 	
 	/// Called after all processes have sent their trace data. |tracing_file| is the path at which tracing data was written. The client is responsible for
 	/// deleting |tracing_file|.
-	on_end_tracing_complete: proc "c" (self: ^end_tracing_callback, tracing_file: ^cef_string),
+	on_end_tracing_complete: proc "system" (self: ^end_tracing_callback, tracing_file: ^cef_string),
 }
 
 /// Start tracing events on all processes. Tracing is initialized asynchronously and |callback| will be executed on the UI thread after initialization is
@@ -23,7 +23,7 @@ end_tracing_callback :: struct {
 /// - "test_MyTest*,test_OtherStuff"
 /// - "-excluded_category1,-excluded_category2"
 /// This function must be called on the browser process UI thread.
-begin_tracing :: proc "c" (categories: ^cef_string, callback: ^Completion_callback) -> b32
+begin_tracing :: proc "system" (categories: ^cef_string, callback: ^Completion_callback) -> b32
 
 /// Stop tracing events on all processes.
 /// This function will fail and return false (0) if a previous call to
@@ -32,9 +32,9 @@ begin_tracing :: proc "c" (categories: ^cef_string, callback: ^Completion_callba
 /// sent their trace data. If |tracing_file| is NULL a new temporary file path
 /// will be used. If |callback| is NULL no trace data will be written.
 /// This function must be called on the browser process UI thread.
-end_tracing :: proc "c" (tracing_file: ^cef_string, callback: ^end_tracing_callback) -> b32
+end_tracing :: proc "system" (tracing_file: ^cef_string, callback: ^end_tracing_callback) -> b32
 
 /// Returns the current system trace time or, if none is defined, the current high-res time. Can be used by clients to synchronize with the time
 /// information in trace events.
 ///
-now_from_system_trace_time :: proc "c" () -> i64 
+now_from_system_trace_time :: proc "system" () -> i64 

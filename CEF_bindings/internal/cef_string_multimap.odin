@@ -15,7 +15,7 @@ when ODIN_OS == .Windows {
 string_multimap_impl :: distinct rawptr
 string_multimap :: ^string_multimap_impl
 
-@(default_calling_convention="c", link_prefix="cef_", require_results)
+@(default_calling_convention="system", link_prefix="cef_", require_results)
 foreign lib {
 	/// Allocate a new string multimap.
 	string_multimap_alloc :: proc () -> string_multimap ---

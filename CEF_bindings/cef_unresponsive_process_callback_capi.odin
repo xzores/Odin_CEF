@@ -9,8 +9,8 @@ unresponsive_process_callback :: struct {
 	base: base_ref_counted,
 
 	/// Reset the timeout for the unresponsive process.
-	wait: proc "c" (self: ^unresponsive_process_callback),
+	wait: proc "system" (self: ^unresponsive_process_callback),
 
 	/// Terminate the unresponsive process.
-	terminate: proc "c" (self: ^unresponsive_process_callback),
+	terminate: proc "system" (self: ^unresponsive_process_callback),
 } 

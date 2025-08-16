@@ -13,15 +13,15 @@ when ODIN_OS == .Windows {
 cef_process_message_t :: struct {
 	base: base_ref_counted,
 	
-	is_valid: proc "c" (self: ^cef_process_message_t) -> b32,
-	is_read_only: proc "c" (self: ^cef_process_message_t) -> b32,
-	copy: proc "c" (self: ^cef_process_message_t) -> ^cef_process_message_t,
-	get_name: proc "c" (self: ^cef_process_message_t) -> cef_string_userfree,
-	get_argument_list: proc "c" (self: ^cef_process_message_t) -> ^cef_list_value,
-	get_shared_memory_region: proc "c" (self: ^cef_process_message_t) -> ^Shared_memory_region,
+	is_valid: proc "system" (self: ^cef_process_message_t) -> b32,
+	is_read_only: proc "system" (self: ^cef_process_message_t) -> b32,
+	copy: proc "system" (self: ^cef_process_message_t) -> ^cef_process_message_t,
+	get_name: proc "system" (self: ^cef_process_message_t) -> cef_string_userfree,
+	get_argument_list: proc "system" (self: ^cef_process_message_t) -> ^cef_list_value,
+	get_shared_memory_region: proc "system" (self: ^cef_process_message_t) -> ^Shared_memory_region,
 }
 
-@(default_calling_convention="c")
+@(default_calling_convention="system")
 foreign lib {
 	cef_process_message_create :: proc(name: ^cef_string) -> ^cef_process_message_t ---
 } 

@@ -36,22 +36,22 @@ cef_alpha_type_t :: enum c.int {
 Image :: struct {
 	base: base_ref_counted,
 	
-	is_empty: proc "c" (self: ^Image) -> b32,
-	is_same: proc "c" (self: ^Image, that: ^Image) -> b32,
-	add_bitmap: proc "c" (self: ^Image, scale_factor: f32, pixel_width: c.int, pixel_height: c.int, color_type: cef_color_type_t, alpha_type: cef_alpha_type_t, pixel_data: rawptr, pixel_data_size: c.size_t) -> b32,
-	add_png: proc "c" (self: ^Image, scale_factor: f32, png_data: rawptr, png_data_size: c.size_t) -> b32,
-	add_jpeg: proc "c" (self: ^Image, scale_factor: f32, jpeg_data: rawptr, jpeg_data_size: c.size_t) -> b32,
-	get_width: proc "c" (self: ^Image) -> c.size_t,
-	get_height: proc "c" (self: ^Image) -> c.size_t,
-	has_representation: proc "c" (self: ^Image, scale_factor: f32) -> b32,
-	remove_representation: proc "c" (self: ^Image, scale_factor: f32) -> b32,
-	get_representation_info: proc "c" (self: ^Image, scale_factor: f32, actual_scale_factor: ^f32, pixel_width: ^c.int, pixel_height: ^c.int) -> b32,
-	get_as_bitmap: proc "c" (self: ^Image, scale_factor: f32, color_type: cef_color_type_t, alpha_type: cef_alpha_type_t, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value,
-	get_as_png: proc "c" (self: ^Image, scale_factor: f32, with_transparency: b32, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value,
-	get_as_jpeg: proc "c" (self: ^Image, scale_factor: f32, quality: c.int, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value,
+	is_empty: proc "system" (self: ^Image) -> b32,
+	is_same: proc "system" (self: ^Image, that: ^Image) -> b32,
+	add_bitmap: proc "system" (self: ^Image, scale_factor: f32, pixel_width: c.int, pixel_height: c.int, color_type: cef_color_type_t, alpha_type: cef_alpha_type_t, pixel_data: rawptr, pixel_data_size: c.size_t) -> b32,
+	add_png: proc "system" (self: ^Image, scale_factor: f32, png_data: rawptr, png_data_size: c.size_t) -> b32,
+	add_jpeg: proc "system" (self: ^Image, scale_factor: f32, jpeg_data: rawptr, jpeg_data_size: c.size_t) -> b32,
+	get_width: proc "system" (self: ^Image) -> c.size_t,
+	get_height: proc "system" (self: ^Image) -> c.size_t,
+	has_representation: proc "system" (self: ^Image, scale_factor: f32) -> b32,
+	remove_representation: proc "system" (self: ^Image, scale_factor: f32) -> b32,
+	get_representation_info: proc "system" (self: ^Image, scale_factor: f32, actual_scale_factor: ^f32, pixel_width: ^c.int, pixel_height: ^c.int) -> b32,
+	get_as_bitmap: proc "system" (self: ^Image, scale_factor: f32, color_type: cef_color_type_t, alpha_type: cef_alpha_type_t, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value,
+	get_as_png: proc "system" (self: ^Image, scale_factor: f32, with_transparency: b32, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value,
+	get_as_jpeg: proc "system" (self: ^Image, scale_factor: f32, quality: c.int, pixel_width: ^c.int, pixel_height: ^c.int) -> ^cef_binary_value,
 }
 
-@(default_calling_convention="c")
+@(default_calling_convention="system")
 foreign lib {
 	cef_image_create :: proc() -> ^Image ---
 } 

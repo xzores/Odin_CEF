@@ -231,7 +231,7 @@ else when ODIN_OS == .Linux {
 		foreign lib {
 			/// Return the singleton X11 display shared with Chromium.
 			/// Must only be accessed on the browser process UI thread.
-			get_xdisplay :: proc "c" () -> XDisplay ---
+			get_xdisplay :: proc "system" () -> XDisplay ---
 		}
 	}
 

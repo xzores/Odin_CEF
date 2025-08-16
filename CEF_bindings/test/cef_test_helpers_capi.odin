@@ -12,9 +12,9 @@ when ODIN_OS == .Windows {
 }
 
 // Function declarations
-cef_execute_java_script_with_user_gesture_for_tests :: proc "c" (frame: ^Frame, javascript: ^common.cef_string)
-cef_set_data_directory_for_tests :: proc "c" (dir: ^common.cef_string)
-cef_is_feature_enabled_for_tests :: proc "c" (feature_name: ^common.cef_string) -> c.int
+cef_execute_java_script_with_user_gesture_for_tests :: proc "system" (frame: ^Frame, javascript: ^common.cef_string)
+cef_set_data_directory_for_tests :: proc "system" (dir: ^common.cef_string)
+cef_is_feature_enabled_for_tests :: proc "system" (feature_name: ^common.cef_string) -> c.int
 foreign lib {
 	cef_test_runner_get_global :: proc() -> ^cef_test_runner_t ---
 } 

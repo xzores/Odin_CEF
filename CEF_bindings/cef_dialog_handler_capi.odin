@@ -11,10 +11,10 @@ File_dialog_callback :: struct {
 
 	/// Continue the file selection. |file_paths| should be a single value or a list of values depending on the dialog mode. An NULL |file_paths| value is
 	/// treated the same as calling cancel().
-	cont: proc "c" (self: ^File_dialog_callback, file_paths: string_list),
+	cont: proc "system" (self: ^File_dialog_callback, file_paths: string_list),
 
 	/// Cancel the file selection.
-	cancel: proc "c" (self: ^File_dialog_callback),
+	cancel: proc "system" (self: ^File_dialog_callback),
 }
 
 /// Implement this structure to handle dialog events. The functions of this structure will be called on the browser process UI thread.
@@ -41,6 +41,6 @@ Dialog_handler :: struct {
 	/// return false (0). If this function returns false (0) it may be called an
 	/// additional time for the same dialog (both before and after MIME type
 	/// expansion).
-	on_file_dialog: proc "c" (self: ^Dialog_handler, browser: ^Browser, mode: File_dialog_mode, title: ^cef_string, default_file_path: ^cef_string,
+	on_file_dialog: proc "system" (self: ^Dialog_handler, browser: ^Browser, mode: File_dialog_mode, title: ^cef_string, default_file_path: ^cef_string,
 		 accept_filters: string_list, accept_extensions: string_list, accept_descriptions: string_list, callback: ^File_dialog_callback) -> b32,
 } 

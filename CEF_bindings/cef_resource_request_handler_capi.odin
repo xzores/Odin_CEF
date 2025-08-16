@@ -14,7 +14,7 @@ Resource_request_handler :: struct {
 	/// optionally filter cookies for the request return a
 	/// cookie_access_filter object. The |request| object cannot not be
 	/// modified in this callback.
-	get_cookie_access_filter: proc "c" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request) -> ^cookie_access_filter,
+	get_cookie_access_filter: proc "system" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request) -> ^cookie_access_filter,
 
 	/// Called on the IO thread before a resource request is loaded. The |browser| and |frame| values represent the source of the request, and may be NULL
 	/// for requests originating from service workers or Url_request. To
@@ -24,14 +24,14 @@ Resource_request_handler :: struct {
 	/// and call callback functions at a later time to continue or cancel
 	/// the request asynchronously. Return RV_CANCEL to cancel the request
 	/// immediately.
-	on_before_resource_load: proc "c" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, callback: ^cef_callback) -> cef_return_value,
+	on_before_resource_load: proc "system" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, callback: ^cef_callback) -> cef_return_value,
 
 	/// Called on the IO thread before a resource is loaded. The |browser| and |frame| values represent the source of the request, and may be NULL for
 	/// requests originating from service workers or Url_request. To allow
 	/// the resource to load using the default network loader return NULL. To
 	/// specify a handler for the resource return a Resource_handler object.
 	/// The |request| object cannot not be modified in this callback.
-	get_resource_handler: proc "c" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request) -> ^Resource_handler,
+	get_resource_handler: proc "system" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request) -> ^Resource_handler,
 
 	/// Called on the IO thread when a resource load is redirected. The |browser| and |frame| values represent the source of the request, and may be NULL
 	/// for requests originating from service workers or Url_request. The
@@ -40,7 +40,7 @@ Resource_request_handler :: struct {
 	/// resulted in the redirect. The |new_url| parameter will contain the new URL
 	/// and can be changed if desired. The |request| and |response| objects cannot
 	/// be modified in this callback.
-	on_resource_redirect: proc "c" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response, new_url: ^cef_string),
+	on_resource_redirect: proc "system" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response, new_url: ^cef_string),
 
 	/// Called on the IO thread when a resource response is received. The |browser| and |frame| values represent the source of the request, and may
 	/// be NULL for requests originating from service workers or Url_request.
@@ -51,13 +51,13 @@ Resource_request_handler :: struct {
 	/// redirected in this callback. The |response| object cannot be modified in
 	/// this callback.
 	/// WARNING: Redirecting using this function is deprecated. Use on_before_resource_load or get_resource_handler to perform redirects.
-	on_resource_response: proc "c" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response) -> b32,
+	on_resource_response: proc "system" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response) -> b32,
 
 	/// Called on the IO thread to optionally filter resource response content. The |browser| and |frame| values represent the source of the request, and
 	/// may be NULL for requests originating from service workers or
 	/// Url_request. |request| and |response| represent the request and
 	/// response respectively and cannot be modified in this callback.
-	get_resource_response_filter: proc "c" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response) -> ^Response_filter,
+	get_resource_response_filter: proc "system" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response) -> ^Response_filter,
 
 	/// Called on the IO thread when a resource load has completed. The |browser| and |frame| values represent the source of the request, and may be NULL
 	/// for requests originating from service workers or Url_request.
@@ -72,7 +72,7 @@ Resource_request_handler :: struct {
 	/// to test for this situation, and care should be taken not to call |browser|
 	/// or |frame| functions that modify state (like load_url, send_process_message,
 	/// etc.) if the frame is invalid.
-	on_resource_load_complete: proc "c" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response, status: Url_request_status, received_content_length: i64),
+	on_resource_load_complete: proc "system" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response, status: Url_request_status, received_content_length: i64),
 
 	/// Called on the IO thread to handle requests for URLs with an unknown protocol component. The |browser| and |frame| values represent the source
 	/// of the request, and may be NULL for requests originating from service
@@ -81,7 +81,7 @@ Resource_request_handler :: struct {
 	/// the registered OS protocol handler, if any. SECURITY WARNING: YOU SHOULD
 	/// USE THIS METHOD TO ENFORCE RESTRICTIONS BASED ON SCHEME, HOST OR OTHER URL
 	/// ANALYSIS BEFORE ALLOWING OS EXECUTION.
-	on_protocol_execution: proc "c" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, allow_os_execution: ^b32),
+	on_protocol_execution: proc "system" (self: ^Resource_request_handler, browser: ^Browser, frame: ^Frame, request: ^Request, allow_os_execution: ^b32),
 }
 
 /// Implement this structure to filter cookies that may be sent with a request. The functions of this structure will be called on the IO thread.
@@ -94,12 +94,12 @@ cookie_access_filter :: struct {
 	/// for requests originating from service workers or Url_request.
 	/// |request| cannot be modified in this callback. Return true (1) if the
 	/// specified cookie can be sent with the request or false (0) otherwise.
-	can_send_cookie: proc "c" (self: ^cookie_access_filter, browser: ^Browser, frame: ^Frame, request: ^Request, cookie: ^cef_cookie) -> b32,
+	can_send_cookie: proc "system" (self: ^cookie_access_filter, browser: ^Browser, frame: ^Frame, request: ^Request, cookie: ^cef_cookie) -> b32,
 
 	/// Called on the IO thread after a resource response is received. The |browser| and |frame| values represent the source of the request, and may
 	/// be NULL for requests originating from service workers or Url_request.
 	/// |request| cannot be modified in this callback. Return true (1) if the
 	/// specified cookie returned with the response can be saved or false (0)
 	/// otherwise.
-	can_save_cookie: proc "c" (self: ^cookie_access_filter, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response, cookie: ^cef_cookie) -> b32,
+	can_save_cookie: proc "system" (self: ^cookie_access_filter, browser: ^Browser, frame: ^Frame, request: ^Request, response: ^Response, cookie: ^cef_cookie) -> b32,
 } 

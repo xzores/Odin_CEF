@@ -13,9 +13,9 @@ when ODIN_OS == .Windows {
 cef_shared_process_message_builder_t :: struct {
 	base: base_ref_counted,
 	
-	is_valid: proc "c" (self: ^cef_shared_process_message_builder_t) -> b32,
-	size: proc "c" (self: ^cef_shared_process_message_builder_t) -> c.size_t,
-	memory: proc "c" (self: ^cef_shared_process_message_builder_t) -> rawptr,
-	build: proc "c" (self: ^cef_shared_process_message_builder_t) -> ^cef_process_message_t,
+	is_valid: proc "system" (self: ^cef_shared_process_message_builder_t) -> b32,
+	size: proc "system" (self: ^cef_shared_process_message_builder_t) -> c.size_t,
+	memory: proc "system" (self: ^cef_shared_process_message_builder_t) -> rawptr,
+	build: proc "system" (self: ^cef_shared_process_message_builder_t) -> ^cef_process_message_t,
 }
 

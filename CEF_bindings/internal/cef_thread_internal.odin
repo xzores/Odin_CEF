@@ -23,7 +23,7 @@ when ODIN_OS == .Windows {
 	INVALID_PLATFORM_THREAD_HANDLE: c.pthread_t : 0
 }
 
-@(default_calling_convention="c", link_prefix="cef_", require_results)
+@(default_calling_convention="system", link_prefix="cef_", require_results)
 foreign lib {
 	/// Returns the current platform thread ID.
 	get_current_platform_thread_id :: proc () -> cef_platform_thread_id ---

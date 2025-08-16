@@ -13,10 +13,10 @@ media_access_callback :: struct {
 	/// CEF_MEDIA_PERMISSION_DEVICE_VIDEO_CAPTURE being set) then
 	/// |allowed_permissions| must match |required_permissions| passed to
 	/// on_request_media_access_permission.
-	cont: proc "c" (self: ^media_access_callback, allowed_permissions: u32),
+	cont: proc "system" (self: ^media_access_callback, allowed_permissions: u32),
 
 	/// Cancel the media access request.
-	cancel: proc "c" (self: ^media_access_callback),
+	cancel: proc "system" (self: ^media_access_callback),
 }
 
 /// Callback structure used for asynchronous continuation of permission prompts.
@@ -27,7 +27,7 @@ permission_prompt_callback :: struct {
 	base: base_ref_counted,
 
 	/// Complete the permissions request with the specified |result|.
-	cont: proc "c" (self: ^permission_prompt_callback, result: Permission_request_result),
+	cont: proc "system" (self: ^permission_prompt_callback, result: Permission_request_result),
 }
 
 /// Implement this structure to handle events related to permission requests. The functions of this structure will be called on the browser process UI
@@ -47,7 +47,7 @@ Permission_handler :: struct {
 	/// With Alloy style, default handling will deny the request. This function
 	/// will not be called if the "--enable-media-stream" command-line switch is
 	/// used to grant all permissions.
-		on_request_media_access_permission: proc "c" (self: ^Permission_handler, browser: ^Browser, frame: ^Frame, requesting_origin: ^cef_string, requested_permissions: u32, callback: ^media_access_callback) -> b32,
+		on_request_media_access_permission: proc "system" (self: ^Permission_handler, browser: ^Browser, frame: ^Frame, requesting_origin: ^cef_string, requested_permissions: u32, callback: ^media_access_callback) -> b32,
 
 	/// Called when a page should show a permission prompt. |prompt_id| uniquely identifies the prompt. |requesting_origin| is the URL origin requesting
 	/// permission. |requested_permissions| is a combination of values from
@@ -57,7 +57,7 @@ Permission_handler :: struct {
 	/// Return false (0) to proceed with default handling. With Chrome style,
 	/// default handling will display the permission prompt UI. With Alloy style,
 	/// default handling is CEF_PERMISSION_RESULT_IGNORE.
-	on_show_permission_prompt: proc "c" (self: ^Permission_handler, browser: ^Browser, prompt_id: u64, requesting_origin: ^cef_string, requested_permissions: u32, callback: ^permission_prompt_callback) -> b32,
+	on_show_permission_prompt: proc "system" (self: ^Permission_handler, browser: ^Browser, prompt_id: u64, requesting_origin: ^cef_string, requested_permissions: u32, callback: ^permission_prompt_callback) -> b32,
 
 	/// Called when a permission prompt handled via on_show_permission_prompt is dismissed. |prompt_id| will match the value that was passed to
 	/// on_show_permission_prompt. |result| will be the value passed to
@@ -65,5 +65,5 @@ Permission_handler :: struct {
 	/// if the dialog was dismissed for other reasons such as navigation, browser
 	/// closure, etc. This function will not be called if on_show_permission_prompt
 	/// returned false (0) for |prompt_id|.
-	on_dismiss_permission_prompt: proc "c" (self: ^Permission_handler, browser: ^Browser, prompt_id: u64, result: Permission_request_result),
+	on_dismiss_permission_prompt: proc "system" (self: ^Permission_handler, browser: ^Browser, prompt_id: u64, result: Permission_request_result),
 } 

@@ -10,7 +10,7 @@ when ODIN_OS == .Windows {
 	foreign import lib "CEF/Release/libcef.dylib"
 }
 
-@(default_calling_convention="c")
+@(default_calling_convention="system")
 foreign lib {
 	cef_resolve_url :: proc(base_url: ^cef_string, relative_url: ^cef_string, resolved_url: ^cef_string) -> b32 ---
 	cef_parse_url :: proc(url: ^cef_string, parts: ^Urlparts) -> b32 ---

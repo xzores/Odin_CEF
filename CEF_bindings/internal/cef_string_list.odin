@@ -14,7 +14,7 @@ when ODIN_OS == .Windows {
 string_list_impl :: distinct rawptr
 string_list :: ^string_list_impl
 
-@(default_calling_convention="c", link_prefix="cef_", require_results)
+@(default_calling_convention="system", link_prefix="cef_", require_results)
 foreign lib {
 	/// Allocate a new string map.
 	string_list_alloc :: proc () -> string_list ---

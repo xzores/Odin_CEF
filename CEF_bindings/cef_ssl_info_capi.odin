@@ -10,11 +10,11 @@ ssl_info :: struct {
 
 	/// Returns a bitmask containing any and all problems verifying the server
 	/// certificate.
-	get_cert_status: proc "c" (self: ^ssl_info) -> Cert_status,
+	get_cert_status: proc "system" (self: ^ssl_info) -> Cert_status,
 
 	/// Returns the X.509 certificate.
-	get_x509_certificate: proc "c" (self: ^ssl_info) -> ^X509_certificate,
+	get_x509_certificate: proc "system" (self: ^ssl_info) -> ^X509_certificate,
 }
 
 /// Returns true (1) if the certificate status represents an error.
-is_cert_status_error :: proc "c" (status: Cert_status) -> b32 
+is_cert_status_error :: proc "system" (status: Cert_status) -> b32 

@@ -43,7 +43,7 @@ App :: struct {
 	get_render_process_handler: proc "stdcall" (self: ^App) -> ^Render_process_handler,
 }
 
-@(default_calling_convention="c", link_prefix="cef_", require_results)
+@(default_calling_convention="system", link_prefix="cef_", require_results)
 foreign lib {
 	/// This function should be called from the application entry point function to execute a secondary process. It can be used to run secondary processes from
 	/// the browser client executable (default behavior) or from a separate
@@ -54,7 +54,7 @@ foreign lib {
 	/// return the process exit code. The |application| parameter may be NULL. The
 	/// |windows_sandbox_info| parameter is only used on Windows and may be NULL
 	/// (see cef_sandbox_win.h for details).
-	execute_process :: proc "c" (args: ^Main_args, application: ^App, windows_sandbox_info: rawptr) -> c.int ---
+	execute_process :: proc "system" (args: ^Main_args, application: ^App, windows_sandbox_info: rawptr) -> c.int ---
 
 	/// This function should be called on the main application thread to initialize the CEF browser process. The |application| parameter may be NULL. Returns
 	/// true (1) if initialization succeeds. Returns false (0) if initialization
@@ -63,7 +63,7 @@ foreign lib {
 	/// should exit immediately without calling any other CEF functions except,
 	/// optionally, get_exit_code. The |windows_sandbox_info| parameter is only
 	/// used on Windows and may be NULL (see cef_sandbox_win.h for details).
-	initialize :: proc "c" (args: ^Main_args, settings: ^Settings, application: ^App, windows_sandbox_info: rawptr) -> c.int ---
+	initialize :: proc "system" (args: ^Main_args, settings: ^Settings, application: ^App, windows_sandbox_info: rawptr) -> c.int ---
 
 	/// This function can optionally be called on the main application thread after initialize to retrieve the initialization exit code. When initialize
 	/// returns true (1) the exit code will be 0 (RESULT_CODE_NORMAL_EXIT).
@@ -71,11 +71,11 @@ foreign lib {
 	/// browser process initialization errors and normal early exit conditions (such
 	/// as RESULT_CODE_NORMAL_EXIT_PROCESS_NOTIFIED for process singleton
 	/// relaunch behavior).
-	get_exit_code :: proc "c" () -> c.int ---
+	get_exit_code :: proc "system" () -> c.int ---
 
 	/// This function should be called on the main application thread to shut down the CEF browser process before the application exits. Do not call any other
 	/// CEF functions after calling this function.
-	shutdown :: proc "c" () ---
+	shutdown :: proc "system" () ---
 
 	/// Perform a single iteration of CEF message loop processing. This function is provided for cases where the CEF message loop must be integrated into an
 	/// existing application message loop. Use of this function is not recommended
@@ -89,16 +89,16 @@ foreign lib {
 	/// the main application thread and only if initialize() is called with a
 	/// cef_settings.multi_threaded_message_loop value of false (0). This function
 	/// will not block.
-	do_message_loop_work :: proc "c" () ---
+	do_message_loop_work :: proc "system" () ---
 
 	/// Run the CEF message loop. Use this function instead of an application- provided message loop to get the best balance between performance and CPU
 	/// usage. This function should only be called on the main application thread
 	/// and only if initialize() is called with a
 	/// cef_settings.multi_threaded_message_loop value of false (0). This function
 	/// will block until a quit message is received by the system.
-	run_message_loop :: proc "c" () ---
+	run_message_loop :: proc "system" () ---
 
 	/// Quit the CEF message loop that was started by calling run_message_loop(). This function should only be called on the main
 	/// application thread and only if run_message_loop() was used.
-	quit_message_loop :: proc "c" () ---
+	quit_message_loop :: proc "system" () ---
 }

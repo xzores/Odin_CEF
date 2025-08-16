@@ -67,21 +67,21 @@ Frame_handler :: struct {
 	/// etc.) will be queued. The queued commands will be sent before
 	/// on_frame_attached or discarded before on_frame_destroyed if the frame never
 	/// attaches.
-	on_frame_created: proc "c" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame),
+	on_frame_created: proc "system" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame),
 
 	/// Called when an existing frame is destroyed. This will be the last notification that references |frame| and frame::is_valid() will
 	/// return false (0) for |frame|. If called during browser destruction and
 	/// after life_span_handler::on_before_close() then
 	/// browser::is_valid() will return false (0) for |browser|. Any queued
 	/// commands that have not been sent will be discarded before this callback.
-	on_frame_destroyed: proc "c" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame),
+	on_frame_destroyed: proc "system" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame),
 
 	/// Called when a frame can begin routing commands to/from the associated renderer process. |reattached| will be true (1) if the frame was re-
 	/// attached after exiting the BackForwardCache or after encountering a
 	/// recoverable connection error. Any queued commands will now have been
 	/// dispatched. This function will not be called for temporary frames created
 	/// during cross-origin navigation.
-	on_frame_attached: proc "c" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame, reattached: b32),
+	on_frame_attached: proc "system" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame, reattached: b32),
 
 	/// Called when a frame loses its connection to the renderer process. This may occur when a frame is destroyed, enters the BackForwardCache, or
 	/// encounters a rare connection error. In the case of frame destruction this
@@ -95,7 +95,7 @@ Frame_handler :: struct {
 	/// error then there will be a follow-up call to on_frame_attached. This
 	/// function will not be called for temporary frames created during cross-
 	/// origin navigation.
-	on_frame_detached: proc "c" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame),
+	on_frame_detached: proc "system" (self: ^Frame_handler, browser: ^Browser, frame: ^Frame),
 
 	/// Called when the main frame changes due to (a) initial browser creation, (b) final browser destruction, (c) cross-origin navigation or (d) re-
 	/// navigation after renderer process termination (due to crashes, etc).
@@ -106,5 +106,5 @@ Frame_handler :: struct {
 	/// NULL for cross-origin navigations or re-navigation after renderer process
 	/// termination. This function will be called after on_frame_created() for
 	/// the new frame and before on_frame_destroyed() for the old frame.
-	on_main_frame_changed: proc "c" (self: ^Frame_handler, browser: ^Browser, old_frame: ^Frame, new_frame: ^Frame),
+	on_main_frame_changed: proc "system" (self: ^Frame_handler, browser: ^Browser, old_frame: ^Frame, new_frame: ^Frame),
 } 

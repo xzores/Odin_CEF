@@ -10,7 +10,7 @@ when ODIN_OS == .Windows {
 	foreign import lib "CEF/Release/libcef.dylib"
 }
 
-@(default_calling_convention="c")
+@(default_calling_convention="system")
 foreign lib {
 	cef_get_path :: proc(key: Path_key, path: ^cef_string) -> b32 ---
 } 

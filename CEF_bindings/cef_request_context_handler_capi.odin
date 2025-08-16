@@ -10,7 +10,7 @@ Request_context_handler :: struct {
 	base: base_ref_counted,
 
 	// Called on the browser process UI thread immediately after the request context has been initialized.
-	on_request_context_initialized: proc "c" (
+	on_request_context_initialized: proc "system" (
 		self: ^Request_context_handler,
 		Request_context: ^Request_context,
 	),
@@ -25,7 +25,7 @@ Request_context_handler :: struct {
 	// Return nil to proceed with default handling, or return a cef_resource_request_handler to handle.
 	// Not called if the browser client’s request_handler returns a non-nil
 	// GetResourceRequestHandler for the same request (by request identifier).
-	get_resource_request_handler: proc "c" (
+	get_resource_request_handler: proc "system" (
 		self: ^Request_context_handler,
 		browser: ^Browser,
 		frame: ^Frame,

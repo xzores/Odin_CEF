@@ -18,29 +18,29 @@ Media_router :: struct {
 	base: base_ref_counted,
 
 	// Add an observer for MediaRouter events. Stays registered until the returned Registration is destroyed.
-	add_observer: proc "c" (self: ^Media_router, observer: ^Media_observer) -> ^Registration,
+	add_observer: proc "system" (self: ^Media_router, observer: ^Media_observer) -> ^Registration,
 
 	// Return a MediaSource for the specified media source URN (e.g. "cast:<appId>?clientId=<clientId>").
-	get_source: proc "c" (self: ^Media_router, urn: ^cef_string) -> ^Media_source,
+	get_source: proc "system" (self: ^Media_router, urn: ^cef_string) -> ^Media_source,
 
 	// Trigger async calls to Media_observer.on_sinks for all observers.
-	notify_current_sinks: proc "c" (self: ^Media_router),
+	notify_current_sinks: proc "system" (self: ^Media_router),
 
 	// Create a new route between |source| and |sink|. |callback| executes on success or failure.
 	// On success also triggers Media_observer.on_routes for all observers.
-	create_route: proc "c" (self: ^Media_router, source: ^Media_source, sink: ^Media_sink, callback: ^Media_route_create_callback),
+	create_route: proc "system" (self: ^Media_router, source: ^Media_source, sink: ^Media_sink, callback: ^Media_route_create_callback),
 
 	// Trigger async calls to Media_observer.on_routes for all observers.
-	notify_current_routes: proc "c" (self: ^Media_router),
+	notify_current_routes: proc "system" (self: ^Media_router),
 }
 
 
 /// Returns the MediaRouter for the global request context. If |callback| is non-NULL it
 /// will run asynchronously on the UI thread after the manager's storage is initialized.
 /// Equivalent to request_context_get_global_context()->get_media_router().
-@(default_calling_convention="c", link_prefix="cef_", require_results)
+@(default_calling_convention="system", link_prefix="cef_", require_results)
 foreign lib {
-	media_router_get_global :: proc "c" (callback: ^Completion_callback) -> ^Media_router ---
+	media_router_get_global :: proc "system" (callback: ^Completion_callback) -> ^Media_router ---
 }
 
 
@@ -51,16 +51,16 @@ Media_observer :: struct {
 	base: base_ref_counted,
 
 	// The list of available media sinks changed or notify_current_sinks was called.
-	on_sinks: proc "c" (self: ^Media_observer, sinksCount: c.size_t, sinks: ^^Media_sink),
+	on_sinks: proc "system" (self: ^Media_observer, sinksCount: c.size_t, sinks: ^^Media_sink),
 
 	// The list of available media routes changed or notify_current_routes was called.
-	on_routes: proc "c" (self: ^Media_observer, routesCount: c.size_t, routes: ^^Media_route),
+	on_routes: proc "system" (self: ^Media_observer, routesCount: c.size_t, routes: ^^Media_route),
 
 	// The connection state of |route| changed.
-	on_route_state_changed: proc "c" (self: ^Media_observer, route: ^Media_route, state: Media_route_connection_state),
+	on_route_state_changed: proc "system" (self: ^Media_observer, route: ^Media_route, state: Media_route_connection_state),
 
 	// A message was received over |route|. |message| valid only for the scope of this callback.
-	on_route_message_received: proc "c" (self: ^Media_observer, route: ^Media_route, message: rawptr, message_size: c.size_t),
+	on_route_message_received: proc "system" (self: ^Media_observer, route: ^Media_route, message: rawptr, message_size: c.size_t),
 }
 
 
@@ -71,19 +71,19 @@ Media_route :: struct {
 	base: base_ref_counted,
 
 	// Return the ID for this route. (Free with cef_string_userfree_free)
-	get_id: proc "c" (self: ^Media_route) -> cef_string_userfree,
+	get_id: proc "system" (self: ^Media_route) -> cef_string_userfree,
 
 	// Return the source associated with this route.
-	get_source: proc "c" (self: ^Media_route) -> ^Media_source,
+	get_source: proc "system" (self: ^Media_route) -> ^Media_source,
 
 	// Return the sink associated with this route.
-	get_sink: proc "c" (self: ^Media_route) -> ^Media_sink,
+	get_sink: proc "system" (self: ^Media_route) -> ^Media_sink,
 
 	// Send a message over this route. |message| will be copied if necessary.
-	send_route_message: proc "c" (self: ^Media_route, message: rawptr, message_size: c.size_t),
+	send_route_message: proc "system" (self: ^Media_route, message: rawptr, message_size: c.size_t),
 
 	// Terminate this route. Triggers Media_observer.on_routes on all observers.
-	terminate: proc "c" (self: ^Media_route),
+	terminate: proc "system" (self: ^Media_route),
 }
 
 
@@ -94,7 +94,7 @@ Media_route_create_callback :: struct {
 	base: base_ref_counted,
 
 	// Executed when route creation finishes. |route| is NULL on failure.
-	on_media_route_create_finished: proc "c" (
+	on_media_route_create_finished: proc "system" (
 		self: ^Media_route_create_callback,
 		result: Media_route_create_result,
 		error: ^cef_string,
@@ -110,25 +110,25 @@ Media_sink :: struct {
 	base: base_ref_counted,
 
 	// Return the sink ID. (Free with cef_string_userfree_free)
-	get_id: proc "c" (self: ^Media_sink) -> cef_string_userfree,
+	get_id: proc "system" (self: ^Media_sink) -> cef_string_userfree,
 
 	// Return the sink name. (Free with cef_string_userfree_free)
-	get_name: proc "c" (self: ^Media_sink) -> cef_string_userfree,
+	get_name: proc "system" (self: ^Media_sink) -> cef_string_userfree,
 
 	// Return the icon type for this sink.
-	get_icon_type: proc "c" (self: ^Media_sink) -> Media_sink_icon_type,
+	get_icon_type: proc "system" (self: ^Media_sink) -> Media_sink_icon_type,
 
 	// Asynchronously retrieve device info.
-	get_device_info: proc "c" (self: ^Media_sink, callback: ^Media_sink_device_info_callback),
+	get_device_info: proc "system" (self: ^Media_sink, callback: ^Media_sink_device_info_callback),
 
 	// True if this sink accepts content via Cast.
-	is_cast_sink: proc "c" (self: ^Media_sink) -> c.int,
+	is_cast_sink: proc "system" (self: ^Media_sink) -> c.int,
 
 	// True if this sink accepts content via DIAL.
-	is_dial_sink: proc "c" (self: ^Media_sink) -> c.int,
+	is_dial_sink: proc "system" (self: ^Media_sink) -> c.int,
 
 	// True if this sink is compatible with |source|.
-	is_compatible_with: proc "c" (self: ^Media_sink, source: ^Media_source) -> c.int,
+	is_compatible_with: proc "system" (self: ^Media_sink, source: ^Media_source) -> c.int,
 }
 
 
@@ -139,7 +139,7 @@ Media_sink_device_info_callback :: struct {
 	base: base_ref_counted,
 
 	// Executed asynchronously once device information has been retrieved.
-	on_media_sink_device_info: proc "c" (self: ^Media_sink_device_info_callback, device_info: ^Media_sink_device_info),
+	on_media_sink_device_info: proc "system" (self: ^Media_sink_device_info_callback, device_info: ^Media_sink_device_info),
 }
 
 
@@ -150,11 +150,11 @@ Media_source :: struct {
 	base: base_ref_counted,
 
 	// Return the ID (media source URN or URL). (Free with cef_string_userfree_free)
-	get_id: proc "c" (self: ^Media_source) -> cef_string_userfree,
+	get_id: proc "system" (self: ^Media_source) -> cef_string_userfree,
 
 	// True if this source outputs content via Cast.
-	is_cast_source: proc "c" (self: ^Media_source) -> c.int,
+	is_cast_source: proc "system" (self: ^Media_source) -> c.int,
 
 	// True if this source outputs content via DIAL.
-	is_dial_source: proc "c" (self: ^Media_source) -> c.int,
+	is_dial_source: proc "system" (self: ^Media_source) -> c.int,
 }

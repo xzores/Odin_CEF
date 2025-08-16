@@ -18,17 +18,17 @@ import cef "CEF_bindings"
 
 import "furbs/utils"
 
-get_view_rect :: proc "c" (self: ^cef.Render_handler, browser: ^cef.Browser, rect: ^cef.cef_rect) {
+get_view_rect :: proc "system" (self: ^cef.Render_handler, browser: ^cef.Browser, rect: ^cef.cef_rect) {
 
 	
 }
 
-on_paint :: proc "c" (self: ^cef.Render_handler, browser: ^cef.Browser, type: cef.Paint_element_type, dirtyRectsCount: c.size_t, dirtyRects: ^cef.cef_rect, buffer: rawptr, width: c.int, height: c.int) {
+on_paint :: proc "system" (self: ^cef.Render_handler, browser: ^cef.Browser, type: cef.Paint_element_type, dirtyRectsCount: c.size_t, dirtyRects: ^cef.cef_rect, buffer: rawptr, width: c.int, height: c.int) {
 
 
 }
 
-on_loading_state_change :: proc "c" (self: ^cef.Load_handler, browser: ^cef.Browser, isLoading: b32, canGoBack: b32, canGoForward: b32) {
+on_loading_state_change :: proc "system" (self: ^cef.Load_handler, browser: ^cef.Browser, isLoading: b32, canGoBack: b32, canGoForward: b32) {
 
 }
 
@@ -50,11 +50,11 @@ alloc_cef_object :: proc ($T : typeid, loc := #caller_location) -> ^T where intr
 
 	base : cef.base_ref_counted = {
 		size_of(T), //size
-		proc "c" (self: ^cef.base_ref_counted) { //add_ref 
+		proc "system" (self: ^cef.base_ref_counted) { //add_ref 
 			super := cast(^Super)self;
 			super.ref_cnt += 1; //whatever object must have ref_count defined.
 		},
-		proc "c" (self: ^cef.base_ref_counted) -> b32 { //release
+		proc "system" (self: ^cef.base_ref_counted) -> b32 { //release
 			context = {};
 			super := cast(^Super)self;
 			super.ref_cnt -= 1; //whatever object must have ref_count defined
@@ -65,11 +65,11 @@ alloc_cef_object :: proc ($T : typeid, loc := #caller_location) -> ^T where intr
 
 			return auto_cast res;
 		},
-		proc "c" (self: ^cef.base_ref_counted) -> b32 { //has_one_ref
+		proc "system" (self: ^cef.base_ref_counted) -> b32 { //has_one_ref
 			super := cast(^Super)self;
 			return super.ref_cnt == 1;
 		},
-		proc "c" (self: ^cef.base_ref_counted) -> b32 { //has_at_least_one_ref
+		proc "system" (self: ^cef.base_ref_counted) -> b32 { //has_at_least_one_ref
 			super := cast(^Super)self;
 			return super.ref_cnt >= 1;
 		}
@@ -100,8 +100,8 @@ make_load_handler :: proc () -> ^cef.Load_handler {
 	return handler;
 }
 
-On_before_command_line_processing :: #type proc "stdcall" (self: ^cef.App, process_type: ^cef.cef_string, Command_line: ^cef.Command_line);
-On_register_custom_schemes :: #type proc "stdcall" (self: ^cef.App, registrar: ^cef.Scheme_registrar);
+On_before_command_line_processing :: #type proc "system" (self: ^cef.App, process_type: ^cef.cef_string, Command_line: ^cef.Command_line);
+On_register_custom_schemes :: #type proc "system" (self: ^cef.App, registrar: ^cef.Scheme_registrar);
 
 make_application :: proc (on_cmd_process : On_before_command_line_processing, on_reg_schemes : On_register_custom_schemes) -> ^cef.App {
 	app := alloc_cef_object(cef.App);
@@ -109,13 +109,13 @@ make_application :: proc (on_cmd_process : On_before_command_line_processing, on
 	app.on_before_command_line_processing = on_cmd_process;
 	app.on_register_custom_schemes = on_reg_schemes;
 
-	app.get_resource_bundle_handler =  proc "stdcall" (self: ^cef.App) -> ^cef.Resource_bundle_handler {
+	app.get_resource_bundle_handler =  proc "system" (self: ^cef.App) -> ^cef.Resource_bundle_handler {
 		return nil;
 	}
-	app.get_browser_process_handler = proc "stdcall" (self: ^cef.App) -> ^cef.Browser_process_handler {
+	app.get_browser_process_handler = proc "system" (self: ^cef.App) -> ^cef.Browser_process_handler {
 		return nil;
 	}
-	app.get_render_process_handler = proc "stdcall" (self: ^cef.App) -> ^cef.Render_process_handler {
+	app.get_render_process_handler = proc "system" (self: ^cef.App) -> ^cef.Render_process_handler {
 		return nil;
 	}
 
@@ -152,11 +152,11 @@ entry :: proc () {
 	log.debugf("hinstance : %v, exe_path : %v, exe_dir : %v", hinstance, exe_path, exe_dir);
 
 	app := make_application(
-		proc "stdcall" (self: ^cef.App, process_type: ^cef.cef_string, Command_line: ^cef.Command_line) {
+		proc "system" (self: ^cef.App, process_type: ^cef.cef_string, Command_line: ^cef.Command_line) {
 			context = runtime.default_context();
 			fmt.printf("proccessing command line arguments, %v and %v\n", process_type, Command_line);
 		},
-		proc "stdcall" (self: ^cef.App, registrar: ^cef.Scheme_registrar) {
+		proc "system" (self: ^cef.App, registrar: ^cef.Scheme_registrar) {
 			context = runtime.default_context();
 			fmt.printf("registering scheme %v\n", registrar);
 		}

@@ -13,6 +13,6 @@ when ODIN_OS == .Windows {
 cef_button_delegate_t :: struct {
 	base: cef_view_delegate_t,
 	
-	on_button_pressed: proc "c" (self: ^cef_button_delegate_t, button: ^cef_button_t),
-	on_button_state_changed: proc "c" (self: ^cef_button_delegate_t, button: ^cef_button_t),
+	on_button_pressed: proc "system" (self: ^cef_button_delegate_t, button: ^cef_button_t),
+	on_button_state_changed: proc "system" (self: ^cef_button_delegate_t, button: ^cef_button_t),
 } 

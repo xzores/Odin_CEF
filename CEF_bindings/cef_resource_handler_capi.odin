@@ -9,7 +9,7 @@ Resource_skip_callback :: struct {
 	base: base_ref_counted,
 
 	// Continue skip(). If bytes_skipped > 0 more skipping may occur; if <= 0 the request fails with ERR_REQUEST_RANGE_NOT_SATISFIABLE.
-	cont: proc "c" (self: ^Resource_skip_callback, bytes_skipped: c.int64_t),
+	cont: proc "system" (self: ^Resource_skip_callback, bytes_skipped: c.int64_t),
 }
 
 // Callback for asynchronous continuation of cef_resource_handler_t::read().
@@ -19,7 +19,7 @@ Resource_read_callback :: struct {
 	base: base_ref_counted,
 
 	// Continue read(). 0 => complete; >0 => read() again; <0 => fail with error code = bytes_read.
-	cont: proc "c" (self: ^Resource_read_callback, bytes_read: c.int),
+	cont: proc "system" (self: ^Resource_read_callback, bytes_read: c.int),
 }
 
 // Custom request handler. Functions are called on the IO thread unless noted.
@@ -33,7 +33,7 @@ Resource_handler :: struct {
 	// - handle_request=0 & return 1: decide later; call |callback| to continue/cancel.
 	// - handle_request=1 & return 0: cancel immediately.
 	// For backwards compat you may set handle_request=0 & return 0 to trigger process_request().
-	open: proc "c" (
+	open: proc "system" (
 		self: ^Resource_handler,
 		request: ^Request,
 		handle_request: ^c.int,
@@ -41,7 +41,7 @@ Resource_handler :: struct {
 	) -> c.int,
 
 	// DEPRECATED. Begin processing the request; call callback::cont() when headers are available. Return 0 to cancel.
-	process_request: proc "c" (
+	process_request: proc "system" (
 		self: ^Resource_handler,
 		request: ^Request,
 		callback: ^cef_callback,
@@ -52,7 +52,7 @@ Resource_handler :: struct {
 	// - If known: set positive length and read() until done.
 	// - To redirect: set |redirectUrl| or set redirect status + Location header on |response|.
 	// - On setup error: response.set_error(...).
-	get_response_headers: proc "c" (
+	get_response_headers: proc "system" (
 		self: ^Resource_handler,
 		response: ^Response,
 		response_length: ^c.int64_t,
@@ -63,7 +63,7 @@ Resource_handler :: struct {
 	// - Immediate: set *bytes_skipped and return 1.
 	// - Async: set *bytes_skipped=0, return 1, then callback.cont(...) when ready.
 	// - Failure: set *bytes_skipped < 0 and return 0.
-	skip: proc "c" (
+	skip: proc "system" (
 		self: ^Resource_handler,
 		bytes_to_skip: c.int64_t,
 		bytes_skipped: ^c.int64_t,
@@ -75,7 +75,7 @@ Resource_handler :: struct {
 	// - Async: keep data_out pointer valid, set *bytes_read=0, return 1, then callback.cont(...) when ready.
 	// - Complete: set *bytes_read=0 and return 0.
 	// - Failure: set *bytes_read < 0 and return 0.
-	read: proc "c" (
+	read: proc "system" (
 		self: ^Resource_handler,
 		data_out: rawptr,
 		bytes_to_read: c.int,
@@ -84,7 +84,7 @@ Resource_handler :: struct {
 	) -> c.int,
 
 	// DEPRECATED. Use skip/read instead.
-	read_response: proc "c" (
+	read_response: proc "system" (
 		self: ^Resource_handler,
 		data_out: rawptr,
 		bytes_to_read: c.int,
@@ -93,5 +93,5 @@ Resource_handler :: struct {
 	) -> c.int,
 
 	// Request processing has been canceled.
-	cancel: proc "c" (self: ^Resource_handler),
+	cancel: proc "system" (self: ^Resource_handler),
 }

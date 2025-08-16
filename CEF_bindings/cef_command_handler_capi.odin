@@ -13,7 +13,7 @@ Command_handler :: struct {
 	// |disposition| describes the intended command target.
 	// Return 1 if handled, 0 for default. For context menus this is called after
 	// Context_menu_handler_t::OnContextMenuCommand. (Chrome style only.)
-	on_chrome_command: proc "c" (
+	on_chrome_command: proc "system" (
 		self: ^Command_handler,
 		browser: ^Browser,
 		command_id: c.int,
@@ -21,27 +21,27 @@ Command_handler :: struct {
 	) -> c.int,
 
 	// Should a Chrome app menu item be visible? Only called for items visible by default. (Chrome style only.)
-	is_chrome_app_menu_item_visible: proc "c" (
+	is_chrome_app_menu_item_visible: proc "system" (
 		self: ^Command_handler,
 		browser: ^Browser,
 		command_id: c.int,
 	) -> c.int,
 
 	// Should a Chrome app menu item be enabled? Only called for items enabled by default. (Chrome style only.)
-	is_chrome_app_menu_item_enabled: proc "c" (
+	is_chrome_app_menu_item_enabled: proc "system" (
 		self: ^Command_handler,
 		browser: ^Browser,
 		command_id: c.int,
 	) -> c.int,
 
 	// During browser creation: should a Chrome page action icon be visible? (Chrome style only.)
-	is_chrome_page_action_icon_visible: proc "c" (
+	is_chrome_page_action_icon_visible: proc "system" (
 		self: ^Command_handler,
 		icon_type: Chrome_page_action_icon_type,
 	) -> c.int,
 
 	// During browser creation: should a Chrome toolbar button be visible? (Chrome style only.)
-	is_chrome_toolbar_button_visible: proc "c" (
+	is_chrome_toolbar_button_visible: proc "system" (
 		self: ^Command_handler,
 		button_type: Chrome_toolbar_button_type,
 	) -> c.int,

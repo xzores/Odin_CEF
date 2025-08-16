@@ -13,7 +13,7 @@ when ODIN_OS == .Windows {
 Resource_bundle_handler :: struct {
 	base: base_ref_counted,
 	
-	get_localized_string: proc "c" (self: ^Resource_bundle_handler, string_id: c.int, string: ^cef_string) -> b32,
-	get_data_resource: proc "c" (self: ^Resource_bundle_handler, resource_id: c.int, data: ^^cef_binary_value) -> b32,
-	get_data_resource_for_scale: proc "c" (self: ^Resource_bundle_handler, resource_id: c.int, scale_factor: cef_scale_factor_t, data: ^^cef_binary_value) -> b32,
+	get_localized_string: proc "system" (self: ^Resource_bundle_handler, string_id: c.int, string: ^cef_string) -> b32,
+	get_data_resource: proc "system" (self: ^Resource_bundle_handler, resource_id: c.int, data: ^^cef_binary_value) -> b32,
+	get_data_resource_for_scale: proc "system" (self: ^Resource_bundle_handler, resource_id: c.int, scale_factor: cef_scale_factor_t, data: ^^cef_binary_value) -> b32,
 } 
