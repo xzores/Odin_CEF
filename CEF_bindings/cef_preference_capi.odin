@@ -10,11 +10,7 @@ when ODIN_OS == .Windows {
 	foreign import lib "CEF/Release/libcef.dylib"
 }
 
-// ---- Compile-time feature gate --------------------------------------------
-// Keep this in sync with your CEF build.
-CEF_VERSION_MAJOR   :: 139
-CEF_HAS_API_13401   :: CEF_VERSION_MAJOR >= 134
-// ---------------------------------------------------------------------------
+CEF_HAS_API_13401 :: true; //TODO i think this is right
 
 // Manages custom preference registrations. (Allocated DLL-side.)
 Preference_registrar :: struct {

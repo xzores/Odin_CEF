@@ -47,7 +47,6 @@ cef_string_userfree_utf16_free :: internal.string_userfree_utf16_free;
 cef_string_utf16_to_lower :: internal.string_utf16_to_lower;
 cef_string_utf16_to_upper :: internal.string_utf16_to_upper;
 
-
 Log_severity :: internal.Log_severity;
 Audio_parameters :: internal.Audio_parameters 
 Browser_settings :: internal.Browser_settings

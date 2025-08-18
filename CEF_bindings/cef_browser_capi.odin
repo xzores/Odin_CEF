@@ -1,5 +1,13 @@
 package odin_cef
 
+when ODIN_OS == .Windows {
+	foreign import lib "CEF/Release/libcef.lib"
+} else when ODIN_OS == .Linux {
+	foreign import lib "CEF/Release/libcef.so"
+} else when ODIN_OS == .Darwin {
+	foreign import lib "CEF/Release/libcef.dylib"
+}
+
 import "core:c"
 
 /// Structure used to represent a browser. When used in the browser process the functions of this structure may be called on any thread unless otherwise
@@ -117,3 +125,18 @@ download_image_callback :: struct {
 	/// multiple scale factors, or nil if the download failed.
 	on_download_image_finished: proc "system" (self: ^download_image_callback, image_url: ^cef_string, http_status_code: c.int, image: ^Image),
 } 
+
+@(default_calling_convention="system", link_prefix="cef_", require_results)
+foreign lib {
+	
+	/// Create a new browser using |window_info|; values are copied and any native window is created on the UI thread. If |request_context| is nil the global context is used. Callable from any browser-process thread and non-blocking. Optional |extra_info| is passed to Render_process_handler.on_browser_created in the render process.
+	browser_host_create_browser :: proc (window_info: ^Window_info, client: ^Client, url: ^cef_string, settings: ^Browser_settings,
+										 extra_info: ^cef_dictionary_value, request_context: ^Request_context,) -> c.int ---
+
+	/// Create a new browser using |window_info| on the browser-process UI thread. If |request_context| is nil the global context is used. Optional |extra_info| is passed to Render_process_handler.on_browser_created in the render process.
+	browser_host_create_browser_sync :: proc (window_info: ^Window_info, client: ^Client, url: ^cef_string, settings: ^Browser_settings,	
+												extra_info: ^cef_dictionary_value, request_context: ^Request_context) -> ^Browser ---
+
+	/// Returns the browser (if any) with the specified identifier.
+	browser_host_get_browser_by_identifier :: proc (browser_id: c.int) -> ^Browser ---
+}

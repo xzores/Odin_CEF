@@ -1,5 +1,13 @@
 package odin_cef
 
+when ODIN_OS == .Windows {
+	foreign import lib "CEF/Release/libcef.lib"
+} else when ODIN_OS == .Linux {
+	foreign import lib "CEF/Release/libcef.so"
+} else when ODIN_OS == .Darwin {
+	foreign import lib "CEF/Release/libcef.dylib"
+}
+
 import "core:c"
 
 /// All ref-counted framework structures must include this structure first.
@@ -29,3 +37,4 @@ base_scoped :: struct {
 	/// Called to delete this object. May be NULL if the object is not owned.
 	del: proc "system" (self: ^base_scoped),
 } 
+

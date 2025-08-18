@@ -1,0 +1,233 @@
+[0816/221915.476:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/221915.541:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/221922.636:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/221922.646:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/221925.622:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/221950.272:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/221950.279:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/221953.839:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/222014.151:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/222014.158:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/222017.666:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/222049.907:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/222049.916:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/222059.425:ERROR:base\i18n\icu_util.cc:224] Invalid file descriptor to ICU data received.
+[0816/222108.555:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/222108.564:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/222112.053:FATAL:gin\v8_initializer.cc:684] Error loading V8 startup snapshot file
+[0816/222358.337:ERROR:ui\base\resource\resource_bundle.cc:1086] Failed to load C:\Users\jakob\Nextcloud\Odin_CEF\chrome_100_percent.pak
+Some features may not be available.
+[0816/222358.337:ERROR:ui\base\resource\resource_bundle.cc:1086] Failed to load C:\Users\jakob\Nextcloud\Odin_CEF\chrome_100_percent.pak
+Some features may not be available.
+[0816/222358.338:ERROR:ui\base\resource\resource_bundle.cc:1086] Failed to load C:\Users\jakob\Nextcloud\Odin_CEF\resources.pak
+Some features may not be available.
+[0816/222358.338:ERROR:ui\base\resource\resource_bundle.cc:1086] Failed to load C:\Users\jakob\Nextcloud\Odin_CEF\resources.pak
+Some features may not be available.
+[36984:53344:0816/222401.546:VERBOSE1:base\metrics\statistics_recorder.cc:596] Collections of all histograms
+Histogram: HeapProfiling.InProcess.Enabled recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: HeapProfiling.InProcess.Enabled.Utility recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: LevelDBEnv.DeleteTableBackupFile recorded 0 samples (flags = 0x41)
+0 ... 
+
+Histogram: LevelDBEnv.SyncResult recorded 2 samples, mean = 0.0 (flags = 0x41)
+0  --O                                                                       (2 = 100.0%)
+1  ... 
+
+Histogram: LocalStorage.DatabaseOpen recorded 1 samples, mean = 0.0 (flags = 0x41)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Memory.PartitionAlloc.PartitionRoot.ExtrasSize recorded 1 samples, mean = 4.0 (flags = 0x1)
+0  ... 
+4  -O                                                                        (1 = 100.0%) {0.0%}
+5  ... 
+
+Histogram: Mojo.EndToEndLatencyUs.ChildIOThread recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Scheduling.ThreadController.ActiveIntervalDuration.Any.Other recorded 1 samples, mean = 0.0 (flags = 0x41)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Scheduling.ThreadController.ActiveIntervalDuration.Short.Other recorded 1 samples, mean = 21.0 (flags = 0x41)
+0   ... 
+21  -O                                                                        (1 = 100.0%) {0.0%}
+22  ... 
+
+Histogram: Scheduling.ThreadController.ActiveIntervalOffCpuDuration.Any.Other recorded 1 samples, mean = 0.0 (flags = 0x41)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Scheduling.ThreadController.ActiveIntervalOffCpuDuration.Short.Other recorded 1 samples, mean = 21.0 (flags = 0x41)
+0   ... 
+21  -O                                                                        (1 = 100.0%) {0.0%}
+22  ... 
+
+Histogram: Scheduling.ThreadController.ActiveIntervalOnCpuDuration.Any.Other recorded 1 samples, mean = 0.0 (flags = 0x41)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Scheduling.ThreadController.ActiveIntervalOnCpuDuration.Short.Other recorded 1 samples, mean = 0.0 (flags = 0x41)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Scheduling.ThreadController.ActiveIntervalOnCpuPercentage.Any.Other recorded 1 samples, mean = 0.0 (flags = 0x41)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Scheduling.ThreadController.ActiveIntervalOnCpuPercentage.Short.Other recorded 1 samples, mean = 0.0 (flags = 0x41)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Scheduling.ThreadController.IdleDuration.Any.Other recorded 1 samples, mean = 1.0 (flags = 0x41)
+0  O                                                                         (0 = 0.0%)
+1  -O                                                                        (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: Scheduling.ThreadController.IdleDuration.Medium.Other recorded 1 samples, mean = 1.0 (flags = 0x41)
+0  O                                                                         (0 = 0.0%)
+1  -O                                                                        (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: Security.GwpAsan.Activated.Malloc.Utility recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Security.GwpAsan.Activated.PartitionAlloc.Utility recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Startup.LoadTime.RecordedProcessCreation recorded 1 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  -O                                                                        (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: UMA.ChildProcess.Ping.SharedMemorySetUp recorded 1 samples, mean = 1.0 (flags = 0x41)
+0  O                                                                         (0 = 0.0%)
+1  -O                                                                        (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: UMA.LocalHistogram recorded 1 samples, mean = 1.0 (flags = 0x40)
+0  O                                                                         (0 = 0.0%)
+1  -O                                                                        (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: UMA.PersistentAllocator.EarlyHistograms.UtilityMetrics recorded 1 samples, mean = 8.0 (flags = 0x41)
+0  ... 
+8  -O                                                                        (1 = 100.0%) {0.0%}
+9  ... 
+
+Histogram: UMA.PersistentAllocator.UtilityMetrics.UsedPct recorded 0 samples (flags = 0x41)
+0 ... 
+
+Histogram: Variations.Limits.VariationKeySize.Default recorded 3 samples, mean = 0.0 (flags = 0x1)
+0  ---O                                                                      (3 = 100.0%)
+1  ... 
+
+
+[0816/222948.753:ERROR:ui\base\resource\resource_bundle.cc:1086] Failed to load C:\Users\jakob\Nextcloud\Odin_CEF\chrome_100_percent.pak
+Some features may not be available.
+[0816/222948.755:ERROR:ui\base\resource\resource_bundle.cc:1086] Failed to load C:\Users\jakob\Nextcloud\Odin_CEF\resources.pak
+Some features may not be available.
+[0816/222948.766:ERROR:ui\base\resource\resource_bundle.cc:1086] Failed to load C:\Users\jakob\Nextcloud\Odin_CEF\chrome_100_percent.pak
+Some features may not be available.
+[0816/222948.767:ERROR:ui\base\resource\resource_bundle.cc:1086] Failed to load C:\Users\jakob\Nextcloud\Odin_CEF\resources.pak
+Some features may not be available.
+[20188:27488:0816/222951.881:VERBOSE1:base\metrics\statistics_recorder.cc:596] Collections of all histograms
+Histogram: HeapProfiling.InProcess.Enabled recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: HeapProfiling.InProcess.Enabled.Utility recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: LevelDBEnv.DeleteTableBackupFile recorded 0 samples (flags = 0x41)
+0 ... 
+
+Histogram: LocalStorage.DatabaseOpen recorded 1 samples, mean = 0.0 (flags = 0x41)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Memory.PartitionAlloc.PartitionRoot.ExtrasSize recorded 1 samples, mean = 4.0 (flags = 0x1)
+0  ... 
+4  -O                                                                        (1 = 100.0%) {0.0%}
+5  ... 
+
+Histogram: Mojo.Channel.WriteToReadLatencyUs recorded 1 samples, mean = 17.0 (flags = 0x41)
+0   ... 
+17  -O                                                                        (1 = 100.0%) {0.0%}
+19  ... 
+
+Histogram: Mojo.EndToEndLatencyUs.ChildIOThread recorded 0 samples (flags = 0x1)
+0 ... 
+
+Histogram: Security.GwpAsan.Activated.Malloc.Utility recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Security.GwpAsan.Activated.PartitionAlloc.Utility recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Startup.LoadTime.RecordedProcessCreation recorded 1 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  -O                                                                        (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: UMA.ChildProcess.Ping.SharedMemorySetUp recorded 1 samples, mean = 1.0 (flags = 0x41)
+0  O                                                                         (0 = 0.0%)
+1  -O                                                                        (1 = 100.0%) {0.0%}
+2  ... 
+
+Histogram: UMA.LocalHistogram recorded 1 samples, mean = 1.0 (flags = 0x40)
+0  O                                                                         (0 = 0.0%)
+1  -O                                                                        (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: UMA.PersistentAllocator.EarlyHistograms.UtilityMetrics recorded 1 samples, mean = 8.0 (flags = 0x41)
+0  ... 
+8  -O                                                                        (1 = 100.0%) {0.0%}
+9  ... 
+
+Histogram: UMA.PersistentAllocator.UtilityMetrics.UsedPct recorded 0 samples (flags = 0x41)
+0 ... 
+
+Histogram: Variations.Limits.VariationKeySize.Default recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+
+[0816/224413.713:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0816/225536.676:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0816/225540.521:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0817/230326.399:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0817/230823.174:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0817/230845.185:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0817/230900.921:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0817/230954.884:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0817/231109.664:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/105530.577:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/105603.474:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/110304.969:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/110512.752:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/110631.278:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/112515.602:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/112831.360:WARNING:cef\libcef\common\resource_util.cc:83] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0818/112831.365:ERROR:chrome\common\logging_chrome.cc:584] Invalid logging destination: cef.log: The operation completed successfully. (0x0)
+[0818/112845.599:WARNING:cef\libcef\common\resource_util.cc:83] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0818/112910.427:WARNING:cef\libcef\common\resource_util.cc:83] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0818/112922.217:WARNING:cef\libcef\common\resource_util.cc:83] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0818/113103.934:WARNING:cef\libcef\common\resource_util.cc:83] Please customize CefSettings.root_cache_path for your application. Use of the default value may lead to unintended process singleton behavior.
+[0818/113316.286:ERROR:chrome\common\logging_chrome.cc:584] Invalid logging destination: cef.log: The operation completed successfully. (0x0)
+[0818/113526.755:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/113541.383:FATAL:cef\libcef_dll\ctocpp\ctocpp_ref_counted.h:124] Cannot wrap struct with invalid base.size value (got 1780730657328, expected 80) at API version -1
+[0818/113549.684:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/114159.850:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
+[0818/115046.627:FATAL:cef\libcef_dll\ctocpp\app_ctocpp.cc:118] CefApp_0_CToCpp called with invalid version -1
