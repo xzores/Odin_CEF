@@ -36,3 +36,4 @@
 
 examples/cache/**
 examples/cef.log
+examples/debug.log
