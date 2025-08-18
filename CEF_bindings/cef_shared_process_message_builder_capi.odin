@@ -16,6 +16,6 @@ cef_shared_process_message_builder_t :: struct {
 	is_valid: proc "system" (self: ^cef_shared_process_message_builder_t) -> b32,
 	size: proc "system" (self: ^cef_shared_process_message_builder_t) -> c.size_t,
 	memory: proc "system" (self: ^cef_shared_process_message_builder_t) -> rawptr,
-	build: proc "system" (self: ^cef_shared_process_message_builder_t) -> ^cef_process_message_t,
+	build: proc "system" (self: ^cef_shared_process_message_builder_t) -> ^Process_message,
 }
 

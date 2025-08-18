@@ -59,14 +59,16 @@ alloc_cef_object :: proc ($T : typeid, loc := #caller_location) -> ^T where intr
 			new_val := intrinsics.atomic_add(&super.ref_cnt, 1);
 		},
 		proc "system" (self: ^cef.base_ref_counted) -> b32 { //release
-			context = {};
+			context = restore_context();
 			super := cast(^Super)self;
 			new_val := intrinsics.atomic_sub(&super.ref_cnt, 1);
-			freed := new_val <= 1;
+			fmt.assertf(new_val >= 1, "Freed %v to many times", super, loc = super.alloc_location);
+			freed := new_val == 1;
 			
 			//free the object
 			if freed {
-				mem.free(super, cef_allocator, super.alloc_location);
+				log.debugf("freeing %v\n", type_info_of(T), location = super.alloc_location);
+				mem.free(super);
 			}
 			
 			return auto_cast freed;
@@ -91,11 +93,19 @@ alloc_cef_object :: proc ($T : typeid, loc := #caller_location) -> ^T where intr
 	return &super.obj;
 }
 
+release :: proc (t : ^$T) where intrinsics.type_has_field(T, "base") {
+	t.base.release(auto_cast t);
+}
+
+increment :: proc (t : ^$T) where intrinsics.type_has_field(T, "base") {
+	t.base.add_ref(auto_cast t);
+}
+
 to_cef_str :: proc (str : string, loc := #caller_location) -> cef.cef_string {
 	if str == "" {
 		return {};
 	}
-	str16 := make([]u16, len(str), context.temp_allocator, loc);
+	str16 := make([]u16, len(str) + 2, context.temp_allocator, loc);
 	str16_len := utf16.encode_string(str16, str);
 	res : cef.cef_string;
 	code := cef.cef_string_utf16_set(raw_data(str16), auto_cast str16_len, &res, 1);
@@ -133,9 +143,9 @@ make_application :: proc (on_cmd_process : On_before_command_line_processing, on
 	return app;
 }
 
-destroy_application :: proc (app : ^cef.App) {
-	fmt.printf("calling release\n");
-	app.base.release(auto_cast app);
+release_application :: proc (app : ^cef.App) {
+	log.debugf("releasing application");
+	release(auto_cast app);
 }
 
 make_client :: proc (loc := #caller_location) -> ^cef.Client {
@@ -144,4 +154,11 @@ make_client :: proc (loc := #caller_location) -> ^cef.Client {
 
 
 	return client;
+}
+
+
+utf16_str :: proc (str : string, alloc := context.allocator) -> []u16 {
+	class_name_w := make([]u16, len(str) + 2, alloc);
+	utf16.encode_string(class_name_w, str);
+	return class_name_w
 }

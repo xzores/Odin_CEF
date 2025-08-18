@@ -51,7 +51,6 @@ Log_severity :: internal.Log_severity;
 Audio_parameters :: internal.Audio_parameters 
 Browser_settings :: internal.Browser_settings
 Cursor_handle :: internal.Cursor_handle;
-Process_message :: cef_process_message_t;
 Shared_memory_region :: shared_memory_region;
 String_multimap :: string_multimap;
 Context_menu_edit_state_flags :: internal.Context_menu_edit_state_flags;

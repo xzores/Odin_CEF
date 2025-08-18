@@ -11,6 +11,7 @@ import "core:os"
 import "core:sync"
 import "core:path/filepath"
 import "core:dynlib"
+import "core:slice"
 import win32 "core:sys/windows"
 import "core:unicode/utf16"
 
@@ -38,10 +39,10 @@ on_loading_state_change :: proc "system" (self: ^cef.Load_handler, browser: ^cef
 g_render_handler : ^cef.Render_handler;
 g_load_handler : ^cef.Load_handler;
 
-main_thread_id : int;
+browser_window : win32.HWND;
 
 entry :: proc () { 
-	
+
 	{ //setup the hash, required in newer versions of CEF
 		res := cef.api_hash(cef.CEF_API_VERSION_13900, 0);
 		assert(res == cef.CEF_API_HASH_13900, "The hash does not match the platform");
@@ -49,153 +50,172 @@ entry :: proc () {
 		log.infof("CEF returned api version %v", cef.api_version());
 	}
 
-	log.infof("Starting thread %v", os.current_thread_id());
-	if main_thread_id == 0 {
+	hinstance : win32.HMODULE
+	args : cef.Main_args; 
+	{	//Run common setup
+
+		log.infof("Starting thread %v", os.current_thread_id());
 		set_cef_allocator();
-		main_thread_id = os.current_thread_id();
-	}
+			set_cef_logger();
 
-    // 1) Get hInstance and exe dir
-    hinstance := win32.GetModuleHandleW(nil);
-    // 2) Main args
-	args : cef.Main_args = { hinstance };
-	
-	code := cef.execute_process(&args, nil, nil);
-	if (code >= 0) {
-		//this is a child process
-		return;
-	}
-	else if code == -1 {
-		//we are the browser (main)
-		log.infof("Starting browser thread...");
-	}
-	
-	exe_path  := os.args[0];
-    exe_dir   := filepath.dir(exe_path);
-	defer delete(exe_dir);
-	
-	log.debugf("hinstance : %v, exe_path : %v, exe_dir : %v", hinstance, exe_path, exe_dir);
+		// 1) Get hInstance and exe dir
+		hinstance = win32.GetModuleHandleW(nil);
+		if hinstance == nil {
+			check_win32_error("Failed to get module handle");
+		}
 
-	root_cache_dir := filepath.join({exe_dir, "cache"}, context.temp_allocator);
-	cache_dir := filepath.join({root_cache_dir, "default"}, context.temp_allocator);
-	res_dir := exe_dir;
-	loc_dir := filepath.join({res_dir, "locales"}, context.temp_allocator);
-	log_dest := filepath.join({exe_dir, "cef.log"}, context.temp_allocator);
-	
-	utils.ensure_folder_exists(cache_dir);
-	
-	cef_settings := make_cef_settings(
-		no_sandbox = true,
-		multi_threaded_message_loop = true,
-		cache_path = cache_dir,
-   	 	root_cache_path = root_cache_dir,
-		resources_dir_path = res_dir,
-		locales_dir_path = loc_dir,
-		browser_subprocess_path = exe_path,
-		log_file = log_dest,
-		log_severity = cef.Log_severity.LOGSEVERITY_DEBUG
-	);
-	defer destroy_cef_settings(cef_settings);
-
-	browser_window : win32.HWND;
-	{ //Use win32 to register a window class
-		wcex : win32.WNDCLASSEXW;
-		wcex.cbSize = size_of(win32.WNDCLASSEXW);
-		wcex.style = win32.CS_HREDRAW | win32.CS_VREDRAW;
-		wcex.lpfnWndProc = proc "system" (window_handle : win32.HWND, msg : win32.UINT, wParam : win32.WPARAM, lParam : win32.LPARAM) -> win32.LRESULT {
-			context = restore_context();
-			
-			switch msg {
-
-				case win32.WM_CREATE: {
-					pClient := make_client();
-					
-					rect : win32.RECT;
-					win32.GetClientRect(window_handle, &rect);
-					bounds : cef.cef_rect = {
-						rect.left,
-						rect.top, 
-						rect.right - rect.left,
-						rect.bottom - rect.top,
-					}
-
-					info : cef.Window_info;
-					info.style = win32.WS_OVERLAPPEDWINDOW | win32.WS_CLIPCHILDREN | win32.WS_CLIPSIBLINGS | win32.WS_VISIBLE;
-					info.parent_window = nil;
-					info.bounds = bounds;
-					
-					url := to_cef_str("google.com");
-					defer destroy_cef_string(url);
-					ok := cef.browser_host_create_browser(&info, pClient, &url, nil, nil, nil);
-					if ok == 0 {
-						// creation failed
-						return -1;
-					}
-
-					return 0;// handled successfully
-				}
-				case: {
-					return win32.DefWindowProcA(window_handle, msg, wParam, lParam);
+		// 2) Main args
+		args = { hinstance };
+		
+		code := cef.execute_process(&args, nil, nil);
+		if (code >= 0) {
+			//this is a child process
+			return;
+		}
+		else if code == -1 {
+			//we are the browser (main)
+			log.infof("Starting browser thread...");
+			when ODIN_WINDOWS_SUBSYSTEM == .Windows && ODIN_DEBUG {
+				if !win32.AllocConsole() {
+					check_win32_error("Failed to create console");
 				}
 			}
-
-			unreachable();
-		};
-
-		class_name_str := "$browser-window$";
-		class_name_w := make([]u16, len(class_name_str) + 1, context.temp_allocator);
-		utf16.encode_string(class_name_w, class_name_str);
-
-		window_name_str := "Odin Browser";
-		window_name_w := make([]u16, len(window_name_str) + 1, context.temp_allocator);
-		utf16.encode_string(window_name_w, window_name_str);
-
-		wcex.hInstance = auto_cast hinstance;
-		//wcex.hCursor = win32.LoadCursorW(nil, win32.IDC_ARROW_W);
-		wcex.lpszClassName = raw_data(class_name_w);
-		win32.RegisterClassExW(&wcex);
-
-		browser_window = win32.CreateWindowExW(0, wcex.lpszClassName, raw_data(window_name_w), win32.WS_OVERLAPPEDWINDOW | win32.WS_CLIPCHILDREN, 200, 20, 1080, 1920, nil, nil, auto_cast hinstance, nil);
-		win32.ShowWindow(browser_window, win32.SWP_SHOWWINDOW);
-		win32.UpdateWindow(browser_window);
-	}
-
-
-	app := make_application(
-		proc "system" (self: ^cef.App, process_type: ^cef.cef_string, Command_line: ^cef.Command_line) {
-			context = restore_context();
-			fmt.printf("proccessing command line arguments, %v and %#v\n", process_type, Command_line);
-		},
-		proc "system" (self: ^cef.App, registrar: ^cef.Scheme_registrar) {
-			context = restore_context();
-			fmt.printf("registering scheme %#v\n", registrar);
 		}
-	);
-	defer destroy_application(app);
-	log.debugf("size of app: %v", size_of(cef.App));
-
-
-	code = cef.initialize(&args, &cef_settings, app, nil);
-	if (code == 0) {
-		exit_code := cef.get_exit_code();
-		fmt.panicf("CEF initialize failed, code was %v (%v)", code, exit_code);
 	}
-	
-	/*
-	// Global handlers
-	g_render_handler = make_render_handler();
-	g_load_handler = make_load_handler();
-	*/
-	
-	msg : win32.MSG;
-	for true {
-		win32.GetMessageW(&msg, nil, 0, 0);
-		win32.TranslateMessage(&msg);
-		win32.DispatchMessageW(&msg);
-	} 
 
+	{	//Run the main thread
+		exe_path  := os.args[0];
+		exe_dir   := filepath.dir(exe_path);
+		defer delete(exe_dir);
+		
+		log.debugf("hinstance : %v, exe_path : %v, exe_dir : %v", hinstance, exe_path, exe_dir);
+
+		root_cache_dir := filepath.join({exe_dir, "cache"}, context.temp_allocator);
+		cache_dir := filepath.join({root_cache_dir, "default"}, context.temp_allocator);
+		res_dir := exe_dir;
+		loc_dir := filepath.join({res_dir, "locales"}, context.temp_allocator);
+		log_dest := filepath.join({exe_dir, "cef.log"}, context.temp_allocator);
+		
+		utils.ensure_folder_exists(cache_dir);
+		
+		cef_settings := make_cef_settings(
+			no_sandbox = true,
+			multi_threaded_message_loop = true,
+			cache_path = cache_dir,
+			root_cache_path = root_cache_dir,
+			resources_dir_path = res_dir,
+			locales_dir_path = loc_dir,
+			browser_subprocess_path = exe_path,
+			log_file = log_dest,
+			log_severity = cef.Log_severity.LOGSEVERITY_DEBUG
+		);
+		defer destroy_cef_settings(cef_settings);
+
+		app := make_application(
+			proc "system" (self: ^cef.App, process_type: ^cef.cef_string, Command_line: ^cef.Command_line) {
+				context = restore_context();
+				fmt.printf("proccessing command line arguments, %v and %#v\n", process_type, Command_line);
+			},
+			proc "system" (self: ^cef.App, registrar: ^cef.Scheme_registrar) {
+				context = restore_context();
+				fmt.printf("registering scheme %#v\n", registrar);
+			}
+		);
+		defer release_application(app)
+		log.debugf("size of app: %v", size_of(cef.App));
+
+		increment(app);
+		if cef.initialize(&args, &cef_settings, app, nil) == 0 {
+			exit_code := cef.get_exit_code();
+			fmt.panicf("CEF initialize failed, code was %v", exit_code);
+		}
+		
+		class_name := utf16_str("$browser-window$", context.temp_allocator);
+		window_name := utf16_str("Odin Browser", context.temp_allocator);
+		log.debugf("creating %v with title %v", class_name, window_name);
+		
+		{ //Use win32 to register a window class
+			wcex : win32.WNDCLASSEXW;
+			wcex.cbSize = size_of(win32.WNDCLASSEXW);
+			wcex.style = win32.CS_HREDRAW | win32.CS_VREDRAW;
+			wcex.lpfnWndProc = proc "system" (window_handle : win32.HWND, msg : win32.UINT, wParam : win32.WPARAM, lParam : win32.LPARAM) -> win32.LRESULT {
+				context = restore_context();
+
+				switch msg {
+
+					case win32.WM_CREATE: {
+						pClient := make_client()  // refcounted; pass with ref=1
+
+						rect : win32.RECT
+						win32.GetClientRect(window_handle, &rect)
+						bounds : cef.cef_rect = {
+							rect.left, rect.top,
+							rect.right - rect.left, rect.bottom - rect.top,
+						}
+						
+						info := cef.Window_info {
+							size = size_of(cef.Window_info),
+							//ex_style = 0,
+							//window_name = to_cef_str("$browser-window$"),
+							//style = win32.WS_OVERLAPPEDWINDOW | win32.WS_CLIPCHILDREN,
+							bounds = bounds,
+							//parent_window = nil,
+							//menu = nil,
+							//windowless_rendering_enabled = 0,
+							//shared_texture_enabled = 0,
+							//external_begin_frame_enabled = 0,
+							//window = window_handle,
+							//runtime_style = .RUNTIME_STYLE_DEFAULT,
+						}
+
+						url := to_cef_str("https://www.google.com")
+						defer destroy_cef_string(url)
+						
+						ok := cef.browser_host_create_browser(&info, pClient, &url, nil, nil, nil)
+						if ok == 0 {
+							log.errorf("cef_browser_host_create_browser failed")
+							return -1
+						}
+						return 0
+					}
+					case win32.WM_DESTROY: {
+						win32.PostQuitMessage(0);
+						return 0;
+					}
+					case: {
+						return win32.DefWindowProcW(window_handle, msg, wParam, lParam);
+					}
+				}
+				
+				unreachable();
+			};
+			wcex.hInstance = auto_cast hinstance;
+			//wcex.hCursor = win32.LoadCursorW(nil, win32._IDC_ARROW);
+			wcex.lpszClassName = raw_data(class_name);
+			win32.RegisterClassExW(&wcex);
+
+			browser_window = win32.CreateWindowExW(0, wcex.lpszClassName, raw_data(window_name), win32.WS_OVERLAPPEDWINDOW | win32.WS_CLIPCHILDREN, 200, 20, 1080, 1080, nil, nil, auto_cast hinstance, nil);
+			if browser_window == nil {
+				check_win32_error("failed to create window");
+			}
+
+			if !win32.ShowWindow(browser_window, win32.SW_SHOW) {
+				check_win32_error("failed to show window");
+			}
+			if !win32.UpdateWindow(browser_window) {
+				check_win32_error("failed to update window");
+			}
+		}
+		
+		msg: win32.MSG
+		for win32.GetMessageW(&msg, nil, 0, 0) > 0 {
+			win32.TranslateMessage(&msg)
+			win32.DispatchMessageW(&msg)
+		}
+	}
+
+	log.infof("Shutting down CEF");
 	cef.shutdown();
-	main_thread_id = 0;
 
 	log.infof("Shutting down gracefully");
 }
@@ -356,6 +376,10 @@ destroy_cef_settings :: proc (settings : cef.Settings) {
 	destroy_cef_string(settings.accept_language_list);
 	destroy_cef_string(settings.cookieable_schemes_list);
 	destroy_cef_string(settings.chrome_policy_id);
+}
+
+make_cef_browser_settings :: proc () {
+
 }
 
 main :: proc () {
