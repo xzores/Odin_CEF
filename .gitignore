@@ -34,5 +34,5 @@
 .vs
 **.pdb**
 
-examples/cache
+examples/cache/**
 examples/cef.log
