@@ -232,6 +232,7 @@ make_client :: proc (loc := #caller_location) -> ^cef.Client {
 		return nil;
 	}
 
+	/*
 	/// Return the handler for off-screen rendering events.
 	client.get_render_handler = proc "system" (self: ^cef.Client) -> ^cef.Render_handler {
 		context = restore_context();
@@ -240,6 +241,7 @@ make_client :: proc (loc := #caller_location) -> ^cef.Client {
 
 		return nil;
 	}
+	*/
 
 	/// Return the handler for browser request events.
 	client.get_request_handler = proc "system" (self: ^cef.Client) -> ^cef.Request_handler {

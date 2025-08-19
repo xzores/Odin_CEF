@@ -161,15 +161,15 @@ entry :: proc () {
 						info := cef.Window_info {
 							size = size_of(cef.Window_info),
 							//ex_style = ex_style,
-							window_name = to_cef_str("$browser-window$"),
+							window_name = to_cef_str("Odin Browser"),
 							style = style,
 							bounds = bounds,
-							parent_window = window_handle,
+							parent_window = nil,  // Let CEF create its own window
 							menu = nil,
 							//windowless_rendering_enabled = 1,
 							//shared_texture_enabled = 0,
 							//external_begin_frame_enabled = 0,
-							window = nil,
+							window = nil,  // Let CEF create its own window
 							runtime_style = .RUNTIME_STYLE_DEFAULT,
 						}
 						
