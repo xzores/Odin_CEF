@@ -130,14 +130,19 @@ entry :: proc () {
 			fmt.panicf("CEF initialize failed, code was %v", exit_code);
 		}
 		
-		class_name := utf16_str("$browser-window$", context.temp_allocator);
-		window_name := utf16_str("Odin Browser", context.temp_allocator);
+		ex_style :: 0;
+		class_name_str :: "BrowserWindowClass";
+		window_name_str :: "Odin Browser";
+		style : u32 : win32.CS_HREDRAW | win32.CS_VREDRAW;
+
+		class_name := utf16_str(class_name_str, context.temp_allocator);
+		window_name := utf16_str(window_name_str, context.temp_allocator);
 		log.debugf("creating %v with title %v", class_name, window_name);
 		
 		{ //Use win32 to register a window class
 			wcex : win32.WNDCLASSEXW;
 			wcex.cbSize = size_of(win32.WNDCLASSEXW);
-			wcex.style = win32.CS_HREDRAW | win32.CS_VREDRAW;
+			wcex.style = style;
 			wcex.lpfnWndProc = proc "system" (window_handle : win32.HWND, msg : win32.UINT, wParam : win32.WPARAM, lParam : win32.LPARAM) -> win32.LRESULT {
 				context = restore_context();
 
@@ -145,7 +150,7 @@ entry :: proc () {
 
 					case win32.WM_CREATE: {
 						pClient := make_client()  // refcounted; pass with ref=1
-
+						
 						rect : win32.RECT
 						win32.GetClientRect(window_handle, &rect)
 						bounds : cef.cef_rect = {
@@ -155,28 +160,31 @@ entry :: proc () {
 						
 						info := cef.Window_info {
 							size = size_of(cef.Window_info),
-							//ex_style = 0,
-							//window_name = to_cef_str("$browser-window$"),
-							//style = win32.WS_OVERLAPPEDWINDOW | win32.WS_CLIPCHILDREN,
+							//ex_style = ex_style,
+							window_name = to_cef_str("$browser-window$"),
+							style = style,
 							bounds = bounds,
-							//parent_window = nil,
-							//menu = nil,
-							//windowless_rendering_enabled = 0,
+							parent_window = window_handle,
+							menu = nil,
+							//windowless_rendering_enabled = 1,
 							//shared_texture_enabled = 0,
 							//external_begin_frame_enabled = 0,
-							//window = window_handle,
-							//runtime_style = .RUNTIME_STYLE_DEFAULT,
+							window = nil,
+							runtime_style = .RUNTIME_STYLE_DEFAULT,
 						}
+						
+						log.debugf("size of window info : %v", size_of(cef.Window_info));
 
 						url := to_cef_str("https://www.google.com")
 						defer destroy_cef_string(url)
 						
-						ok := cef.browser_host_create_browser(&info, pClient, &url, nil, nil, nil)
-						if ok == 0 {
-							log.errorf("cef_browser_host_create_browser failed")
-							return -1
-						}
+						_ = cef.browser_host_create_browser(&info, pClient, &url, nil, nil, nil)
+						//TODO error check
 						return 0
+					}
+					case win32.WM_CLOSE: {
+						log.debugf("WM CLOSE");
+						return win32.DefWindowProcW(window_handle, msg, wParam, lParam);
 					}
 					case win32.WM_DESTROY: {
 						win32.PostQuitMessage(0);
@@ -192,14 +200,17 @@ entry :: proc () {
 			wcex.hInstance = auto_cast hinstance;
 			//wcex.hCursor = win32.LoadCursorW(nil, win32._IDC_ARROW);
 			wcex.lpszClassName = raw_data(class_name);
-			win32.RegisterClassExW(&wcex);
+			if win32.RegisterClassExW(&wcex) == 0 {
+				check_win32_error("failed to register class");
+			}
 
-			browser_window = win32.CreateWindowExW(0, wcex.lpszClassName, raw_data(window_name), win32.WS_OVERLAPPEDWINDOW | win32.WS_CLIPCHILDREN, 200, 20, 1080, 1080, nil, nil, auto_cast hinstance, nil);
+			browser_window = win32.CreateWindowExW(ex_style, wcex.lpszClassName, raw_data(window_name), win32.WS_OVERLAPPEDWINDOW | win32.WS_CLIPCHILDREN | win32.WS_VISIBLE,
+														win32.CW_USEDEFAULT, win32.CW_USEDEFAULT, win32.CW_USEDEFAULT, win32.CW_USEDEFAULT, nil, nil, auto_cast hinstance, nil);
 			if browser_window == nil {
 				check_win32_error("failed to create window");
 			}
 
-			if !win32.ShowWindow(browser_window, win32.SW_SHOW) {
+			if !win32.ShowWindow(browser_window, win32.SW_SHOWDEFAULT) {
 				check_win32_error("failed to show window");
 			}
 			if !win32.UpdateWindow(browser_window) {

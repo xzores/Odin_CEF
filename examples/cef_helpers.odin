@@ -151,8 +151,114 @@ release_application :: proc (app : ^cef.App) {
 make_client :: proc (loc := #caller_location) -> ^cef.Client {
 	client := alloc_cef_object(cef.Client, loc);
 
+	/// Return the handler for audio rendering events.
+	client.get_audio_handler = proc "system" (self: ^cef.Client) -> ^cef.Audio_handler {
+		return nil;
+	}
 
+	/// Return the handler for commands. If no handler is provided the default implementation will be used.
+	client.get_command_handler = proc "system" (self: ^cef.Client) -> ^cef.Command_handler {
+		return nil;
+	}
 
+	/// Return the handler for context menus. If no handler is provided the default implementation will be used.
+	client.get_context_menu_handler = proc "system" (self: ^cef.Client) -> ^cef.Context_menu_handler {
+		return nil;
+	}
+
+	/// Return the handler for dialogs. If no handler is provided the default implementation will be used.
+	client.get_dialog_handler = proc "system" (self: ^cef.Client) -> ^cef.Dialog_handler {
+		return nil;
+	}
+
+	/// Return the handler for browser display state events.
+	client.get_Display_handler = proc "system" (self: ^cef.Client) -> ^cef.Display_handler {
+		return nil;
+	}
+	
+	/// Return the handler for download events. If no handler is returned downloads will not be allowed.
+	client.get_Download_handler = proc "system" (self: ^cef.Client) -> ^cef.Download_handler {
+		return nil;
+	}
+
+	/// Return the handler for drag events.
+	client.get_drag_handler = proc "system" (self: ^cef.Client) -> ^cef.Drag_handler {
+		return nil;
+	}
+
+	/// Return the handler for find result events.
+	client.get_find_handler = proc "system" (self: ^cef.Client) -> ^cef.Find_handler {
+		return nil;
+	}
+
+	/// Return the handler for focus events.
+	client.get_focus_handler = proc "system" (self: ^cef.Client) -> ^cef.Focus_handler {
+		return nil;
+	}
+
+	/// Return the handler for events related to frame lifespan. This function will be called once during browser creation and the result
+	/// will be cached for performance reasons.
+	client.get_frame_handler = proc "system" (self: ^cef.Client) -> ^cef.Frame_handler {
+		return nil;
+	}
+
+	/// Return the handler for permission requests.
+	client.get_permission_handler = proc "system" (self: ^cef.Client) -> ^cef.Permission_handler {
+		return nil;
+	}
+
+	/// Return the handler for JavaScript dialogs. If no handler is provided the default implementation will be used.
+	client.get_jsdialog_handler = proc "system" (self: ^cef.Client) -> ^cef.Jsdialog_handler {
+		return nil;
+	}
+
+	/// Return the handler for keyboard events.
+	client.get_keyboard_handler = proc "system" (self: ^cef.Client) -> ^cef.Keyboard_handler {
+		return nil;
+	}
+
+	/// Return the handler for browser life span events.
+	client.get_life_span_handler = proc "system" (self: ^cef.Client) -> ^cef.Life_span_handler {
+		return nil;
+	}
+
+	/// Return the handler for browser load status events.
+	client.get_load_handler = proc "system" (self: ^cef.Client) -> ^cef.Load_handler {
+		return nil;
+	}
+
+	/// Return the handler for printing on Linux. If a print handler is not provided then printing will not be supported on the Linux platform.
+	client.get_print_handler = proc "system" (self: ^cef.Client) -> ^cef.Print_handler {
+		return nil;
+	}
+
+	/// Return the handler for off-screen rendering events.
+	client.get_render_handler = proc "system" (self: ^cef.Client) -> ^cef.Render_handler {
+		context = restore_context();
+
+		log.warnf("get_render_handler");
+
+		return nil;
+	}
+
+	/// Return the handler for browser request events.
+	client.get_request_handler = proc "system" (self: ^cef.Client) -> ^cef.Request_handler {
+		context = restore_context();
+
+		log.warnf("get_request_handler");
+
+		return nil;
+	}
+
+	/// Called when a new message is received from a different process. Return true (1) if the message was handled or false (0) otherwise. Do not
+	/// keep a reference to |message| outside of this callback.
+	client.on_process_message_received = proc "system" (self: ^cef.Client, browser: ^cef.Browser, frame: ^cef.Frame, source_process: cef.cef_process_id, message: ^cef.Process_message) -> b32 {
+		context = restore_context();
+
+		log.warnf("on_process_message_received");
+
+		return true;
+	}
 	return client;
 }
 

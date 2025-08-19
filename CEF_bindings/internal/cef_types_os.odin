@@ -81,9 +81,9 @@ when ODIN_OS == .Windows {
 		size: c.size_t,
 
 		// Standard parameters required by CreateWindowEx()
-		ex_style: u32,            // DWORD
+		ex_style: c.ulong,            // DWORD
 		window_name: cef_string,
-		style: u32,               // DWORD
+		style: c.ulong,               // DWORD
 		bounds: cef_rect,
 		parent_window: Window_handle,
 		menu: rawptr,             // HMENU
