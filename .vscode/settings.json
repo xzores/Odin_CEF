@@ -10,6 +10,8 @@
 		"xlocnum": "cpp",
 		"xloctime": "cpp",
 		"regex": "cpp",
-		"sstream": "cpp"
+		"sstream": "cpp",
+		"chrono": "cpp",
+		"system_error": "cpp"
 	}
 }

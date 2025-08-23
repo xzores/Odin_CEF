@@ -1,5 +1,13 @@
 package odin_cef
 
+when ODIN_OS == .Windows {
+	foreign import lib "CEF/Release/libcef.lib"
+} else when ODIN_OS == .Linux {
+	foreign import lib "CEF/Release/libcef.so"
+} else when ODIN_OS == .Darwin {
+	foreign import lib "CEF/Release/libcef.dylib"
+}
+
 import "core:c"
 
 /// Structure used to create and/or parse command line arguments. Arguments with "--", "-" and, on Windows, "/" prefixes are considered switches. Switches
@@ -76,3 +84,12 @@ Command_line :: struct {
 	/// Insert a command before the current command. Common for debuggers, like "valgrind" or "gdb --args".
 	prepend_wrapper: proc "system" (self: ^Command_line, wrapper: ^cef_string),
 } 
+
+@(default_calling_convention="system", link_prefix="cef_", require_results)
+foreign lib {
+	/// Create a new cef_command_line instance.
+	command_line_create :: proc () -> ^Command_line ---
+
+	/// Returns the singleton global cef_command_line object. The returned object will be read-only.
+	command_line_get_global :: proc () -> ^Command_line ---
+}

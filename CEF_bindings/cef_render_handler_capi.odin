@@ -69,8 +69,8 @@ Render_handler :: struct {
 	/// Called when the user starts dragging content in the web view. Contextual information about the dragged content is supplied by |Drag_data|.
 	/// OS APIs that run a system message loop may be used within the
 	/// start_dragging call.
-	/// Return false (0) to abort the drag operation. Don't call any of browser_host::drag_source*_ended* functions after returning false (0).
-	/// Return true (1) to handle the drag operation. Call browser_host::drag_source_ended_at and drag_source_system_drag_ended either
+	/// Return false (0) to abort the drag operation. Don't call any of Browser_host::drag_source*_ended* functions after returning false (0).
+	/// Return true (1) to handle the drag operation. Call Browser_host::drag_source_ended_at and drag_source_system_drag_ended either
 	/// synchronously or asynchronously to inform the web view that the drag
 	/// operation has ended.
 	start_dragging: proc "system" (self: ^Render_handler, browser: ^Browser, Drag_data: ^Drag_data, allowed_ops: Drag_operations_mask, x: c.int, y: c.int) -> b32,

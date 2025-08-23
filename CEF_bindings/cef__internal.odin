@@ -124,3 +124,13 @@ Touch_handle_state :: internal.Touch_handle_state;
 Main_args :: internal.Main_args;
 Window_info :: internal.Window_info;
 Accelerated_paint_info :: internal.Accelerated_paint_info;
+Window_handle :: internal.Window_handle;
+Zoom_command :: internal.Zoom_command;
+Pdf_print_settings :: internal.Pdf_print_settings;
+Mouse_event :: internal.Mouse_event;
+Touch_event :: internal.Touch_event;
+mouse_button_type :: internal.mouse_button_type
+Composition_underline :: internal.Composition_underline;
+State :: internal.State;
+Runtime_style :: internal.Runtime_style;
+Key_event_type :: internal.Key_event_type;

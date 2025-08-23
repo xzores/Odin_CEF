@@ -1213,7 +1213,6 @@ menu_id :: enum u32 {
 }
 
 /// Mouse button types.
-/// Mouse button types.
 mouse_button_type :: enum u32 {
 	MBT_LEFT = 0,
 	MBT_MIDDLE,
@@ -1222,7 +1221,7 @@ mouse_button_type :: enum u32 {
 
 /// Structure representing mouse event information.
 /// Structure representing mouse event information.
-mouse_event :: struct {
+Mouse_event :: struct {
 	/// X coordinate relative to the left side of the view.
 	x: c.int,
 
@@ -1231,7 +1230,7 @@ mouse_event :: struct {
 
 	/// Bit flags describing any pressed modifier keys. See
 	/// Event_flags for values.
-	modifiers: u32,
+	modifiers: Event_flags,
 }
 
 /// Touch points states types.
@@ -1255,7 +1254,7 @@ pointer_type :: enum u32 {
 
 /// Structure representing touch event information.
 /// Structure representing touch event information.
-touch_event :: struct {
+Touch_event :: struct {
 	/// Id of a touch point. Must be unique per touch, can be any number except
 	/// -1. Note that a maximum of 16 concurrent touches will be tracked; touches
 	/// beyond that will be ignored.
@@ -1288,7 +1287,7 @@ touch_event :: struct {
 
 	/// Bit flags describing any pressed modifier keys. See
 	/// Event_flags for values.
-	modifiers: u32,
+	modifiers: Event_flags,
 
 	/// The device type that caused the event.
 	pointer_type: pointer_type,
@@ -1447,7 +1446,7 @@ Key_event :: struct {
 
 	/// Bit flags describing any pressed modifier keys. See
 	/// Event_flags for values.
-	modifiers: u32,
+	modifiers: Event_flags,
 
 	/// The Windows key code for the key event. This value is used by the DOM
 	/// specification. Sometimes it comes directly from the event (i.e. on

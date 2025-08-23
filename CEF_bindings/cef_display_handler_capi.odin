@@ -40,7 +40,7 @@ Display_handler :: struct {
 	/// Called to display a console message. Return true (1) to stop the message from being output to the console.
 	on_console_message: proc "system" (self: ^Display_handler, browser: ^Browser, level: Log_severity, message: ^cef_string, source: ^cef_string, line: c.int) -> b32,
 
-	/// Called when auto-resize is enabled via browser_host::set_auto_resize_enabled and the contents have auto-
+	/// Called when auto-resize is enabled via Browser_host::set_auto_resize_enabled and the contents have auto-
 	/// resized. |new_size| will be the desired size in DIP coordinates. Return
 	/// true (1) if the resize was handled or false (0) for default handling.
 	on_auto_resize: proc "system" (self: ^Display_handler, browser: ^Browser, new_size: ^cef_size) -> b32,
@@ -74,6 +74,6 @@ Display_handler :: struct {
 	/// Linux. Return true (1) if the rectangle was provided. Return false (0) to
 	/// use the root window bounds on Windows or the browser content bounds on
 	/// Linux. For additional usage details see
-	/// browser_host::notify_screen_info_changed.
+	/// Browser_host::notify_screen_info_changed.
 	get_root_window_screen_rect: proc "system" (self: ^Display_handler, browser: ^Browser, rect: ^cef_rect) -> b32,
 } 

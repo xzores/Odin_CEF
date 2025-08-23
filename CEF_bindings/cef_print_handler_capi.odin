@@ -37,7 +37,7 @@ Print_handler :: struct {
 	/// Called when printing has started for the specified |browser|. This
 	/// function will be called before the other on_print*() functions and
 	/// irrespective of how printing was initiated (e.g.
-	/// browser_host::print(), JavaScript window.print() or PDF extension
+	/// Browser_host::print(), JavaScript window.print() or PDF extension
 	/// print button).
 	on_print_start: proc "system" (self: ^Print_handler, browser: ^Browser),
 
@@ -60,6 +60,6 @@ Print_handler :: struct {
 	on_print_reset: proc "system" (self: ^Print_handler, browser: ^Browser),
 
 	/// Return the PDF paper size in device units. Used in combination with
-	/// browser_host::print_to_pdf().
+	/// Browser_host::print_to_pdf().
 	get_pdf_paper_size: proc "system" (self: ^Print_handler, browser: ^Browser, device_units_per_inch: c.int) -> cef_size,
 }

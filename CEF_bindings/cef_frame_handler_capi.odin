@@ -3,7 +3,7 @@ package odin_cef
 import "core:c"
 
 /// Implement this structure to handle events related to frame lifespan. The order of callbacks is:
-/// (1) During initial browser_host creation and navigation of the main frame:
+/// (1) During initial Browser_host creation and navigation of the main frame:
 /// - Frame_handler::on_frame_created => The initial main frame object has
 ///	 been created. Any commands will be queued until the frame is attached.
 /// - Frame_handler::on_main_frame_changed => The initial main frame object
@@ -12,7 +12,7 @@ import "core:c"
 ///	 can be used.
 /// - Frame_handler::on_frame_attached => The initial main frame object is
 ///	 now connected to its peer in the renderer process. Commands can be routed.
-/// (2) During further browser_host navigation/loading of the main frame	 and/or sub-frames:
+/// (2) During further Browser_host navigation/loading of the main frame	 and/or sub-frames:
 /// - Frame_handler::on_frame_created => A new main frame or sub-frame
 ///	 object has been created. Any commands will be queued until the frame is
 ///	 attached.
@@ -30,7 +30,7 @@ import "core:c"
 ///	 been assigned to the browser. This will only occur with cross-origin
 ///	 navigation or re-navigation after renderer process termination (due to
 ///	 crashes, etc).
-/// (3) During final browser_host destruction of the main frame: - Frame_handler::on_frame_detached => Any sub-frame objects have lost
+/// (3) During final Browser_host destruction of the main frame: - Frame_handler::on_frame_detached => Any sub-frame objects have lost
 ///	 their connection to the renderer process. Commands can no longer be routed
 ///	 and will be discarded.
 /// - Frame_handler::on_frame_destroyed => Any sub-frame objects have been

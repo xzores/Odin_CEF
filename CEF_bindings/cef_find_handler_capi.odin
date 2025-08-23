@@ -8,7 +8,7 @@ Find_handler :: struct {
 	/// Base structure.
 	base: base_ref_counted,
 
-	/// Called to report find results returned by browser_host::find(). |identifer| is a unique incremental identifier for the currently active
+	/// Called to report find results returned by Browser_host::find(). |identifer| is a unique incremental identifier for the currently active
 	/// search, |count| is the number of matches currently identified,
 	/// |selectionRect| is the location of where the match was found (in window
 	/// coordinates), |activeMatchOrdinal| is the current position in the search

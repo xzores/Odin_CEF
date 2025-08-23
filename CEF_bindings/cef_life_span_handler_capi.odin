@@ -47,7 +47,7 @@ Life_span_handler :: struct {
 	/// Any client state associated with pending popups should be cleared in on_before_popup_aborted, on_after_created of the popup browser, or
 	/// on_before_close of the opener browser. on_before_close of the opener browser
 	/// may be called before this function in cases where the opener is closing
-	/// during popup creation, in which case browser_host::is_valid will
+	/// during popup creation, in which case Browser_host::is_valid will
 	/// return false (0) in this function.
 	on_before_popup_aborted: proc "system" (self: ^Life_span_handler, browser: ^Browser, popup_id: c.int),
 
@@ -73,14 +73,14 @@ Life_span_handler :: struct {
 
 	/// Called when an Alloy style browser is ready to be closed, meaning that the close has already been initiated and that JavaScript unload handlers have
 	/// already executed or should be ignored. This may result directly from a
-	/// call to browser_host::[try_]close_browser() or indirectly if the
+	/// call to Browser_host::[try_]close_browser() or indirectly if the
 	/// browser's top-level parent window was created by CEF and the user attempts
 	/// to close that window (by clicking the 'X', for example). do_close() will
 	/// not be called if the browser's host window/view has already been destroyed
 	/// (via parent window/view hierarchy tear-down, for example), as it is no
 	/// longer possible to customize the close behavior at that point.
-	/// An application should handle top-level parent window close notifications by calling browser_host::try_close_browser() or
-	/// browser_host::close_browser(false (0)) instead of allowing the window
+	/// An application should handle top-level parent window close notifications by calling Browser_host::try_close_browser() or
+	/// Browser_host::close_browser(false (0)) instead of allowing the window
 	/// to close immediately (see the examples below). This gives CEF an
 	/// opportunity to process JavaScript unload handlers and optionally cancel
 	/// the close before do_close() is called.
@@ -97,7 +97,7 @@ Life_span_handler :: struct {
 	/// window/view hierarchy tear-down), otherwise the browser will be left in a
 	/// partially closed state that interferes with proper functioning. Top-level
 	/// windows created on the browser process UI thread can alternately call
-	/// browser_host::is_ready_to_be_closed() in the close handler to check
+	/// Browser_host::is_ready_to_be_closed() in the close handler to check
 	/// close status instead of relying on custom do_close() handling. See
 	/// documentation on that function for additional details.
 	/// The life_span_handler::on_before_close() function will be called after do_close() (if do_close() is called) and immediately before the
