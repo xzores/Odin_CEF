@@ -705,7 +705,7 @@ entry_furbs_window :: proc () {
 	}
 
 	/////////////////////////////// RENDER INIT ///////////////////////////////
-	render.init({}, required_gl_verion = .opengl_4_4);
+	render.init({});
 	defer render.destroy();
 	
 	window := render.window_make(512, 512, "CEF in an opengl window", .allow_resize, .none);
@@ -804,30 +804,81 @@ entry_furbs_window :: proc () {
 					sd *= 120; //WHY 120 idk??
 					pClient.host.send_mouse_wheel_event(pClient.host, &mouse_event, cast(i32)sd.x, cast(i32)sd.y);
 				}
-				
 			}
+
+
+			send_char_input :: proc (host : ^cef.Browser_host, codepoint : rune, mods : render.Input_modifier) {
+
+				key_modifiers : cef.Event_flags;
+				{	//construct event falg
+					if .caps_lock in mods {
+						key_modifiers += .EVENTFLAG_CAPS_LOCK_ON;
+					}
+					if .shift in mods {
+						key_modifiers += .EVENTFLAG_SHIFT_DOWN;
+					}
+					if .control in mods {
+						key_modifiers += .EVENTFLAG_CONTROL_DOWN;
+					}
+					if .alt in mods {
+						key_modifiers += .EVENTFLAG_ALT_DOWN;
+					}
+					if render.is_button_down(.left) {
+						key_modifiers += .EVENTFLAG_LEFT_MOUSE_BUTTON;
+					}
+					if render.is_button_down(.middel) {
+						key_modifiers += .EVENTFLAG_MIDDLE_MOUSE_BUTTON;
+					}
+					if render.is_button_down(.right) {
+						key_modifiers += .EVENTFLAG_RIGHT_MOUSE_BUTTON;
+					}
+					if .super in mods {
+						key_modifiers += .EVENTFLAG_COMMAND_DOWN;
+					}
+					if render.is_num_lock() {
+						key_modifiers += .EVENTFLAG_NUM_LOCK_ON;
+					}
+				}
+				
+				ke := cef.Key_event {
+					size                     = size_of(cef.Key_event),
+					type                     = .KEYEVENT_CHAR,
+					modifiers                = key_modifiers,
+					windows_key_code         = auto_cast codepoint,  			// <- this is the real VK code
+					//native_key_code          = auto_cast scancode,     	// <- physical position (hardware code)
+					is_system_key            = render.is_alt() ? 1 : 0,
+					//character                = auto_cast cp,           	// <- typed character
+					//unmodified_character     = auto_cast unmod_cp,     		// <- same char, with shift removed
+					focus_on_editable_field  = 1,                      	// <- set to 1 unless you know otherwise
+				}
+
+				host.send_key_event(host, &ke);
+			}
+
 
 			{ //DO keyboard input
 				//This simply handles text input event nothing more, no rawkey inputs here
 				//r is a 4 byte rune (UTF32)
-				r, done := render.recive_next_input()
-				for !done {
-					defer r, done = render.recive_next_input()
-					
-					fmt.printf("doing key %v\n", r);
+				for ki in render.char_inputs() {
+					send_char_input(pClient.host, ki.codepoint, ki.mods);
+				}
+				
+				for ki in render.key_events() {
 
+					event_type : cef.Key_event_type;
 					key_modifiers : cef.Event_flags;
+
 					{	//construct event falg
-						if render.is_caps_lock() {
+						if .caps_lock in ki.mods {
 							key_modifiers += .EVENTFLAG_CAPS_LOCK_ON;
 						}
-						if render.is_shift() {
+						if .shift in ki.mods {
 							key_modifiers += .EVENTFLAG_SHIFT_DOWN;
 						}
-						if render.is_control() {
+						if .control in ki.mods {
 							key_modifiers += .EVENTFLAG_CONTROL_DOWN;
 						}
-						if render.is_alt() {
+						if .alt in ki.mods {
 							key_modifiers += .EVENTFLAG_ALT_DOWN;
 						}
 						if render.is_button_down(.left) {
@@ -839,59 +890,48 @@ entry_furbs_window :: proc () {
 						if render.is_button_down(.right) {
 							key_modifiers += .EVENTFLAG_RIGHT_MOUSE_BUTTON;
 						}
-						if render.is_super() {
+						if .super in ki.mods {
 							key_modifiers += .EVENTFLAG_COMMAND_DOWN;
 						}
 						if render.is_num_lock() {
 							key_modifiers += .EVENTFLAG_NUM_LOCK_ON;
 						}
-						//ignore EVENTFLAG_IS_LEFT = 1 << 10,
-						//ignore EVENTFLAG_IS_RIGHT = 1 << 11,
-						if render.is_key_down(.alt_right) && render.is_control() {
-							key_modifiers += .EVENTFLAG_ALTGR_DOWN;
+					}
+
+					key_code : c.int = map_to_win_vk(ki.key);
+
+					switch ki.action {
+						case .press: {
+							event_type = .KEYEVENT_KEYDOWN;
+							
+							if ki.key == .f5 {
+								log.debugf("reloading browser");
+								pClient.browser.reload(pClient.browser);
+							}
+							
+							if ki.key == .p && .control in ki.mods {
+								log.debugf("printing page");
+								pClient.host.print(pClient.host);
+							}
 						}
-						//ignore EVENTFLAG_IS_REPEAT = 1 << 13,
-						//ignore EVENTFLAG_PRECISION_SCROLLING_DELTA = 1 << 14,
-						//ignore EVENTFLAG_SCROLL_BY_PAGE = 1 << 15,
+						case .release: {
+							event_type = .KEYEVENT_KEYUP;
+						}
+						case .repeat: {}; //nothing
 					}
 
-					/// Structure representing keyboard event information.
 					ke := cef.Key_event {
-						size = size_of(cef.Key_event),
-						
-						/// The type of keyboard event.
-						type = .KEYEVENT_CHAR,
-
-						/// Bit flags describing any pressed modifier keys. See
-						/// Event_flags for values.
-						modifiers = key_modifiers,
-
-						/// The Windows key code for the key event. This value is used by the DOM
-						/// specification. Sometimes it comes directly from the event (i.e. on
-						/// Windows) and sometimes it's determined using a mapping function. See
-						/// WebCore/platform/chromium/KeyboardCodes.h for the list of values.
-						windows_key_code = auto_cast r, //IDK what this is???
-
-						/// The actual key code genenerated by the platform.
-						native_key_code = 0, //IDK what this is???
-
-						/// Indicates whether the event is considered a "system key" event (see
-						/// http://msdn.microsoft.com/en-us/library/ms646286(VS.85).aspx for details).
-						/// This value will always be false on non-Windows platforms.
-						is_system_key = render.is_alt() ? 1 : 0,
-						
-						/// The character generated by the keystroke.
-						character = auto_cast r,
-
-						/// Same as |character| but unmodified by any concurrently-held modifiers
-						/// (except shift). This is useful for working out shortcut keys.
-						unmodified_character  = auto_cast r, //TODO we should do something more here
-
-						/// True if the focus is currently on an editable field on the page. This is
-						/// useful for determining if standard key events should be intercepted.
-						focus_on_editable_field = 1, //ITDK what this is
+						size                     = size_of(cef.Key_event),
+						type                     = event_type,
+						modifiers                = key_modifiers,
+						windows_key_code         = key_code,  			// <- this is the real VK code
+						native_key_code          = ki.scancode,     	// <- physical position (hardware code)
+						is_system_key            = render.is_alt() ? 1 : 0,
+						//character                = auto_cast ki.key,           	// <- typed character
+						//unmodified_character     = auto_cast ki.key,     		// <- same char, with shift removed
+						focus_on_editable_field  = 1,                      	// <- set to 1 unless you know otherwise
 					}
-
+					
 					pClient.host.send_key_event(pClient.host, &ke);
 				}
 			}
@@ -969,5 +1009,167 @@ main :: proc () {
 	}
 	else {
 		entry();
+	}
+}
+
+map_to_win_vk :: proc(kc: render.Key_code) -> c.int {
+	#partial switch kc {
+		// --- Control / navigation ---
+		case .escape:        return win32.VK_ESCAPE;
+		case .tab:           return win32.VK_TAB;
+		case .backspace:     return win32.VK_BACK;
+		case .enter, .kp_enter:
+			return win32.VK_RETURN;
+		case .space:         return win32.VK_SPACE;
+
+		case .insert:        return win32.VK_INSERT;
+		case .delete:        return win32.VK_DELETE;
+		case .home:          return win32.VK_HOME;
+		case .end:           return win32.VK_END;
+		case .page_up:       return win32.VK_PRIOR; // Page Up
+		case .page_down:     return win32.VK_NEXT;  // Page Down
+
+		case .left:          return win32.VK_LEFT;
+		case .right:         return win32.VK_RIGHT;
+		case .up:            return win32.VK_UP;
+		case .down:          return win32.VK_DOWN;
+
+		case .caps_lock:     return win32.VK_CAPITAL;
+		case .scroll_lock:   return win32.VK_SCROLL;
+		case .num_lock:      return win32.VK_NUMLOCK;
+		case .print_screen:  return win32.VK_SNAPSHOT;
+		case .pause:         return win32.VK_PAUSE;
+		
+		// --- Function keys ---
+		case .f1:  return win32.VK_F1;
+		case .f2:  return win32.VK_F2;
+		case .f3:  return win32.VK_F3;
+		case .f4:  return win32.VK_F4;
+		case .f5:  return win32.VK_F5;
+		case .f6:  return win32.VK_F6;
+		case .f7:  return win32.VK_F7;
+		case .f8:  return win32.VK_F8;
+		case .f9:  return win32.VK_F9;
+		case .f10: return win32.VK_F10;
+		case .f11: return win32.VK_F11;
+		case .f12: return win32.VK_F12;
+		case .f13: return win32.VK_F13;
+		case .f14: return win32.VK_F14;
+		case .f15: return win32.VK_F15;
+		case .f16: return win32.VK_F16;
+		case .f17: return win32.VK_F17;
+		case .f18: return win32.VK_F18;
+		case .f19: return win32.VK_F19;
+		case .f20: return win32.VK_F20;
+		case .f21: return win32.VK_F21;
+		case .f22: return win32.VK_F22;
+		case .f23: return win32.VK_F23;
+		case .f24: return win32.VK_F24;
+		// GLFW has F25; Windows doesn't. If you have .f25 and want a fallback, map it to F24 or handle separately.
+
+		// --- Modifiers ---
+		case .shift_left:    return win32.VK_LSHIFT;
+		case .shift_right:   return win32.VK_RSHIFT;
+		case .control_left:  return win32.VK_LCONTROL;
+		case .control_right: return win32.VK_RCONTROL;
+		case .alt_left:      return win32.VK_LMENU;   // Alt
+		case .alt_right:     return win32.VK_RMENU;   // AltGr on some layouts
+		case .super_left:    return win32.VK_LWIN;    // Windows key
+		case .super_right:   return win32.VK_RWIN;    // Windows key
+		case .menu:          return win32.VK_APPS;    // Context/menu key
+
+		// --- Main row digits (assumes your enum has _0.._9 like GLFW) ---
+		case .zero: return win32.VK_0; // '0'
+		case .one: return win32.VK_1;
+		case .two: return win32.VK_2;
+		case .three: return win32.VK_3;
+		case .four: return win32.VK_4;
+		case .five: return win32.VK_5;
+		case .six: return win32.VK_6;
+		case .seven: return win32.VK_7;
+		case .eight: return win32.VK_8;
+		case .nine: return win32.VK_9;
+
+		// --- Letters ---
+		case .a: return win32.VK_A;
+		case .b: return win32.VK_B;
+		case .c: return win32.VK_C;
+		case .d: return win32.VK_D;
+		case .e: return win32.VK_E;
+		case .f: return win32.VK_F;
+		case .g: return win32.VK_G;
+		case .h: return win32.VK_H;
+		case .i: return win32.VK_I;
+		case .j: return win32.VK_J;
+		case .k: return win32.VK_K;
+		case .l: return win32.VK_L;
+		case .m: return win32.VK_M;
+		case .n: return win32.VK_N;
+		case .o: return win32.VK_O;
+		case .p: return win32.VK_P;
+		case .q: return win32.VK_Q;
+		case .r: return win32.VK_R;
+		case .s: return win32.VK_S;
+		case .t: return win32.VK_T;
+		case .u: return win32.VK_U;
+		case .v: return win32.VK_V;
+		case .w: return win32.VK_W;
+		case .x: return win32.VK_X;
+		case .y: return win32.VK_Y;
+		case .z: return win32.VK_Z;
+
+		// --- OEM / punctuation (main section) ---
+		case .minus:         return win32.VK_OEM_MINUS;   // '-'
+		case .equal:         return win32.VK_OEM_PLUS;    // '='
+		case .bracket_left:  return win32.VK_OEM_4;       // '['
+		case .bracket_right: return win32.VK_OEM_6;       // ']'
+		case .backslash:     return win32.VK_OEM_5;       // '\'
+		case .semicolon:     return win32.VK_OEM_1;       // ';'
+		case .apostrophe:    return win32.VK_OEM_7;       // '\''
+		case .grave_accent:  return win32.VK_OEM_3;       // '`'
+		case .comma:         return win32.VK_OEM_COMMA;   // ','
+		case .period:        return win32.VK_OEM_PERIOD;  // '.'
+		case .slash:         return win32.VK_OEM_2;       // '/'
+
+		// --- Keypad ---
+		case .kp_0:        return win32.VK_NUMPAD0;
+		case .kp_1:        return win32.VK_NUMPAD1;
+		case .kp_2:        return win32.VK_NUMPAD2;
+		case .kp_3:        return win32.VK_NUMPAD3;
+		case .kp_4:        return win32.VK_NUMPAD4;
+		case .kp_5:        return win32.VK_NUMPAD5;
+		case .kp_6:        return win32.VK_NUMPAD6;
+		case .kp_7:        return win32.VK_NUMPAD7;
+		case .kp_8:        return win32.VK_NUMPAD8;
+		case .kp_9:        return win32.VK_NUMPAD9;
+		case .kp_decimal:  return win32.VK_DECIMAL;
+		case .kp_divide:   return win32.VK_DIVIDE;
+		case .kp_multiply: return win32.VK_MULTIPLY;
+		case .kp_subtract: return win32.VK_SUBTRACT;
+		case .kp_add:      return win32.VK_ADD;
+		case .kp_equal:    return win32.VK_OEM_NEC_EQUAL; // if present on the device
+		
+		// If you expose browser/media keys in your render.Key_code, map them similarly:
+		// case .browser_back:        return win32.VK_BROWSER_BACK;
+		// case .browser_forward:     return win32.VK_BROWSER_FORWARD;
+		// case .browser_refresh:     return win32.VK_BROWSER_REFRESH;
+		// case .browser_stop:        return win32.VK_BROWSER_STOP;
+		// case .browser_search:      return win32.VK_BROWSER_SEARCH;
+		// case .browser_favorites:   return win32.VK_BROWSER_FAVORITES;
+		// case .browser_home:        return win32.VK_BROWSER_HOME;
+		// case .volume_mute:         return win32.VK_VOLUME_MUTE;
+		// case .volume_down:         return win32.VK_VOLUME_DOWN;
+		// case .volume_up:           return win32.VK_VOLUME_UP;
+		// case .media_next_track:    return win32.VK_MEDIA_NEXT_TRACK;
+		// case .media_prev_track:    return win32.VK_MEDIA_PREV_TRACK;
+		// case .media_stop:          return win32.VK_MEDIA_STOP;
+		// case .media_play_pause:    return win32.VK_MEDIA_PLAY_PAUSE;
+		// case .launch_mail:         return win32.VK_LAUNCH_MAIL;
+		// case .launch_media_select: return win32.VK_LAUNCH_MEDIA_SELECT;
+		// case .launch_app1:         return win32.VK_LAUNCH_APP1;
+		// case .launch_app2:         return win32.VK_LAUNCH_APP2;
+
+		case:
+			fmt.panicf("TODO: unmapped key (%v)", kc);
 	}
 }
